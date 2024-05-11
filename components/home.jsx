@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Home() {
     const imageStyle = {
         borderRadius: '5%',
-        border: '1px solid #fff',
+        border: '2px solid #ffff',
     }
     return (
         <div class="w-full">
