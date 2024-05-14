@@ -1,119 +1,212 @@
 'use client'
-import React from 'react'
-import { useRef } from 'react'
+import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+const roles = ['User', 'Administrator'];
+
 export default function CustomRegister() {
     const emailRef = useRef("");
     const passRef = useRef("");
-    const confirmPassRef = useRef()
-    const router=useRouter()
+    const confirmPassRef = useRef();
+    const firstNameRef = useRef("");
+    const lastNameRef = useRef("");
+    const [selectedRole, setSelectedRole] = useState('');
+    const router = useRouter();
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 
     const handleRegister = async (event) => {
         event.preventDefault();
-        try{
-        if (emailRef.current.length === 0) return alert('email is empty')
-        if (passRef.current.length < 6) return alert('Password mustnot be less than 6 characters ')
-            if(passRef.current!=confirmPassRef.current) return alert('password must be same ')
-        const payload = {
-            email: emailRef.current,
-            password: passRef.current,
+        try {
+            if (emailRef.current.length === 0) return alert('Email is empty');
+            if (passRef.current.length < 6) return alert('Password must not be less than 6 characters');
+            if (passRef.current !== confirmPassRef.current) return alert('Passwords must match');
+
+            const payload = {
+                email: emailRef.current,
+                password: passRef.current,
+                firstName: firstNameRef.current,
+                lastName: lastNameRef.current,
+                role: selectedRole // Include the selected role in the payload
+            };
+
+            const formData = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            };
+
+            const res = await fetch("http://localhost:3000/api/auth/register", formData);
+            const resJson = await res.json();
+            alert(`${resJson.message}`);
+            router.push('/login');
+        } catch (error) {
+            alert(`${error}`);
         }
-        const formData = {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }
+    };
+    const imageStyle = {
+        borderRadius: '5%',
+        border: '1px solid #fff',
+        width: '700px', // Adjust width as needed
+        height: '700px',
 
-
-
-
-        const res = await fetch("http://localhost:3000/api/auth/register", formData)
-        const resJson = await res.json();
-        alert(`${resJson.message}`)
-        router.push('/login')
-    }catch(error){
-        alert(`${error}`)
     }
-    }
+
     return (
         <section>
-            <div class="grid grid-cols-1 lg:grid-cols-2">
-                <div class="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-                    <div class="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-                        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="flex items-center justify-center px-2 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-4">
+                    <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
+                        <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
                             Sign Up
                         </h2>
-                        <p class="mt-2 text-sm text-gray-600">
-                            Don&#x27;t have an account?{" "}
-
-                        </p>
-                        <form action="#" method="POST" class="mt-8">
-                            <div class="space-y-5">
+                        <form action="#" method="POST" className="mt-8">
+                            <div className="space-y-5">
+                                <div className="flex space-x-2">
+                                    <div>
+                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                            First Name
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                onChange={(event) => firstNameRef.current = event.target.value}
+                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="text"
+                                                placeholder="First Name"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                            Last Name
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                onChange={(event) => lastNameRef.current = event.target.value}
+                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="text"
+                                                placeholder="Last Name"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div>
-                                    <label for="" class="text-base font-medium text-gray-900">
-                                        {" "}
-                                        Email address{" "}
+                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                        Email address
                                     </label>
-                                    <div class="mt-2">
-                                        <input onChange={(event) => emailRef.current = event.target.value}
-                                            class="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                    <div className="mt-2">
+                                        <input
+                                            onChange={(event) => emailRef.current = event.target.value}
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
                                             placeholder="Email"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex items-center justify-between">
-                                        <label for="" class="text-base font-medium text-gray-900">
-                                            {" "}
-                                            Password{" "}
+                                    <div className="flex items-center justify-between">
+                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                            Password
                                         </label>
-
                                     </div>
-                                    <div class="mt-2">
-                                        <input onChange={(event) => passRef.current = event.target.value}
-                                            class="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                    <div className="mt-2">
+                                        <input
+                                            onChange={(event) => passRef.current = event.target.value}
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="flex items-center justify-between">
-                                        <label for="" class="text-base font-medium text-gray-900">
-                                            {" "}
-                                            Confirm  Password{" "}
+                                    <div className="flex items-center justify-between">
+                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                            Confirm Password
                                         </label>
-
                                     </div>
-                                    <div class="mt-2">
-                                        <input onChange={(event) => confirmPassRef.current = event.target.value}
-                                            class="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                    <div className="mt-2">
+                                        <input
+                                            onChange={(event) => confirmPassRef.current = event.target.value}
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <button onClick={(event) => handleRegister(event)}
-                                        type="button"
-                                        class="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                        Select Your Role
+                                    </label>
+                                    <select
+                                        onChange={(event) => setSelectedRole(event.target.value)}
+                                        value={selectedRole}
+                                        className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
-                                        Get started{" "}
+                                        <option value="">Select Role</option>
+                                        {roles.map(role => (
+                                            <option key={role} value={role}>{role}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+
+                                    {/* Placeholder for latitude and longitude */}
+                                    <div className='flex space-x-2 my-4'>
+                                        <div >
+                                            <input
+                                                className="flex h-10  w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="text"
+                                                placeholder={`Latitude: ${latitude}`}
+                                                readOnly
+                                            />
+                                        </div>
+                                        <div>
+                                            <input
+                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="text"
+                                                placeholder={`Longitude: ${longitude}`}
+                                                readOnly
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                navigator.geolocation.getCurrentPosition((position) => {
+                                                    setLatitude(position.coords.latitude);
+                                                    setLongitude(position.coords.longitude);
+                                                });
+                                            }}
+                                            type="button"
+                                            className="my-4 inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                        >
+                                            Get Location
+                                            <svg className='ml-4' xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7"/></svg>
+                                        </button>
+                                    </div>
+                                    {/* End of placeholder */}
+                                    <button
+                                        onClick={(event) => handleRegister(event)}
+                                        type="button"
+                                        className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                    >
+                                        Get started{' '}
                                         <svg
+                                        
                                             xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
+                                            width="20"
+                                            height="20"
                                             viewBox="0 0 24 24"
                                             fill="none"
                                             stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="ml-2"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className="ml-4"
                                         >
                                             <line x1="5" y1="12" x2="19" y2="12"></line>
                                             <polyline points="12 5 19 12 12 19"></polyline>
@@ -122,14 +215,14 @@ export default function CustomRegister() {
                                 </div>
                             </div>
                         </form>
-                        <div class="mt-3 space-y-3">
+                        <div className="mt-3 space-y-3">
                             <button
                                 type="button"
-                                class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
                             >
-                                <span class="mr-2 inline-block">
+                                <span className="mr-2 inline-block">
                                     <svg
-                                        class="h-6 w-6 text-rose-500"
+                                        className="h-6 w-6 text-rose-500"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="currentColor"
@@ -139,34 +232,20 @@ export default function CustomRegister() {
                                 </span>
                                 Sign in with Google
                             </button>
-                            <button
-                                type="button"
-                                class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-                            >
-                                <span class="mr-2 inline-block">
-                                    <svg
-                                        class="h-6 w-6 text-[#2563EB]"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-                                    </svg>
-                                </span>
-                                Sign in with Facebook
-                            </button>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="h-full w-full ">
+                <div className="h-full w-full mt-4 ">
                     <img
-                        class="mx-auto h-full w-full rounded-md object-cover"
-                        src="https://images.unsplash.com/photo-1523800503107-5bc3ba2a6f81?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        className="mx-auto h-full w-full rounded-md object-cover"
+                        src="/GTS.jpg"
+
+                        style={imageStyle}
                         alt=""
                     />
                 </div>
             </div>
         </section>
-
-    )
+    );
 }
