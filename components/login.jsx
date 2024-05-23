@@ -88,11 +88,11 @@ export default function CustomLogin() {
 
                                 <button onClick={handleGoogleLogin}
                                     type="button"
-                                    class="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                                    className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
                                 >
-                                    <span class="mr-2 inline-block">
+                                    <span className="mr-2 inline-block">
                                         <svg
-                                            class="h-6 w-6 text-rose-500"
+                                            className="h-6 w-6 text-rose-500"
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
                                             fill="currentColor"
