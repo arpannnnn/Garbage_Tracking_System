@@ -14,7 +14,7 @@ export default function HeroPage() {
 
 <Testi />
 <Content />
-<Footer />
+
     </div>
     </div>
   )

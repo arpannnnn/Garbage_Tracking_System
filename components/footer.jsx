@@ -9,7 +9,7 @@ const Footer = () => {
 
 
             <footer className="bg-white">
-                <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-24">
+                <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-10">
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                         <div>
                             <div className="flex justify-center font-bold text-teal-600 sm:justify-start">
@@ -17,8 +17,7 @@ const Footer = () => {
                             </div>
 
                             <p className="mt-6 max-w-md text-center leading-relaxed text-gray-500 sm:max-w-xs sm:text-left">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet culpa
-                                cum itaque neque.
+                            GTS Nepal is dedicated to revolutionizing solid waste management practices across Nepal through innovative software solutions.
                             </p>
 
                             <ul className="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
@@ -112,7 +111,7 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4 lg:col-span-2">
+                        <div className="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2 md:grid-cols-4 lg:col-span-2">
                             <div className="text-center sm:text-left">
                                 <p className="text-lg font-medium text-gray-900">About Us</p>
 
@@ -131,13 +130,11 @@ const Footer = () => {
 
                                     <li>
                                         <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
-                                            Employee Handbook
+                                            Login To Dashboard
                                         </a>
                                     </li>
 
-                                    <li>
-                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Careers </a>
-                                    </li>
+                                    
                                 </ul>
                             </div>
 
@@ -147,21 +144,19 @@ const Footer = () => {
                                 <ul className="mt-8 space-y-4 text-sm">
                                     <li>
                                         <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
-                                            Web Development
+                                            Arpan
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Web Design </a>
+                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Arpan 2</a>
                                     </li>
 
                                     <li>
-                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Marketing </a>
+                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Arpan 3 </a>
                                     </li>
 
-                                    <li>
-                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Google Ads </a>
-                                    </li>
+                                   
                                 </ul>
                             </div>
 
@@ -178,22 +173,14 @@ const Footer = () => {
                                     </li>
 
                                     <li>
-                                        <a
-                                            className="group flex justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end"
-                                            href="#"
-                                        >
-                                            <span className="text-gray-700 transition group-hover:text-gray-700/75">
+                                        
+                                            <a className="text-gray-700 transition group-hover:text-gray-700/75">
                                                 Live Chat
-                                            </span>
+                                            </a>
 
-                                            <span className="relative flex h-2 w-2">
-                                                <span
-                                                    className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"
-                                                ></span>
-                                                <span className="relative inline-flex size-2 rounded-full bg-teal-500"></span>
-                                            </span>
-                                        </a>
-                                    </li>
+                                            
+                                                
+                                        </li>
                                 </ul>
                             </div>
 
@@ -221,7 +208,7 @@ const Footer = () => {
                                                 />
                                             </svg>
 
-                                            <span className="flex-1 text-gray-700">john@doe.com</span>
+                                            <span className="flex-1 text-gray-700">arpannacharya@gmail.com</span>
                                         </a>
                                     </li>
 
@@ -245,7 +232,7 @@ const Footer = () => {
                                                 />
                                             </svg>
 
-                                            <span className="flex-1 text-gray-700">0123456789</span>
+                                            <span className="flex-1 text-gray-700">9866742214</span>
                                         </a>
                                     </li>
 
@@ -273,7 +260,7 @@ const Footer = () => {
                                         </svg>
 
                                         <address className="-mt-0.5 flex-1 not-italic text-gray-700">
-                                            213 Lane, London, United Kingdom
+                                            Ghorahi 11 , Dang
                                         </address>
                                     </li>
                                 </ul>
