@@ -7,11 +7,11 @@ const Grid = () => {
                 <div className="mx-auto max-w-lg text-center ">
                     <h2 className="mt-4 text-3xl font-bold tracking-tight text-black md:text-4xl lg:text-6xl">Our Features</h2>
 
-                   
+
                 </div>
                 <p className='  mt-8 text-lg  text-center text-black ' >
-                        GTS Nepal is a cutting-edge software designed to streamline and optimize solid waste management across Nepal. Built on the latest technology,, it enhances daily operations, promoting efficient and sustainable waste management practices.
-                        </p>
+                    GTS Nepal is a cutting-edge software designed to streamline and optimize solid waste management across Nepal. Built on the latest technology,, it enhances daily operations, promoting efficient and sustainable waste management practices.
+                </p>
 
                 <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2">
                     <a

@@ -1,13 +1,14 @@
-'use client'
-import React, { useState } from 'react';
 
-import Image from "next/image";
+import React from 'react';
+
+
 export default function Home() {
     const imageStyle = {
         borderRadius: '5%',
         border: '1px solid #fff',
     }
     return (
+        
         <div className="w-full">
             <header className="relative w-full border-b bg-white pb-1">
             </header>
@@ -48,7 +49,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            
+
             <div className="mx-auto my-32 max-w-7xl px-2 lg:px-8">
                 <div className="grid grid-cols-1 gap-y-8 text-center sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
                     <div>
@@ -118,15 +119,15 @@ export default function Home() {
                             </svg>
                         </button>
                         <div className="p-6">
-                            <p className="text-gray-700">
+                            <div className="text-gray-700">
                                 To start using the Garbage Tracking System:
-                                <ol className="list-decimal pl-4 mt-4">
+                                <ul className="list-decimal pl-4 mt-4">
                                     <li>Create an account on our platform.</li>
                                     <li>Enter your address details for accurate tracking.</li>
                                     <li>Once logged in, track the waste-collecting vehicle assigned to your area.</li>
                                     <li>Receive notifications about the estimated time of arrival of the garbage collector.</li>
-                                </ol>
-                            </p>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div className="bg-white rounded-lg shadow-md">
@@ -137,15 +138,15 @@ export default function Home() {
                             </svg>
                         </button>
                         <div className="p-6">
-                            <p className="text-gray-700">
+                            <div className="text-gray-700">
                                 To start using the Garbage Tracking System:
-                                <ol className="list-decimal pl-4 mt-4">
+                                <ul className="list-decimal pl-4 mt-4">
                                     <li>Create an account on our platform.</li>
                                     <li>Enter your address details for accurate tracking.</li>
                                     <li>Once logged in, track the waste-collecting vehicle assigned to your area.</li>
                                     <li>Receive notifications about the estimated time of arrival of the garbage collector.</li>
-                                </ol>
-                            </p>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div className="bg-white rounded-lg shadow-md">
@@ -377,7 +378,7 @@ export default function Home() {
                 </div>
             </div>
 
-           
+
 
 
 

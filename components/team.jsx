@@ -11,8 +11,8 @@ export const TeamSection = () => {
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
                             <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
@@ -41,8 +41,8 @@ export const TeamSection = () => {
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
                             <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
@@ -71,8 +71,8 @@ export const TeamSection = () => {
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
                             <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
@@ -99,10 +99,10 @@ export const TeamSection = () => {
                             </div>
                         </div>
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
+                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://img.freepik.com/premium-vector/gautam-buddha-sitting-vector-illustration_1020331-23661.jpg?w=740" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
@@ -129,10 +129,10 @@ export const TeamSection = () => {
                             </div>
                         </div>
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
+                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://img.freepik.com/free-photo/spooky-arachnid-illustration-dark-background-generated-by-ai_188544-19591.jpg?t=st=1716620923~exp=1716624523~hmac=4dfa2dcc5776475a56557e6429a854d4b1707c53a76c65d72614612f6336c026&w=1380" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
@@ -159,10 +159,10 @@ export const TeamSection = () => {
                             </div>
                         </div>
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="" />
+                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://img.freepik.com/free-photo/dark-figure-with-long-black-cloak-stands-fire-with-word-death-it_1340-32867.jpg?t=st=1716620969~exp=1716624569~hmac=2761f9f2a1ec3de916de7add97db729aab30fac956218267be88cb7d33aa1ed1&w=740" />
                             <div className="flex-1 my-4">
-                                <p className="text-xl font-semibold leading-snug">Leroy Jenkins</p>
-                                <p>Visual Designer</p>
+                                <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
+                                <p>IT Engineer</p>
                             </div>
                             <div className="flex items-center justify-center p-3 space-x-3 border-t-2">
                                 <a rel="noopener noreferrer" href="#" title="Email" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
