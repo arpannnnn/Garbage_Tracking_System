@@ -1,15 +1,55 @@
-
+"use client"
 import React from 'react';
-
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+    const [showScrollBtn, setShowScrollBtn] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollHeight = window.pageYOffset;
+            setShowScrollBtn(scrollHeight > 200); // Show button when scrolled more than 200px
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     const imageStyle = {
         borderRadius: '5%',
         border: '1px solid #fff',
     }
     return (
-        
+
         <div className="w-full">
+            <button
+                id="scrollToTopBtn"
+                className={`fixed bottom-4 right-4 z-50 ${showScrollBtn ? 'block' : 'hidden'
+                    } h-12 w-12 rounded-full bg-gradient-to-r from-green-400 to-blue-500`}
+                onClick={scrollToTop}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mx-auto"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 10l7-7m0 0l7 7m-7-7v18"
+                    />
+                </svg>
+            </button>
             <header className="relative w-full border-b bg-white pb-1">
             </header>
             <div className="relative w-full bg-white">
@@ -49,6 +89,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+
 
             <div className="mx-auto my-32 max-w-7xl px-2 lg:px-8">
                 <div className="grid grid-cols-1 gap-y-8 text-center sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
