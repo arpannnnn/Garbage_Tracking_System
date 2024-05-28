@@ -6,66 +6,24 @@ export const Content = () => {
             <div className="grid gap-10 lg:grid-cols-2">
                 <div className="flex flex-col justify-center md:pr-8 xl:pr-0 lg:max-w-lg">
                     <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-teal-accent-400">
-                        <svg className="text-teal-900 w-7 h-7" viewBox="0 0 24 24">
-                            <polyline
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeMiterlimit="10"
-                                points="8,5 8,1 16,1 16,5"
-                                strokeLinejoin="round"
-                            />
-                            <polyline
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeMiterlimit="10"
-                                points="9,15 1,15 1,5 23,5 23,15 15,15"
-                                strokeLinejoin="round"
-                            />
-                            <polyline
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeMiterlimit="10"
-                                points="22,18 22,23 2,23 2,18"
-                                strokeLinejoin="round"
-                            />
-                            <rect
-                                x="9"
-                                y="13"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeMiterlimit="10"
-                                width="6"
-                                height="4"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" viewBox="0 0 24 24"><path fill="green" d="m21.82 15.42l-2.5 4.33c-.49.86-1.4 1.31-2.32 1.25h-2v2l-2.5-4.5L15 14v2h2.82l-2.22-3.85l4.33-2.5l1.8 3.12c.52.77.59 1.8.09 2.65M9.21 3.06h5c.98 0 1.83.57 2.24 1.39l1 1.74l1.73-1l-2.64 4.41l-5.15.09l1.73-1l-1.41-2.45l-2.21 3.85l-4.34-2.5l1.8-3.12c.41-.83 1.26-1.41 2.25-1.41m-4.16 16.7l-2.5-4.33c-.49-.85-.42-1.87.09-2.64l1-1.73l-1.73-1l5.14.08l2.65 4.42l-1.73-1L6.56 16H11v5H7.4a2.51 2.51 0 0 1-2.35-1.24" /></svg>
                     </div>
                     <div className="max-w-xl mb-6">
                         <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-                            Let us handle
+                            GTS Nepal:
                             <br className="hidden md:block" />
-                            your next{' '}
+
                             <span className="inline-block text-deep-purple-accent-400">
-                                destination
+                                Your Partner in Clean and Green Communities.
                             </span>
                         </h2>
                         <p className="text-base text-gray-700 md:text-lg">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                            quae. explicabo.
+                            GTS Nepal is the ultimate Smart Waste Management Platform, empowering you to start instantly with User Charges Collection, Complaint Management, GPS Tracking, Fuel Management, GIS Survey & Billing, and Comprehensive Monitoring with Photographs and more!
                         </p>
                     </div>
                     <div>
                         <a
-                            href="/"
+                            href="/about"
                             aria-label=""
                             className="inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
                         >

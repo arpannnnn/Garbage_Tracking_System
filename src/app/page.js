@@ -12,8 +12,8 @@ export default function HeroPage() {
     
     <div>
 
-<Testi />
 <Content />
+<Testi />
 
     </div>
     </div>

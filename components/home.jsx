@@ -253,7 +253,7 @@ export default function Home() {
                         <p className="mt-8 font-medium text-gray-700">
                             Take control of your waste management process and live in a cleaner, healthier environment.
                         </p>
-                        <div className="flex pt-1 items-center">
+                        <div className="flex pt-1` items-center">
                             <input
                                 type="email"
                                 value={email}
