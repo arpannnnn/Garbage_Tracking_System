@@ -11,7 +11,7 @@ export async function POST(request){
 
         const userCred= await signInWithEmailAndPassword(customAuth,email,password)
         const user=userCred.user;
-        return NextResponse.json({message:'succrssfully logged in',staatus:200,data:user});
+        return NextResponse.json({message:'successfully logged in',staatus:200,data:user});
 
     }catch(error){
         return NextResponse.json({error:`error?.message`})

@@ -1,10 +1,39 @@
-import React from 'react'
-
+'use client'
+import React, { useState } from 'react'
 export const TeamSection = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (formData.name && formData.email && formData.message) {
+            alert('Thanks For submitting!');
+            // Optionally,we can reset the form after submission
+            setFormData({
+                name: '',
+                email: '',
+                message: ''
+            });
+        } else {
+            alert('Please fill out all fields.');
+        }
+    }
+
     return (
+
         <div>
             <section className="py-6 bg-gray-800 dark:bg-gray-100 text-gray-100 dark:text-gray-800">
-                <div className="container flex flex-col items-center justify-center p-4 mx-auto sm:p-10">
+                <div className="container flex flex-col items-center  justify-center p-4 mx-auto sm:p-10">
                     <p className="p-2 text-sm font-medium tracking-wider text-center uppercase">Development team</p>
                     <h1 className="text-4xl font-bold leading-none text-center sm:text-5xl">"The talented people behind the scenes"</h1>
                     <div className="flex  flex-row flex-wrap-reverse  justify-center mt-8">
@@ -22,7 +51,7 @@ export const TeamSection = () => {
                                     </svg>
                                 </a>
                                 <a rel="noopener noreferrer" href="#" title="Twitter" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
                                         <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
                                     </svg>
                                 </a>
@@ -52,7 +81,7 @@ export const TeamSection = () => {
                                     </svg>
                                 </a>
                                 <a rel="noopener noreferrer" href="#" title="Twitter" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
                                         <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
                                     </svg>
                                 </a>
@@ -68,7 +97,7 @@ export const TeamSection = () => {
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
                             <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-1/263466540_137729135284412_8858117032975631302_n.jpg?stp=c0.9.200.200a_dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=KNFA7l3fsV0Q7kNvgGOOa-1&_nc_ht=scontent.fktm10-1.fna&oh=00_AYBzfTkfdL5-lU4xbtyTA8Woup9FuETqpTeQhRfZq2qGBw&oe=6659077F" />
                             <div className="flex-1 my-4">
@@ -83,7 +112,7 @@ export const TeamSection = () => {
                                     </svg>
                                 </a>
                                 <a rel="noopener noreferrer" href="#" title="Twitter" className="text-gray-900 dark:text-gray-50 hover:text-violet-400 hover:dark:text-violet-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
                                         <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
                                     </svg>
                                 </a>
@@ -99,15 +128,15 @@ export const TeamSection = () => {
                                 </a>
                             </div>
                         </div>
-                        
-                        
-                       
+
+
+
                     </div>
                 </div>
             </section>
-            <section class="text-black bg-cyan-100 body-font relative">
-                <div class="container px-5 py-20 mx-auto flex sm:flex-nowrap flex-wrap">
-                    <div class="lg:w-2/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
+            <section class="text-black bg-cyan-100 body-font relative ">
+                <div class="container px-5 py-20 mx-auto flex sm:flex-nowrap flex-wrap ">
+                    <div class="lg:w-2/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative ">
                         <iframe width="100%" height="100%" class="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Nepal&ie=UTF8&t=&z=7&iwloc=B&output=embed"></iframe>
                         <div class="bg-white relative flex flex-wrap py-6 rounded shadow-md">
                             <div class="lg:w-1/2 px-6">
@@ -122,23 +151,27 @@ export const TeamSection = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 px-4 md:mt-0 ">
-                        <h2 class="text-gray-900 text-bold mb-1 text-4xl font-bold leading-none">Feedback</h2>
-                        <p class="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
-                        <div class="relative mb-4">
-                            <label for="name" class="leading-7 text-sm text-gray-600">Name</label>
-                            <input type="text" id="name" name="name" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
-                        </div>
-                        <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
-                            <input type="email" id="email" name="email" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
-                        </div>
-                        <div class="relative mb-4">
-                            <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
-                            <textarea id="message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
-                        </div>
-                        <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
+
+                    <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
+                        <h2 className="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
+                        <p className="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
+                        <form onSubmit={handleSubmit}>
+                            <div className="relative mb-4">
+                                <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
+                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+                            </div>
+                            <div className="relative mb-4">
+                                <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
+                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+                            </div>
+                            <div className="relative mb-4">
+                                <label htmlFor="message" className="leading-7 text-sm text-gray-600">Message</label>
+                                <textarea id="message" name="message" value={formData.message} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" required></textarea>
+                            </div>
+                            <button type="submit" className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Send Now</button>
+                        </form>
                     </div>
+
                 </div>
             </section>
         </div>

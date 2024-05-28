@@ -26,6 +26,34 @@ export default function Home() {
         borderRadius: '5%',
         border: '1px solid #fff',
     }
+    const [email, setEmail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
+
+    const handleEmailChange = (e) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        setIsValidEmail(validateEmail(newEmail));
+    };
+    const handleSubscribeClick = () => {
+        if (isValidEmail) {
+            const emailAddress = email;
+            const subject = 'Subscribe Request';
+            const body = 'Please subscribe me to your newsletter.';
+
+            const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        } else {
+            alert('Please enter a valid email address.');
+        }
+    };
+    const validateEmail = (email) => {
+        // Very basic email validation using regex
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+
+
     return (
 
         <div className="w-full">
@@ -70,12 +98,16 @@ export default function Home() {
                         <form action="" className="mt-8 flex items-start space-x-2">
 
                             <div>
-                                <button
-                                    type="button"
-                                    className="rounded-md bg-black px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                                >
-                                    Join Us
-                                </button>
+                                <a href="/register">
+                                    <button
+
+                                        type="button"
+                                        className="rounded-md bg-black px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                                    >
+                                        Join Us
+
+                                    </button>
+                                </a>
                             </div>
                         </form>
                     </div>
@@ -221,15 +253,19 @@ export default function Home() {
                         <p className="mt-8 font-medium text-gray-700">
                             Take control of your waste management process and live in a cleaner, healthier environment.
                         </p>
-                        <div className="mt-8 flex w-full max-w-sm items-center space-x-2">
+                        <div className="flex pt-1 items-center">
                             <input
-                                className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                                 type="email"
+                                value={email}
+                                onChange={handleEmailChange}
                                 placeholder="Enter your email"
+                                className="rounded-md bg-white px-3 py-2 mr-4 text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                             <button
                                 type="button"
-                                className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                                onClick={handleSubscribeClick}
+                                disabled={!isValidEmail}
+                                className={`rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 ${!isValidEmail ? 'cursor-not-allowed' : ''}`}
                             >
                                 Subscribe
                             </button>
