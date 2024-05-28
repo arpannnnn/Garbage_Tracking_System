@@ -2,18 +2,29 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const roles = ['User', 'Administrator'];
+const roles = ['User', 'Staff'];
 
 export default function CustomRegister() {
     const emailRef = useRef("");
     const passRef = useRef("");
-    const confirmPassRef = useRef();
+    const confirmPassRef = useRef("");
     const firstNameRef = useRef("");
     const lastNameRef = useRef("");
+    const citizenshipRef = useRef("");
     const [selectedRole, setSelectedRole] = useState('');
     const router = useRouter();
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
+
+    const handleCitizenshipChange = (event) => {
+        let value = event.target.value.replace(/\D/g, '');
+        if (value.length > 16) {
+            value = value.slice(0, 16); // Only 12 digits allowed
+        }
+        const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        citizenshipRef.current = formattedValue;
+        event.target.value = formattedValue;
+    };
 
     const handleRegister = async (event) => {
         event.preventDefault();
@@ -26,7 +37,7 @@ export default function CustomRegister() {
                 email: emailRef.current,
                 password: passRef.current,
                 firstName: firstNameRef.current,
-                lastName: lastNameRef.current,
+               
                 role: selectedRole // Include the selected role in the payload
             };
 
@@ -47,13 +58,13 @@ export default function CustomRegister() {
             alert(`${error}`);
         }
     };
+
     const imageStyle = {
         borderRadius: '5%',
         border: '1px solid #fff',
-        width: '700px', // Adjust width as needed
+        width: '700px', 
         height: '700px',
-
-    }
+    };
 
     return (
         <section>
@@ -65,40 +76,31 @@ export default function CustomRegister() {
                         </h2>
                         <form action="#" method="POST" className="mt-8">
                             <div className="space-y-5">
-                                <div className="flex space-x-2">
+                               
                                     <div>
-                                        <label htmlFor="" className="text-base font-medium text-gray-900">
-                                            First Name
+                                        <label htmlFor="fullName" className="text-base font-medium text-gray-900">
+                                            FULL Name
                                         </label>
                                         <div className="mt-2">
                                             <input
-                                                onChange={(event) => firstNameRef.current = event.target.value}
+                                                id="fullName"
+                                                onChange={(event) => fullNameRef.current = event.target.value}
                                                 className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                                 type="text"
-                                                placeholder="First Name"
+                                                placeholder="Full Name"
                                             />
                                         </div>
                                     </div>
-                                    <div>
-                                        <label htmlFor="" className="text-base font-medium text-gray-900">
-                                            Last Name
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                onChange={(event) => lastNameRef.current = event.target.value}
-                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                                type="text"
-                                                placeholder="Last Name"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                    
+                                
+                                <div className="mt-4"></div>
                                 <div>
-                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                    <label htmlFor="email" className="text-base font-medium text-gray-900">
                                         Email address
                                     </label>
                                     <div className="mt-2">
                                         <input
+                                            id="email"
                                             onChange={(event) => emailRef.current = event.target.value}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
@@ -108,12 +110,13 @@ export default function CustomRegister() {
                                 </div>
                                 <div>
                                     <div className="flex items-center justify-between">
-                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="password" className="text-base font-medium text-gray-900">
                                             Password
                                         </label>
                                     </div>
                                     <div className="mt-2">
                                         <input
+                                            id="password"
                                             onChange={(event) => passRef.current = event.target.value}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
@@ -123,24 +126,26 @@ export default function CustomRegister() {
                                 </div>
                                 <div>
                                     <div className="flex items-center justify-between">
-                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="confirmPassword" className="text-base font-medium text-gray-900">
                                             Confirm Password
                                         </label>
                                     </div>
                                     <div className="mt-2">
                                         <input
+                                            id="confirmPassword"
                                             onChange={(event) => confirmPassRef.current = event.target.value}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
-                                            placeholder="Password"
+                                            placeholder="Confirm Password"
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                    <label htmlFor="role" className="text-base font-medium text-gray-900">
                                         Select Your Role
                                     </label>
                                     <select
+                                        id="role"
                                         onChange={(event) => setSelectedRole(event.target.value)}
                                         value={selectedRole}
                                         className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
@@ -152,51 +157,62 @@ export default function CustomRegister() {
                                     </select>
                                 </div>
                                 <div>
-
-                                    {/* Placeholder for latitude and longitude */}
-                                    <div className='flex space-x-2 my-4'>
-                                        <div >
-                                            <input
-                                                className="flex h-10  w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                                type="text"
-                                                placeholder={`Latitude: ${latitude}`}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div>
-                                            <input
-                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                                type="text"
-                                                placeholder={`Longitude: ${longitude}`}
-                                                readOnly
-                                            />
-                                        </div>
+                                    <label htmlFor="citizenship" className="text-base font-medium text-gray-900">
+                                        Citizenship Number
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            id="citizenship"
+                                            onChange={handleCitizenshipChange}
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type="text"
+                                            placeholder="Citizenship Number"
+                                            maxLength="20" // 16 digits + 2 spaces
+                                        />
+                                    </div>
+                                </div>
+                                <div className='flex space-x-2 my-4'>
+                                    <div >
+                                        <input
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type="text"
+                                            placeholder={`Latitude: ${latitude}`}
+                                            readOnly
+                                        />
                                     </div>
                                     <div>
-                                        <button
-                                            onClick={(event) => {
-                                                event.preventDefault();
-                                                navigator.geolocation.getCurrentPosition((position) => {
-                                                    setLatitude(position.coords.latitude);
-                                                    setLongitude(position.coords.longitude);
-                                                });
-                                            }}
-                                            type="button"
-                                            className="my-4 inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
-                                        >
-                                            Get Location from here
-                                            <svg className='ml-4' xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7"/></svg>
-                                        </button>
+                                        <input
+                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type="text"
+                                            placeholder={`Longitude: ${longitude}`}
+                                            readOnly
+                                        />
                                     </div>
-                                    {/* End of placeholder */}
+                                </div>
+                                <div>
                                     <button
-                                        onClick={(event) => handleRegister(event)}
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            navigator.geolocation.getCurrentPosition((position) => {
+                                                setLatitude(position.coords.latitude);
+                                                setLongitude(position.coords.longitude);
+                                            });
+                                        }}
+                                        type="button"
+                                        className="my-4 inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                    >
+                                        Get Location from here
+                                        <svg className='ml-4' xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7" /></svg>
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={handleRegister}
                                         type="button"
                                         className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                     >
                                         Get started{' '}
                                         <svg
-                                        
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="20"
                                             height="20"
@@ -232,15 +248,13 @@ export default function CustomRegister() {
                                 </span>
                                 Sign in with Google
                             </button>
-                            
                         </div>
                     </div>
                 </div>
-                <div className="h-full w-full mt-4 ">
+                <div className="h-full w-full mt-4">
                     <img
                         className="mx-auto h-full w-full rounded-md object-cover"
                         src="/GTS.jpg"
-
                         style={imageStyle}
                         alt=""
                     />
