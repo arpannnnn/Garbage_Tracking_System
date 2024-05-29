@@ -1,7 +1,7 @@
 import { CalendarDateRangePicker } from '../../../components/date-range-picker';
 import { Overview } from '../../../components/overview';
 
-import { Button } from '../../../components/ui/button';
+
 import {
   Card,
   CardContent,
@@ -11,18 +11,19 @@ import {
 } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
-
+const username= "Binay Rijal";
 export default function page() {
   return (
+    
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 bg-white md:p-8">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
-            Hi, Welcome back 👋
+            Hi, Welcome back 👋 {username}
           </h2>
           <div className="hidden items-center space-x-2 md:flex">
-            <CalendarDateRangePicker />
-            <Button>Download</Button>
+            {/* <CalendarDateRangePicker /> */}
+            {/* <Button>Download</Button> */}
           </div>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">
@@ -34,7 +35,7 @@ export default function page() {
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card>
+              {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     Total Revenue
@@ -58,8 +59,8 @@ export default function page() {
                     +20.1% from last month
                   </p>
                 </CardContent>
-              </Card>
-              <Card>
+              </Card> */}
+              {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     Subscriptions
@@ -85,8 +86,8 @@ export default function page() {
                     +180.1% from last month
                   </p>
                 </CardContent>
-              </Card>
-              <Card>
+              </Card> */}
+              {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Sales</CardTitle>
                   <svg
@@ -109,8 +110,8 @@ export default function page() {
                     +19% from last month
                   </p>
                 </CardContent>
-              </Card>
-              <Card>
+              </Card> */}
+              {/* <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     Active Now
@@ -134,9 +135,9 @@ export default function page() {
                     +201 since last hour
                   </p>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
-            <div className="  grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-6">
+            <div className="  grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-4">
               <Card className="col-span-4">
                 <CardHeader>
                   <CardTitle>Overview</CardTitle>

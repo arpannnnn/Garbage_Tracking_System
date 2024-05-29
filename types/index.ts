@@ -10,6 +10,7 @@ export interface NavItem {
   description?: string;
 }
 
+
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }

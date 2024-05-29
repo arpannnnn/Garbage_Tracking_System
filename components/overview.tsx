@@ -64,14 +64,14 @@ export function Overview() {
           tickLine={false}
           axisLine={false}
         />
-        <YAxis
+        <YAxis className='text-gray-500 font-weight-500'
           stroke="#888888"
-          fontSize={12}
+          fontSize={9}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `${value} Tons `}
         />
-        <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="total" fill="green" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

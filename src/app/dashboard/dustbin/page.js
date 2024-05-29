@@ -1,4 +1,4 @@
-import SmartDustbin from '../../../components/SmartDustbin';
+import SmartDustbin from '../../../../components/SmartDustbin';
 
 export default function Home() {
     return (
