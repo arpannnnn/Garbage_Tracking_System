@@ -17,7 +17,7 @@ const Footer = () => {
                             </div>
 
                             <p className="mt-6 max-w-md text-center leading-relaxed text-gray-500 sm:max-w-xs sm:text-left">
-                            GTS Nepal is dedicated to revolutionizing solid waste management practices across Nepal through innovative software solutions.
+                                GTS Nepal is dedicated to revolutionizing solid waste management practices across Nepal through innovative software solutions.
                             </p>
 
                             <ul className="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
@@ -129,12 +129,12 @@ const Footer = () => {
                                     </li>
 
                                     <li>
-                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="#">
+                                        <a className="text-gray-700 transition hover:text-gray-700/75" href="/dashboard">
                                             Login To Dashboard
                                         </a>
                                     </li>
 
-                                    
+
                                 </ul>
                             </div>
 
@@ -156,7 +156,7 @@ const Footer = () => {
                                         <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Arpan 3 </a>
                                     </li>
 
-                                   
+
                                 </ul>
                             </div>
 
@@ -173,14 +173,14 @@ const Footer = () => {
                                     </li>
 
                                     <li>
-                                        
-                                            <a className="text-gray-700 transition group-hover:text-gray-700/75">
-                                                Live Chat
-                                            </a>
 
-                                            
-                                                
-                                        </li>
+                                        <a className="text-gray-700 transition group-hover:text-gray-700/75">
+                                            Live Chat
+                                        </a>
+
+
+
+                                    </li>
                                 </ul>
                             </div>
 

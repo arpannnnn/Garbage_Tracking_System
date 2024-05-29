@@ -8,14 +8,14 @@ export default function HeroPage() {
   return (
     <div>
       <HomePage />
-    
-    
-    <div>
 
-<Content />
-<Testi />
 
-    </div>
+      <div>
+
+        <Content />
+        <Testi />
+
+      </div>
     </div>
   )
 }
