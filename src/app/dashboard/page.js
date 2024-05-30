@@ -11,7 +11,9 @@ import {
 } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+
 const username= "Binay Rijal";
+
 export default function page() {
   return (
     
