@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
@@ -9,6 +9,7 @@ export default function CustomNavbar() {
     const pathname = usePathname()
     const { data: session } = useSession()
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)
+    const [isSessionLoading, setIsSessionLoading] = useState(true)
 
     const toggleNavbar = () => {
         setIsNavbarOpen(!isNavbarOpen)
@@ -17,14 +18,27 @@ export default function CustomNavbar() {
         borderRadius: '50%',
         border: '1px solid #fff',
     }
-
-
+    useEffect(() => {
+        const handleSessionUpdate = () => {
+            setIsSessionLoading(false);
+        };
+        if (session) {
+            handleSessionUpdate();
+        } else {
+            const cleanupSessionObserver = () => {
+                const unsubscribe = () => {
+                };
+                return unsubscribe;
+            };
+            const cleanup = cleanupSessionObserver();
+            return cleanup;
+        }
+    }, [session]);
     return (
         <div>
             <nav className="bg-white border-gray-200 dark:bg-gray-800">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-
                         <Image className=''
                             src="/GTS.jpg"
                             width={50}
@@ -66,8 +80,8 @@ export default function CustomNavbar() {
                                 <Link href="/team" className={`${pathname === '/team' ? 'text-blue-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>Our Team</Link>
                             </li>
 
-                            
-                            {!session?.user && (
+
+                            {!session?.user && !isSessionLoading && (
                                 <>
                                     <li>
                                         <Link href="/register" className={`${pathname === '/register' ? 'text-blue-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>Register</Link>
@@ -78,17 +92,17 @@ export default function CustomNavbar() {
                                 </>
                             )}
 
-                            
+
                             {session?.user && (
                                 <li>
                                     <Link href="/api/auth/signout" className={`${pathname === '/logout' ? 'text-blue-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>Logout</Link>
                                 </li>
                             )}
 
-                            
+
                             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                                 <svg className="block rounded hover:bg-orange-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 text-orange-500 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1.5em" viewBox="0 0 10 12"><path fill="currentColor" d="m5.966 4.49l-.827.742a5 5 0 0 0 .455 1.073a4.7 4.7 0 0 0 .722.922l1.071-.33c.6-.185 1.255.005 1.654.48l.61.726a1.47 1.47 0 0 1-.137 2.042c-.995.908-2.527 1.215-3.674.314a10.4 10.4 0 0 1-2.516-2.87A10 10 0 0 1 2.03 4.013c-.22-1.422.821-2.56 2.119-2.948c.774-.232 1.6.166 1.884.908l.335.875c.22.576.062 1.225-.402 1.641" /></svg>
-                                <a href="tel:+9779856987452" className='block rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 text-orange-500'>+9779856987452</a>
+                                <Link href="tel:+9779856987452" className='block rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 text-orange-500'>+9779856987452</Link>
                             </ul>
                         </ul>
                     </div>

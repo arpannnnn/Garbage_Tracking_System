@@ -15,7 +15,6 @@ export default function CustomRegister() {
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
-
     const handleMobileNumberChange = (event) => {
         const value = event.target.value;
         if (/^\d*$/.test(value) && value.length <= 10) {
@@ -31,7 +30,6 @@ export default function CustomRegister() {
         citizenshipRef.current = formattedValue;
         event.target.value = formattedValue;
     };
-
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
@@ -101,7 +99,6 @@ export default function CustomRegister() {
                                         />
                                     </div>
                                 </div>
-
 
                                 <div className="mt-4"></div>
                                 <div>
