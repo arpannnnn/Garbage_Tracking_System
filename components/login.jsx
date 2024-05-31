@@ -13,18 +13,49 @@ export default function CustomLogin() {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        signIn("credentials", { email: emailRef.current.value, password: passRef.current.value, redirect: false }).then(res => {
-            if (res.error == null) {
-                router.push('/')
+        // signIn("credentials", { email: emailRef.current.value, password: passRef.current.value, redirect: false }).then(res => {
+        //     if (res.error == null) {
+        //         router.push('/')
+        //     }
+        //     else {
+        //         alert(`${res.error}`)
+        //     }
+        // }).catch(error => {
+        //     console.log(`${error}`);
+        // }).finally(() => {
+        //     setisGoogleLoading(false)
+        // })
+        const payload = {
+            email: emailRef.current.value,
+            password: passRef.current.value
+        };
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/login_user/", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                // Assuming your backend returns a token upon successful login
+                const token = data.token;
+                // Store the token in local storage
+                localStorage.setItem('user_token', JSON.stringify(token));
+                // Redirect to the homepage
+                router.push('/');
+                alert('Login successfully!!')
+            } else {
+                // Handle invalid credentials or other errors
+                alert('Invalid credentials. Please try again.');
             }
-            else {
-                alert(`${res.error}`)
-            }
-        }).catch(error => {
-            console.log(`${error}`);
-        }).finally(() => {
-            setisGoogleLoading(false)
-        })
+         } catch (error) {
+            console.error('Error logging in:', error);
+            alert('An error occurred during login. Please try again.');
+         } finally {
+            setisGoogleLoading(false);
+         }
 
     }
     const handleGoogleLogin = async () => {
