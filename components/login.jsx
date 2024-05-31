@@ -8,7 +8,7 @@ export default function CustomLogin() {
     const emailRef = useRef("");
     const passRef = useRef("");
     const router = useRouter();
-    // const [isLoading, setisLoading] = useState(false);
+
     const [isGoogleLoading, setisGoogleLoading] = useState(false);
 
     const handleLogin = async (event) => {
@@ -45,8 +45,8 @@ export default function CustomLogin() {
     const imageStyle = {
         borderRadius: '50%',
         border: '1px solid #fff',
-      }
-       
+    }
+
 
 
     return (
@@ -59,7 +59,7 @@ export default function CustomLogin() {
                             width={50}
                             height={50}
                             alt="Picture of the author"
-                            style={imageStyle} 
+                            style={imageStyle}
                         />
                         GTS
                     </a>

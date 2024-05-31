@@ -1,99 +1,90 @@
-
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-// import { FirestoreAdapter } from "@auth/firebase-adapter"
-// import { cert } from "firebase-admin/app";
+import { FirestoreAdapter } from "@auth/firebase-adapter";
+import { cert } from "firebase-admin/app";
 
 export const authOptions = {
-    // adapter: FirestoreAdapter({
-    //     credential: cert({
-    //         projectId: process.env.FIREBASE_PROJECT_ID,
-    //         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    //         privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    //     }),
-    // }), 
+    adapter: FirestoreAdapter({
+        credential: cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        }),
+    }),
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
         CredentialsProvider({
-            name: 'Acer Account',
+            name: 'Custom Credentials',
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "Enter Email" },
-                password: { label: "Password", type: "password" }
+                password: { label: "Password", type: "password" },
+                fullName: { label: "Full Name", type: "text" },
+                citizenship: { label: "Citizenship Number", type: "text" },
+                mobileNumber: { label: "Mobile Number", type: "text" },
+                latitude: { label: "Latitude", type: "text" },
+                longitude: { label: "Longitude", type: "text" },
+                role: { label: "Role", type: "text" },
             },
             async authorize(credentials, req) {
-                if (!credentials || !credentials?.email || !credentials?.password)
+                if (!credentials || !credentials.email || !credentials.password) {
                     throw new Error('Email or password is invalid');
-                //const user = users.find((u) => u.email === credentials?.email);
+                }
+
                 const formData = {
                     email: credentials.email,
-                    password: credentials.password
-                }
-                const payload = {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
+                    password: credentials.password,
+                    fullName: credentials.fullName,
+                    citizenship: credentials.citizenship,
+                    mobileNumber: credentials.mobileNumber,
+                    latitude: credentials.latitude,
+                    longitude: credentials.longitude,
+                    role: credentials.role,
+                };
 
-                }
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
-                const resJson = await res.json();
-                const user = resJson.data;
-                if (user?.email === credentials?.email) {
-                    return user
-                }
-                else {
-                    throw new Error('Invalis Credientials')
-                }
+                // Perform any additional validation or logic here
+
+                // If the credentials are valid, return the user object
+                return formData;
             }
         })
     ],
     pages: {
         signIn: '/login',
-
     },
-    Secret: process.env.NextAuth_SECRET,
+    secret: process.env.NextAuth_SECRET,
     session: {
         strategy: 'jwt',
-        maxAge: 60 * 60 * 24 * 365,//1 year
+        maxAge: 60 * 60 * 24 * 365, // 1 year
     },
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            console.log("signIn", { user, account, profile, email, credentials })
-
-            return true
+            console.log("signIn", { user, account, profile, email, credentials });
+            return true;
         },
         async redirect({ url, baseUrl }) {
-            console.log("redirect", { url, baseUrl })
-
-            return baseUrl
+            console.log("redirect", { url, baseUrl });
+            return baseUrl;
         },
         async session({ session, user, token }) {
-            const newSession = session;
             if (token?.user) {
-                session.user = token?.user;
-                newSession.user = token.user;
-                newSession.accessToken = token.accessToken;
-
+                session.user = token.user;
+                session.accessToken = token.accessToken;
             }
-
-            return session
+            return session;
         },
         async jwt({ token, user, account, profile, isNewUser }) {
-            const newToken = token;
-
             if (user) {
                 token.user = user;
-                newToken.accessToken = account?.access_token;
+                token.accessToken = account?.access_token;
             }
-            return token
+            return token;
         }
     }
-}
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+};
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

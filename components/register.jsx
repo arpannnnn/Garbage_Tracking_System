@@ -44,8 +44,8 @@ export default function CustomRegister() {
                 fullName: fullNameRef.current,
                 citizenship: citizenshipRef.current,
                 mobileNumber: mobileNumber.current,
-                latitude: latitude,
-                longitude: longitude,
+                latitude:parseFloat(latitude),
+                longitude:parseFloat(longitude),
                 role: selectedRole // Include the selected role in the payload
             };
 
