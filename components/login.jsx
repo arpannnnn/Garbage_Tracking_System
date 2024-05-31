@@ -13,49 +13,18 @@ export default function CustomLogin() {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        // signIn("credentials", { email: emailRef.current.value, password: passRef.current.value, redirect: false }).then(res => {
-        //     if (res.error == null) {
-        //         router.push('/')
-        //     }
-        //     else {
-        //         alert(`${res.error}`)
-        //     }
-        // }).catch(error => {
-        //     console.log(`${error}`);
-        // }).finally(() => {
-        //     setisGoogleLoading(false)
-        // })
-        const payload = {
-            email: emailRef.current.value,
-            password: passRef.current.value
-        };
-        try {
-            const response = await fetch("http://127.0.0.1:8000/api/login_user/", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-            if (response.ok) {
-                const data = await response.json();
-                // Assuming your backend returns a token upon successful login
-                const token = data.token;
-                // Store the token in local storage
-                localStorage.setItem('user_token', JSON.stringify(token));
-                // Redirect to the homepage
-                router.push('/');
-                alert('Login successfully!!')
-            } else {
-                // Handle invalid credentials or other errors
-                alert('Invalid credentials. Please try again.');
+        signIn("credentials", { email: emailRef.current.value, password: passRef.current.value, redirect: false }).then(res => {
+            if (res.error == null) {
+                router.push('/')
             }
-         } catch (error) {
-            console.error('Error logging in:', error);
-            alert('An error occurred during login. Please try again.');
-         } finally {
-            setisGoogleLoading(false);
-         }
+            else {
+                alert(`${res.error}`)
+            }
+        }).catch(error => {
+            console.log(`${error}`);
+        }).finally(() => {
+            setisGoogleLoading(false)
+        })
 
     }
     const handleGoogleLogin = async () => {
@@ -108,11 +77,7 @@ export default function CustomLogin() {
                                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                     <input type="password" ref={passRef} id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-start">
-
-                                    </div>
-                                </div>
+                              
 
 
                                 <button onClick={handleLogin} className="w-full text-white bg-red-800 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"> Sign in</button>

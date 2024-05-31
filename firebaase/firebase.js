@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; // <-- Ensure this import is present
+import { getAuth } from "firebase/auth"; //
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -10,11 +11,14 @@ const firebaseConfig = {
   storageBucket: "authapi-c7734.appspot.com",
   messagingSenderId: "947613023347",
   appId: "1:947613023347:web:d032cdd12b6a02501dbe06",
-  measurementId: "G-RJG8TYCNXW"
+  measurementId: "G-RJG8TYCNXW",
+  databaseURL:" https://authapi-c7734-default-rtdb.firebaseio.com"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
-export const customAuth = getAuth(app); // <-- This should now work
+ const customAuth = getAuth(app); //
+ const db = getFirestore(app);
+ export { app, customAuth, db };

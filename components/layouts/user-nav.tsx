@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
-import { Button } from '../../components/ui/button'
+import { Button } from '../../components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,43 +11,89 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger
-} from '../../components/ui/dropdown-menu'
+} from '../../components/ui/dropdown-menu';
+import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { customAuth, db } from '../../firebaase/firebase';
 
 export function UserNav() {
-
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
-    const username = profile ? profile.name : "Loading...";
-    const email = profile ? profile.email : null;
-    const role = profile ? profile.role : null;
 
     useEffect(() => {
-        async function fetchProfile() {
-            try {
-                const authToken = JSON.parse(localStorage.getItem("user_token"));
-                const response = await fetch('http://127.0.0.1:8000/api/profile/', {
-                    headers: {
-                        'Authorization': `Bearer ${authToken.access}`
-                    }
-                }); // Replace with your actual API endpoint
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        const unsubscribe = onAuthStateChanged(customAuth, async (user) => {
+            if (user) {
+                const userRef = doc(db, 'users', user.uid);
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    setProfile(docSnap.data());
                 }
-                const data = await response.json();
-                setProfile(data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Failed to fetch profile data:', error);
-                setLoading(false);
             }
-        }
+            setLoading(false);
+        });
 
-        fetchProfile();
+        return () => unsubscribe();
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem("user_token");
-        window.location.href = '/login'; // Redirect to login page or home page
+        firebaseSignOut(customAuth).then(() => {
+            window.location.href = '/login';
+        }).catch((error) => {
+            console.error('Failed to sign out:', error);
+        });
+    };
+
+    if (loading) {
+        return null; // or a loading spinner
+    }
+
+    if (!profile) {
+        return (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                        <Avatar className="h-8 w-8">
+                            <AvatarImage
+                                src='https://avatars.dicebear.com/api/avataaars/123.svg'
+                                alt="User avatar"
+                            />
+                            <AvatarFallback>
+                                N/A
+                            </AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                            <p className="text-sm font-medium leading-none">
+                                Unknown User
+                            </p>
+                            <p className="text-xs leading-none text-muted-foreground">
+                                No Email
+                            </p>
+                        </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                            Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            Billing
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            Settings
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>New Team</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                        Log out
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        );
     }
 
     return (
@@ -61,7 +106,7 @@ export function UserNav() {
                             alt="User avatar"
                         />
                         <AvatarFallback>
-                            {username.charAt(0)}
+                            {profile.fullName.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
                 </Button>
@@ -70,13 +115,13 @@ export function UserNav() {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                            {username}
+                            {profile.fullName}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            {email}
+                            {profile.email}
                         </p>
                         <p className="text-xs font-bold uppercase text-green-400 leading-none text-muted-foreground">
-                            {role}
+                            {profile.role}
                         </p>
                     </div>
                 </DropdownMenuLabel>

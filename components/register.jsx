@@ -1,7 +1,9 @@
-'use client'
+"use client"
 import React, { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
+// import { useRouter } from 'next/router';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { app } from '../firebaase/firebase';
 const roles = ['User', 'Staff'];
 
 export default function CustomRegister() {
@@ -11,16 +13,22 @@ export default function CustomRegister() {
     const fullNameRef = useRef("");
     const citizenshipRef = useRef("");
     const [selectedRole, setSelectedRole] = useState('');
-    const router = useRouter();
+    // const router = useRouter();
+    const [isGoogleLoading, setisGoogleLoading] = useState(false);
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     const handleMobileNumberChange = (event) => {
         const value = event.target.value;
         if (/^\d*$/.test(value) && value.length <= 10) {
             setMobileNumber(value);
         }
     }
+
     const handleCitizenshipChange = (event) => {
         let value = event.target.value.replace(/\D/g, '');
         if (value.length > 16) {
@@ -30,42 +38,46 @@ export default function CustomRegister() {
         citizenshipRef.current = formattedValue;
         event.target.value = formattedValue;
     };
+
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
-            if (emailRef.current.length === 0) return alert('Email is empty');
-            if (passRef.current.length < 6) return alert('Password must not be less than 6 characters');
-            if (passRef.current !== confirmPassRef.current) return alert('Passwords must match');
+            const email = emailRef.current;
+            const password = passRef.current;
+            const confirmPassword = confirmPassRef.current;
+            const fullName = fullNameRef.current;
+            const citizenship = citizenshipRef.current;
+
+            // Validate email and password
+            if (!email) return alert('Email is empty');
+            if (!password || password.length < 6) return alert('Password must not be less than 6 characters');
+            if (password !== confirmPassword) return alert('Passwords must match');
+
+            // Register user using Firebase authentication
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
             const payload = {
-                email: emailRef.current,
-                password: passRef.current,
-                fullName: fullNameRef.current,
-                fullName: fullNameRef.current,
-                citizenship: citizenshipRef.current,
-                mobileNumber: mobileNumber.current,
-                latitude:parseFloat(latitude),
-                longitude:parseFloat(longitude),
-                role: selectedRole // Include the selected role in the payload
+                email: user.email,
+                fullName,
+                citizenship,
+                mobileNumber,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+                role: selectedRole,
+                uid: user.uid,
             };
 
-            const formData = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            };
+            // Store user data in Firestore
+            await setDoc(doc(db, 'users', user.uid), payload);
 
-            const res = await fetch("http://localhost:3000/api/auth/register", formData);
-            const resJson = await res.json();
-            alert(`${resJson.message}`);
-            router.push('/login');
+            // Redirect user to login page
+            // router.push('/login');
         } catch (error) {
-            alert(`${error}`);
+            console.error('Error registering user:', error);
+            alert('Error registering user. Please try again.');
         }
-    };
+    }
 
     const imageStyle = {
         borderRadius: '5%',
@@ -73,6 +85,21 @@ export default function CustomRegister() {
         width: '700px',
         height: '700px',
     };
+    const handleGoogleLogin = async () => {
+        try {
+
+            setisGoogleLoading(true);
+            await signIn("google", { redirect: true, callbackUrl: 'http://localhost:3000' })
+        }
+        catch (error) {
+            console.error(error);
+
+        }
+        finally {
+            setisGoogleLoading(false)
+        }
+
+    }
 
     return (
         <section>
@@ -82,9 +109,8 @@ export default function CustomRegister() {
                         <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
                             Sign Up
                         </h2>
-                        <form action="#" method="POST" className="mt-8">
+                        <form onSubmit={handleRegister} className="mt-8">
                             <div className="space-y-5">
-
                                 <div>
                                     <label htmlFor="fullName" className="text-base font-medium text-gray-900">
                                         Full Name
@@ -192,10 +218,8 @@ export default function CustomRegister() {
                                             placeholder="Mobile Number"
                                             maxLength="10" // Restrict the length to 10 digits
                                         />
-
                                     </div>
                                 </div>
-
                                 <div className='flex space-x-2 my-4'>
                                     <div >
                                         <input
@@ -232,8 +256,7 @@ export default function CustomRegister() {
                                 </div>
                                 <div>
                                     <button
-                                        onClick={handleRegister}
-                                        type="button"
+                                        type="submit"
                                         className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                     >
                                         Get started{' '}
@@ -254,26 +277,25 @@ export default function CustomRegister() {
                                         </svg>
                                     </button>
                                 </div>
+                                <button onClick={handleGoogleLogin}
+                                    type="button"
+                                    className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
+                                >
+                                    <span className="mr-2 inline-block">
+                                        <svg
+                                            className="h-6 w-6 text-rose-500"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                        >
+                                            <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
+                                        </svg>
+                                    </span>
+                                    {isGoogleLoading ? <span className='pulse'>Loading...</span> : 'Sign in with Google'}
+                                </button>
                             </div>
                         </form>
-                        <div className="mt-3 space-y-3">
-                            <button
-                                type="button"
-                                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-                            >
-                                <span className="mr-2 inline-block">
-                                    <svg
-                                        className="h-6 w-6 text-rose-500"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        <path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path>
-                                    </svg>
-                                </span>
-                                Sign in with Google
-                            </button>
-                        </div>
+                         
                     </div>
                 </div>
                 <div className="h-full w-full mt-4">
