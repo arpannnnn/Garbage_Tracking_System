@@ -1,5 +1,6 @@
+"use client"
 import { Breadcrumb } from '../../../../components/ui/breadcrumb';
-import { CreateProfileOne } from '../../../../components/forms/user-profile-stepper/create-profile';
+import CreateProfileOne from '../../../../components/forms/user-profile-stepper/create-profile';
 import { ScrollArea } from '../../../../components/ui/scroll-area';
 import BreadCrumb from '../../../../components/breadcrumb';
 
@@ -9,7 +10,7 @@ export default function page() {
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <BreadCrumb items={breadcrumbItems} />
-        <CreateProfileOne categories={[]} initialData={null} />
+        <CreateProfileOne />
       </div>
     </ScrollArea>
   );

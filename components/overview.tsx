@@ -69,7 +69,7 @@ export function Overview() {
           fontSize={9}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `${value} Tons `}
+          tickFormatter={(value) => `${value} Kg `}
         />
         <Bar dataKey="total" fill="green" radius={[4, 4, 0, 0]} />
       </BarChart>

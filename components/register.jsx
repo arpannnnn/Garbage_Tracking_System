@@ -1,6 +1,6 @@
 "use client"
 import React, { useRef, useState } from 'react';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { app } from '../firebaase/firebase';
@@ -13,7 +13,7 @@ export default function CustomRegister() {
     const fullNameRef = useRef("");
     const citizenshipRef = useRef("");
     const [selectedRole, setSelectedRole] = useState('');
-    // const router = useRouter();
+    const router = useRouter();
     const [isGoogleLoading, setisGoogleLoading] = useState(false);
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
@@ -72,7 +72,7 @@ export default function CustomRegister() {
             await setDoc(doc(db, 'users', user.uid), payload);
 
             // Redirect user to login page
-            // router.push('/login');
+            router.push('/login');
         } catch (error) {
             console.error('Error registering user:', error);
             alert('Error registering user. Please try again.');
@@ -295,7 +295,7 @@ export default function CustomRegister() {
                                 </button>
                             </div>
                         </form>
-                         
+
                     </div>
                 </div>
                 <div className="h-full w-full mt-4">
