@@ -16,6 +16,8 @@ const hardcodedSchedules = [
     '2024-06-10',
     '2024-06-15',
 ];
+
+
 // Function to fetch driver schedules from the server (commented out for now)
 // const fetchDriverSchedules = () => {
 //     return new Promise<string[]>((resolve) => {

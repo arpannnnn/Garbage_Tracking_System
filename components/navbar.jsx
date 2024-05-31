@@ -34,6 +34,12 @@ export default function CustomNavbar() {
             return cleanup;
         }
     }, [session]);
+    const handleLogout = () => {
+        // Clear local storage
+        localStorage.clear();
+        // Redirect to the login page
+        router.push('/login');
+    };
     return (
         <div>
             <nav className="bg-white border-gray-200 dark:bg-gray-800">
@@ -113,3 +119,7 @@ export default function CustomNavbar() {
         </div>
     )
 }
+
+
+
+
