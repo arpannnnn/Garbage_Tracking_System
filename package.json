@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/firebase-adapter": "^2.0.0",
     "@dnd-kit/core": "^6.1.0",
     "@hookform/resolvers": "^3.4.2",
     "@next-auth/firebase-adapter": "^0.0.2-canary.207",
@@ -33,6 +34,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "firebase": "^10.11.1",
+    "firebase-admin": "^12.1.0",
     "framer-motion": "^11.2.6",
     "lucide-react": "^0.379.0",
     "next": "14.2.3",
@@ -53,6 +56,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "typescript": "5.4.5"
   }
 }
