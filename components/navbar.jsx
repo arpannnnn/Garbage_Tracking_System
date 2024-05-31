@@ -9,7 +9,7 @@ export default function CustomNavbar() {
     const pathname = usePathname()
     const { data: session } = useSession()
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)
-    const [isSessionLoading, setIsSessionLoading] = useState(true)
+    const [isSessionLoading, setIsSessionLoading] = useState(false)
 
     const toggleNavbar = () => {
         setIsNavbarOpen(!isNavbarOpen)
