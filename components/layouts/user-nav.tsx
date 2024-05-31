@@ -1,4 +1,7 @@
 'use client';
+
+import { useEffect, useState } from 'react';
+
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
 import { Button } from '../../components/ui/button'
 import {
@@ -8,74 +11,93 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger
 } from '../../components/ui/dropdown-menu'
-import { signOut, useSession } from 'next-auth/react';
+
 export function UserNav() {
-    const { data: session } = useSession();
-    if (!session) { //for test !session done
-        return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage
-                                src='https://avatars.dicebear.com/api/avataaars/123.svg'
-                                // src={session.user?.image ?? ''}
-                                alt="ok"
 
-                            // {session.user?.name ?? ''}
+    const [profile, setProfile] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const username = profile ? profile.name : "Loading...";
+    const email = profile ? profile.email : null;
+    const role = profile ? profile.role : null;
 
-                            />
-                            <AvatarFallback>
+    useEffect(() => {
+        async function fetchProfile() {
+            try {
+                const authToken = JSON.parse(localStorage.getItem("user_token"));
+                const response = await fetch('http://127.0.0.1:8000/api/profile/', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken.access}`
+                    }
+                }); // Replace with your actual API endpoint
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setProfile(data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Failed to fetch profile data:', error);
+                setLoading(false);
+            }
+        }
 
-                                Binay
-                                {/* {session.user?.name?.[0]} */}
+        fetchProfile();
+    }, []);
 
-                            </AvatarFallback>
-                        </Avatar>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                        <div className="flex flex-col space-y-1">
-                            <p className="text-sm font-medium leading-none">
-                                Arpan
-                                {/* {session.user?.name} */}
-
-                            </p>
-
-                            <p className="text-xs leading-none text-muted-foreground">
-                                arpan@gmail.com
-                                {/* {session.user?.email} */}
-
-                            </p>
-                        </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            Profile
-
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Billing
-
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
-
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>New Team</DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOut()}>
-                        Log out
-
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        );
+    const handleLogout = () => {
+        localStorage.removeItem("user_token");
+        window.location.href = '/login'; // Redirect to login page or home page
     }
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage
+                            src='https://avatars.dicebear.com/api/avataaars/123.svg'
+                            alt="User avatar"
+                        />
+                        <AvatarFallback>
+                            {username.charAt(0)}
+                        </AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                            {username}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                            {email}
+                        </p>
+                        <p className="text-xs font-bold uppercase text-green-400 leading-none text-muted-foreground">
+                            {role}
+                        </p>
+                    </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                        Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Billing
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>New Team</DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                    Log out
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
 }

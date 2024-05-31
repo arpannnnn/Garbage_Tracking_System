@@ -1,3 +1,5 @@
+'use client'
+import { useEffect, useState } from 'react';
 import { CalendarDateRangePicker } from '../../../components/date-range-picker';
 import { Overview } from '../../../components/overview';
 
@@ -13,9 +15,40 @@ import {
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
 
-const username= "Binay Rijal";
 
-export default function page() {
+
+export default function Page() {
+  
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const username = profile ? profile.name : "Loading...";
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const authToken = JSON.parse(localStorage.getItem("user_token"));
+        const response = await fetch('http://127.0.0.1:8000/api/profile/',{
+          headers: {
+            'Authorization': `Bearer ${authToken.access}`
+        }
+        }); // Replace with your actual API endpoint
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setProfile(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch profile data:', error);
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   
 
   return (

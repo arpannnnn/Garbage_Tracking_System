@@ -41,7 +41,7 @@ export const authOptions = {
                     body: JSON.stringify(formData)
 
                 }
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
+                const res = await fetch('http://127.0.0.1:8000/apie/login_user/', payload);
                 const resJson = await res.json();
                 const user = resJson.data;
                 if (user?.email === credentials?.email) {
