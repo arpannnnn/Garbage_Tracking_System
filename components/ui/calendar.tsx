@@ -14,7 +14,7 @@ function Calendar({
   ...props
 }: CalendarProps) {
   return (
-    <div className="flex justify-center items-center mt-4 ">
+    <div className="flex justify-center items-center mt-4 h-full w-full  ">
       {/* Centering the calendar */}
       <DayPicker
         showOutsideDays={showOutsideDays}

@@ -44,11 +44,28 @@ export const authOptions = {
                     longitude: credentials.longitude,
                     role: credentials.role,
                 };
+                const payload = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                };
 
+                const res = await fetch('http://localhost:3000/api/auth/login', payload);
+                const resJson = await res.json();
+                const user = resJson.data;
+
+                if (user?.email === credentials?.email) {
+                    return user;
+                } else {
+                    throw new Error('Invalid Credentials');
+                }
                 // Perform any additional validation or logic here
 
                 // If the credentials are valid, return the user object
-                return formData;
+
             }
         })
     ],
@@ -69,12 +86,17 @@ export const authOptions = {
             console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
-        async session({ session, user, token }) {
+        async session({ session, user, token,email }) {
             if (token?.user) {
                 session.user = token.user;
                 session.accessToken = token.accessToken;
+                session.email = email;
+                session.role = token.user.role;
             }
+
+
             return session;
+
         },
         async jwt({ token, user, account, profile, isNewUser }) {
             if (user) {

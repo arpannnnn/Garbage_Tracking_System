@@ -12,7 +12,7 @@ const ProfileComponent = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(customAuth, (user) => {
       if (user) {
-        const { email, displayName, phoneNumber, photoURL } = user;
+        const { email } = user;
         const userDocRef = doc(db, 'users', user.uid);
         getDoc(userDocRef)
           .then((docSnapshot) => {

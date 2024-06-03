@@ -3,7 +3,7 @@ import { CalendarDateRangePicker } from '../../../../components/date-range-picke
 
 export default function page() {
   return (
-    <div>
+    <div className=' min-h-[100vh]'>
         <CalendarDateRangePicker isDriver={false} />
     </div>
   )

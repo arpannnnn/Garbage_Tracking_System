@@ -1,31 +1,36 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
+import { database } from '../firebaase/firebase'; // Ensure the path is correct
+import { ref, onValue } from "firebase/database";
 
 const SmartDustbin = () => {
-    const [dustbinLevel, setDustbinLevel] = useState(20); // Hardcoded dustbin level
-    const [lastUpdated, setLastUpdated] = useState(null); // Initialize with null
+    const [dustbinLevel, setDustbinLevel] = useState(null);
+    const [dustbinPercentage, setDustbinPercentage] = useState(null);
+    const [lastUpdated, setLastUpdated] = useState(null);
 
     useEffect(() => {
-        // Set the initial lastUpdated value on the client-side
-        setLastUpdated(new Date());
+        const dustbinRef = ref(database, "/sensor/distance");
 
-        const interval = setInterval(() => {
-            fetchDustbinData();
-        }, 3000); // Fetch new data every 3 seconds
+        const fetchDustbinData = () => {
+            onValue(dustbinRef, (snapshot) => {
+                const data = snapshot.val();
+                console.log('Fetched data:', data); // Log data to verify it's being fetched
+                if (data !== null) {
+                    setDustbinLevel(data);
+                    const percentage = (data / 194) * 100; // Convert to percentage with max value 194
+                    setDustbinPercentage(percentage > 100 ? 100 : percentage); // Cap at 100%
+                    setLastUpdated(new Date());
+                }
+            });
+        };
 
-        return () => clearInterval(interval); // Clean up the interval on component unmount
+        // Fetch initial data and set up a listener for changes
+        fetchDustbinData();
+
+        // Optionally, you can clear the listener if needed in future
+        // return () => off(dustbinRef);
+
     }, []);
-
-    const fetchDustbinData = async () => {
-        try {
-            // Hardcoded dustbin level for testing purposes
-            const randomLevel = Math.floor(Math.random() * 101);
-            setDustbinLevel(randomLevel);
-            setLastUpdated(new Date());
-        } catch (error) {
-            console.error('Error fetching dustbin data:', error);
-        }
-    };
 
     return (
         <div className="mt-2 mx-60 p-6 bg-white rounded-lg shadow-lg">
@@ -47,14 +52,27 @@ const SmartDustbin = () => {
                 Dustbin Level Monitoring
             </h2>
             <div className="relative w-24 h-48 mx-auto border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-100">
-                <div
-                    className={`absolute bottom-0 w-full transition-all duration-500 ease-in-out ${dustbinLevel > 75 ? 'bg-red-500' : dustbinLevel > 50 ? 'bg-yellow-500' : 'bg-green-500'
-                        }`}
-                    style={{ height: `${dustbinLevel}%` }}
-                ></div>
+                {dustbinPercentage !== null ? (
+                    <div
+                        className={`absolute bottom-0 w-full transition-all duration-500 ease-in-out ${dustbinPercentage > 75 ? 'bg-red-500' : dustbinPercentage > 50 ? 'bg-yellow-500' : 'bg-green-500'
+                            }`}
+                        style={{ height: `${dustbinPercentage}%` }}
+                    ></div>
+                ) : (
+                    <div className="flex items-center justify-center h-full">
+                        <p>Loading...</p>
+                    </div>
+                )}
             </div>
-            <p className="mt-4 text-lg font-semibold">Dustbin Level: {dustbinLevel}%</p>
-            {lastUpdated && <p className="text-gray-500">Last Updated: {lastUpdated.toLocaleTimeString()}</p>}
+            {dustbinLevel !== null && (
+                <p className="mt-4 text-lg font-semibold">Dustbin Level: {dustbinLevel}</p>
+            )}
+            {dustbinPercentage !== null && (
+                <p className="mt-4 text-lg font-semibold">In (Percentage): {Math.round(dustbinPercentage)}%</p>
+            )}
+            {lastUpdated && (
+                <p className="text-gray-500 mt-4">Last Updated: {lastUpdated.toLocaleTimeString()}</p>
+            )}
         </div>
     );
 };

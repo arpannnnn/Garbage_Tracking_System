@@ -134,27 +134,27 @@ export const TeamSection = () => {
                     </div>
                 </div>
             </section>
-            <section class="text-black bg-cyan-100 body-font relative ">
-                <div class="container px-5 py-20 mx-auto flex sm:flex-nowrap flex-wrap ">
-                    <div class="lg:w-2/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative ">
-                        <iframe width="100%" height="100%" class="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Nepal&ie=UTF8&t=&z=7&iwloc=B&output=embed"></iframe>
-                        <div class="bg-white relative flex flex-wrap py-6 rounded shadow-md">
-                            <div class="lg:w-1/2 px-6">
-                                <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
-                                <p class="mt-1">Ghorahi Dang 11, Nepal </p>
+            <section className="text-black bg-cyan-100 body-font relative ">
+                <div className="container px-5 py-20 mx-auto flex sm:flex-nowrap flex-wrap ">
+                    <div className="lg:w-2/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative ">
+                        <iframe width="100%" height="100%" className="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Nepal&ie=UTF8&t=&z=7&iwloc=B&output=embed"></iframe>
+                        <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
+                            <div className="lg:w-1/2 px-6">
+                                <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
+                                <p className="mt-1">Ghorahi Dang 11, Nepal </p>
                             </div>
-                            <div class="lg:w-1/2 px-6 mt-4 lg:mt-0">
-                                <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
-                                <a class="text-indigo-500 leading-relaxed">arpannacharya@gmail.com</a>
-                                <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">PHONE</h2>
-                                <p class="leading-relaxed">+977-9866742214</p>
+                            <div className="lg:w-1/2 px-6 mt-4 lg:mt-0">
+                                <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
+                                <a className="text-indigo-500 leading-relaxed">arpannacharya@gmail.com</a>
+                                <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">PHONE</h2>
+                                <p className="leading-relaxed">+977-9866742214</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
-                        <h2 className="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
-                        <p className="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
+                    <div classNameName="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
+                        <h2 classNameName="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
+                        <p classNameName="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
                         <form onSubmit={handleSubmit}>
                             <div className="relative mb-4">
                                 <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
