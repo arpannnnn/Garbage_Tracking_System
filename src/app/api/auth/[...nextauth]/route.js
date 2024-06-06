@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
 
@@ -13,10 +12,7 @@ export const authOptions = {
         }),
     }),
     providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        }),
+
         CredentialsProvider({
             name: 'Custom Credentials',
             credentials: {
@@ -62,9 +58,7 @@ export const authOptions = {
                 } else {
                     throw new Error('Invalid Credentials');
                 }
-                // Perform any additional validation or logic here
-
-                // If the credentials are valid, return the user object
+                
 
             }
         })
@@ -86,7 +80,7 @@ export const authOptions = {
             console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
-        async session({ session, user, token,email }) {
+        async session({ session, token, email }) {
             if (token?.user) {
                 session.user = token.user;
                 session.accessToken = token.accessToken;
@@ -98,7 +92,7 @@ export const authOptions = {
             return session;
 
         },
-        async jwt({ token, user, account, profile, isNewUser }) {
+        async jwt({ token, user, account }) {
             if (user) {
                 token.user = user;
                 token.accessToken = account?.access_token;

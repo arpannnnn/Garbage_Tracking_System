@@ -1,7 +1,7 @@
 
 "use client"
 import { useEffect, useState } from 'react';
-import { customAuth, db } from '../../../firebaase/firebase';
+import { customAuth, db } from '../../../firebase/firebase';
 import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { MailIcon, PhoneIcon, MapIcon, UserIcon } from 'lucide-react';

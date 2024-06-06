@@ -1,24 +1,25 @@
 'use client'
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 
 export const Testi = () => {
     const testimonials = [
         {
-            name: 'Lionel Andrés Messi Cuccitini',
+            name: 'Qutoof',
             position: 'Operations Manager at CleanTech Solutions',
-            photo: 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg',
+            photo: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=1917&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D ',
             feedback: '“GTS Nepal&&s platform is a game-changer. The ease of use and the ability to manage everything from user charges to GIS surveys has significantly improved our workflow. Highly recommended!”',
         },
         {
-            name: 'Yub',
+            name: 'Bahadur',
             position: 'Facilities Director at GreenCity Initiatives',
-            photo: 'https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/354236539_2052485895082556_6461423251482142871_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=jh-ZAV4d-i8Q7kNvgG9KJvQ&_nc_ht=scontent.fktm10-1.fna&oh=00_AYB5eccBJyq1X2eHg3u6AomUC0HokUrjOsDMFYtzFCH05A&oe=665BC72E',
+            photo: 'https://images.unsplash.com/photo-1505628346881-b72b27e84530?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             feedback: '“Thanks to GTS Nepal, we have better control and visibility over our waste management operations. The integration of GPS tracking and fuel management has been particularly beneficial for our team.”'
         },
         {
-            name: 'Suman',
+            name: 'Xopher',
             position: 'Logistics Coordinator at Urban Waste Solutions',
-            photo: 'https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/275839998_970443343602742_6749721815837958030_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=3UV_EEfqpcAQ7kNvgGzsDCm&_nc_ht=scontent.fktm10-1.fna&oh=00_AYCbOTUcrMdXG2WIURytn6PcHwnHuLRjny5jYx_zPO69Eg&oe=665BABF6',
+            photo: 'https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             feedback: '“GTS Nepal provides an all-in-one solution that meets all our waste management needs. The platform&&s robust monitoring and reporting features have enhanced our ability to maintain high standards of cleanliness and efficiency.”.',
         },
         
@@ -61,9 +62,11 @@ export const Testi = () => {
                     >
                         <div className="absolute w-full bg-slate-800  -z-10 md:h-96 rounded-2xl"></div>
                         <div className="w-full p-6 md:flex md:items-center rounded-2xl md:bg-transparent md:p-0 lg:px-12 md:justify-evenly">
-                            <img
+                            <Image
                                 className="h-24 w-24 md:mx-6 rounded-full object-cover shadow-md md:h-[32rem] md:w-80 lg:h-[30rem] lg:w-[26rem] md:rounded-2xl"
                                 src={photo}
+                                width={500}
+                                height={500}
                                 alt={`${name} photo`}
                             />
                             <div className="mt-2 md:mx-6">

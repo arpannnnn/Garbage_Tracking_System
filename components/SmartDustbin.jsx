@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { database } from '../firebaase/firebase'; // Ensure the path is correct
+import { database } from '../firebase/firebase'; // Ensure the path is correct
 import { ref, onValue } from "firebase/database";
 
 const SmartDustbin = () => {

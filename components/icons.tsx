@@ -29,6 +29,7 @@ import {
     User2Icon,
     UserX2Icon,
     Calendar,
+    MapIcon,
     X
   } from 'lucide-react';
   
@@ -62,6 +63,7 @@ import {
     moon: Moon,
     laptop: Laptop,
     calendar:Calendar,
+    map:MapIcon,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"

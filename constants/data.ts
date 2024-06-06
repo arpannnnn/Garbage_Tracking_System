@@ -126,10 +126,10 @@ export const navItems: NavItem[] = [
         icon: 'profile',
         label: 'profile'
     },
-    // {
-    //     title: 'Logout',
-    //     href: '/',
-    //     icon: 'login',
-    //     label: 'logout'
-    // }
+    {
+        title: 'Map',
+        href: '/dashboard/map',
+        icon: 'map',
+        label: 'map'
+    }
 ];

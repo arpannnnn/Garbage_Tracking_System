@@ -14,7 +14,7 @@ import {
 } from '../../components/ui/dropdown-menu';
 import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { customAuth, db } from '../../firebaase/firebase';
+import { customAuth, db } from '../../firebase/firebase';
 
 export function UserNav() {
     const [profile, setProfile] = useState(null);

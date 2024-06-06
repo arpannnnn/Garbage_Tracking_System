@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image';
 import React from 'react';
 import { useEffect, useState } from 'react';
 
@@ -111,12 +112,13 @@ export default function Home() {
                             </div>
                         </form>
                     </div>
-                    <div className="relative lg:col-span-5 lg:-mr-8 xl:col-span-6">
-                        <img
-                            className="aspect-[3/2] bg-gray-50 object-cover lg:aspect-[4/3] lg:h-[700px] xl:aspect-[16/9]"
+                    <div className="relative lg:col-span-5 lg:-mr-8 ml-20 xl:col-span-6">
+                        <Image
+                            className="aspect-[3/2] bg-gray-50 object-cover lg:aspect-[4/3] lg:h-[700px] xl:aspect-[16/9] py-2"
                             src="/homegts.jpg"
                             style={imageStyle}
                             alt=""
+                            width={500} height={500}
                         />
                     </div>
                 </div>
@@ -128,8 +130,8 @@ export default function Home() {
                     <div>
                         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
                             <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#000000" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" stroke-linecap="round" strokelinejoin="round" />
+                                <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#000000" strokeWidth="2" strokelinecap="round" strokelinejoin="round" />
                             </svg>
                         </div>
                         <h3 className="mt-8 text-lg font-semibold text-black">Real-time Tracking</h3>

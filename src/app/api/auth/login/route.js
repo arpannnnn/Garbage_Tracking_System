@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { NextResponse } from "next/server";
-import { customAuth } from "../../../../../firebaase/firebase";
+import { customAuth } from "../../../../../firebase/firebase";
 
 export async function POST(request){
     try{
