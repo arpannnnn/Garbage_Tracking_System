@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { database } from '../firebase/firebase';
+import { ref, onValue } from "firebase/database";
 
-// Fix  broken icon images on Leaflet maps
+// Fix broken icon images on Leaflet maps
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
@@ -14,24 +16,24 @@ L.Icon.Default.mergeOptions({
 
 // Custom SVG for driver marker icon
 const driverIconSvg = `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" ="round" strokelinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M16 16l-4-4-4 4m4-4v-6" />
-  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="currentColor"><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/><path d="M11 9v3m-4-2v2m10-8h-2m0 0H9.485c-1.226 0-1.84 0-2.39.228c-.552.229-.985.662-1.852 1.53L3.464 7.535c-.722.722-1.083 1.083-1.274 1.543c-.19.46-.19.97-.19 1.992V13c0 2.357 0 3.535.732 4.268c.487.487 1.171.65 2.268.704M15 4v4c0 1.886 0 2.828.586 3.414S17.114 12 19 12h3v1c0 2.357 0 3.535-.732 4.268c-.487.487-1.171.65-2.268.704M9 18h6"/><path d="M15 7h1.7c1.358 0 2.037 0 2.59.354c.553.353.875.994 1.519 2.276L22 12"/></g></svg>
 `;
 
 // Create a custom icon for the driver marker
 const driverMarkerIcon = L.divIcon({
   html: driverIconSvg,
-  iconSize: [32, 32], // 
-  className: "driver-marker-icon", 
+  iconSize: [32, 32],
+  className: "driver-marker-icon",
 });
 
 const MapComponent = () => {
   const [position, setPosition] = useState(null);
-  const [driverLocation, setDriverLocation] = useState(null); 
-  const [showNotification, setShowNotification] = useState(false); 
+  const [driverLocation, setDriverLocation] = useState(null);
+  // const [showNotification, setShowNotification] = useState(false);
   const [driverETA, setDriverETA] = useState(null);
+  const [binLocation, setBinLocation] = useState(null);
+  const [binStatus, setBinStatus] = useState(null);
+
   useEffect(() => {
     if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
@@ -64,6 +66,41 @@ const MapComponent = () => {
     }
   }, [position]);
 
+  // Simulate fetching bin location within 100 meters
+  useEffect(() => {
+    if (position) {
+      const [userLatitude, userLongitude] = position;
+
+      // Simulate bin location within a radius of 100 meters
+      const binLatitude = userLatitude + (1 * 0.0001 - 0.0005);
+      const binLongitude = userLongitude + (1 * 0.0001 - 0.0005);
+
+      setBinLocation([binLatitude, binLongitude]);
+    }
+  }, [position]);
+
+  // Fetch bin status from Firebase
+  useEffect(() => {
+    const binStatusRef = ref(database, "/sensor/distance");
+
+    const fetchBinStatus = () => {
+      onValue(binStatusRef, (snapshot) => {
+        const status = snapshot.val();
+        console.log('Fetched bin status:', status); // Log status to verify it's being fetched
+        
+          setBinStatus(status);
+        
+      });
+    };
+    // Fetch initial data and set up a listener for changes
+    fetchBinStatus();
+
+    // Optionally, you can clear the listener if needed in future
+    // return () => off(binStatusRef);
+
+  }, []);
+
+
   // Calculate driver ETA
   useEffect(() => {
     if (position && driverLocation) {
@@ -83,46 +120,76 @@ const MapComponent = () => {
   }, [position, driverLocation]);
 
   // Send notification API call
-  const sendNotification = async () => {
-    try {
-      const response = await fetch('https://api-endpoint.com/notify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: 'Driver is within 100 meters',
-          position,
-          driverLocation,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      console.log('Notification sent!');
-    } catch (error) {
-      console.error('Failed to send notification:', error);
-    }
-  };
+  // const sendNotification = async () => {
+  //   try {
+  //     const response = await fetch('https://api-endpoint.com/notify', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         message: 'Driver is within 100 meters',
+  //         position,
+  //         driverLocation,
+  //       }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     console.log('Notification sent!');
+  //   } catch (error) {
+  //     console.error('Failed to send notification:', error);
+  //   }
+  // };
 
   // Check if driver is within 100 meters of user
-  useEffect(() => {
-    if (position && driverLocation) {
-      const [userLatitude, userLongitude] = position;
-      const [driverLatitude, driverLongitude] = driverLocation;
+  // useEffect(() => {
+  //   if (position && driverLocation) {
+  //     const [userLatitude, userLongitude] = position;
+  //     const [driverLatitude, driverLongitude] = driverLocation;
 
-      const distance = L.latLng(userLatitude, userLongitude).distanceTo(
-        L.latLng(driverLatitude, driverLongitude)
-      );
+  //     const distance = L.latLng(userLatitude, userLongitude).distanceTo(
+  //       L.latLng(driverLatitude, driverLongitude)
+  //     );
 
-      if (distance <= 100) {
-        setShowNotification(true);
-        sendNotification(); // Call the function to send the notification
-      } else {
-        setShowNotification(false);
-      }
+  //     if (distance <= 100) {
+  //       setShowNotification(true);
+  //       sendNotification(); // Call the function to send the notification
+  //     } else {
+  //       setShowNotification(false);
+  //     }
+  //   }
+  // }, [position, driverLocation]);
+
+  // Get bin marker color based on status
+  const getBinMarkerColor = (percentage) => {
+    if (percentage >= 75) {
+      return "red";
+    } else if (percentage >= 50) {
+      return "orange";
+    } else if (percentage >= 25) {
+      return "yellow";
+    } else {
+      return "green";
     }
-  }, [position, driverLocation]);
+  };
+  
+  const binMarkerColor = getBinMarkerColor(binStatus);
+
+  const binIconSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z" />
+      <line x1="10" y1="11" x2="10" y2="17" />
+      <line x1="14" y1="11" x2="14" y2="17" />
+    </svg>
+  `;
+
+  // Create a custom icon for the bin marker
+  const binMarkerIcon = L.divIcon({
+    html: binIconSvg,
+    iconSize: [32, 32],
+    className: "bin-marker-icon",
+  });
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
@@ -141,7 +208,7 @@ const MapComponent = () => {
           </Marker>
           <Circle
             center={position}
-            radius={200}
+            radius={300}
             pathOptions={{ fillColor: "blue", color: "blue" }}
           />
           {driverLocation && (
@@ -156,11 +223,23 @@ const MapComponent = () => {
               </Popup>
             </Marker>
           )}
+          {binLocation && (
+            <Marker position={binLocation} icon={binMarkerIcon}>
+              <Popup>
+                Bin 1 location
+                {binStatus && (
+                  <div>
+                    Status: {binStatus}
+                  </div>
+                )}
+              </Popup>
+            </Marker>
+          )}
         </MapContainer>
       ) : (
         <p>Loading...</p>
       )}
-      {showNotification && <p>Driver is approaching! Please be ready.</p>}
+      {/* {showNotification && <p>Driver is approaching! Please be ready.</p>} */}
     </div>
   );
 };
