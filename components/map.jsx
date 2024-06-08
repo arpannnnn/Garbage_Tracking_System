@@ -80,22 +80,21 @@ const MapComponent = () => {
   }, [position]);
 
   // Fetch bin status from Firebase
+
+
   useEffect(() => {
     const binStatusRef = ref(database, "/sensor/distance");
-
     const fetchBinStatus = () => {
       onValue(binStatusRef, (snapshot) => {
         const status = snapshot.val();
-        console.log('Fetched bin status:', status); // Log status to verify it's being fetched
-        
           setBinStatus(status);
         
       });
     };
-    // Fetch initial data and set up a listener for changes
+    
     fetchBinStatus();
 
-    // Optionally, you can clear the listener if needed in future
+    // Optionally, we can clear the listener if needed in future
     // return () => off(binStatusRef);
 
   }, []);
@@ -173,8 +172,10 @@ const MapComponent = () => {
       return "green";
     }
   };
-  
-  const binMarkerColor = getBinMarkerColor(binStatus);
+    const binMarkerColor = getBinMarkerColor(binStatus);
+
+
+    
 
   const binIconSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

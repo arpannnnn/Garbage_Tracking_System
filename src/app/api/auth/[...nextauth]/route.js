@@ -12,7 +12,6 @@ export const authOptions = {
         }),
     }),
     providers: [
-
         CredentialsProvider({
             name: 'Custom Credentials',
             credentials: {
@@ -58,15 +57,13 @@ export const authOptions = {
                 } else {
                     throw new Error('Invalid Credentials');
                 }
-                
-
             }
         })
     ],
     pages: {
         signIn: '/login',
     },
-    secret: process.env.NextAuth_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
         maxAge: 60 * 60 * 24 * 365, // 1 year
@@ -80,23 +77,26 @@ export const authOptions = {
             console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
-        async session({ session, token, email }) {
+        async session({ session, token }) {
+            console.log("Session callback triggered");
             if (token?.user) {
                 session.user = token.user;
-                session.accessToken = token.accessToken;
-                session.email = email;
-                session.role = token.user.role;
+                session.email = token.user.email;
+                session.accessToken = token.accessToken; // Ensure access token is set
+                session.role = token.user.role; // Ensure role is set if available
             }
-
-
+            console.log("Session data:", session);
             return session;
-
         },
         async jwt({ token, user, account }) {
             if (user) {
                 token.user = user;
                 token.accessToken = account?.access_token;
+                if (user.role) {
+                    token.role = user.role;
+                }
             }
+            console.log("JWT token data:", token);
             return token;
         }
     }
