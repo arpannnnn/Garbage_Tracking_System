@@ -25,7 +25,13 @@ const nextConfig = {
         },
         {
             protocol: 'https',
-            hostname: 'ui-avatars.com',
+            hostname: 'ui-avatars.com'
+        
+           
+        },
+        {
+            protocol: 'https',
+            hostname: "scontent.fktm10-1.fna.fbcdn.net"
         
            
         },

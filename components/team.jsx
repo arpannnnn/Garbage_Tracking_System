@@ -1,4 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
+import Image from 'next/image';
 import React, { useState } from 'react'
 export const TeamSection = () => {
     const [formData, setFormData] = useState({
@@ -38,7 +40,13 @@ export const TeamSection = () => {
                     <h1 className="text-4xl font-bold leading-none text-center sm:text-5xl">"The talented people behind the scenes"</h1>
                     <div className="flex  flex-row flex-wrap-reverse  justify-center mt-8">
                         <div className="flex flex-col justify-center   w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/405741399_3716905368541236_3288495521380446542_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=QsBuaYy3ecAQ7kNvgEcVELk&_nc_ht=scontent.fktm10-1.fna&oh=00_AYCJ1mLxUOORlKrVSnPjZ_wW8PdyCbG2o3ZyAyMTS3dLPg&oe=6658F635" />
+                            <Image
+                                alt=""
+                                className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center  bg-cover rounded-full bg-gray-500 dark:bg-gray-500"
+                                src="https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?q=80&w=1985&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                width={500}
+                                height={500}
+                            />
                             <div className="flex-1 my-4">
                                 <p className="text-xl font-semibold leading-snug">Arpan Acharya</p>
                                 <p>IT Engineer</p>
@@ -68,7 +76,9 @@ export const TeamSection = () => {
                             </div>
                         </div>
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24  -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://scontent.fktm7-1.fna.fbcdn.net/v/t1.6435-9/45063101_1147598905394387_7575579748953227264_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=nnnm-I0D_BQQ7kNvgFUBAN9&_nc_ht=scontent.fktm7-1.fna&oh=00_AYDP-QG1_HTM21_UkDPSdTeH6of3Kd4ZK4w3iXegDUUm2A&oe=667A9CB6" />
+                            <Image alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center  bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://images.unsplash.com/photo-1457449940276-e8deed18bfff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                width={500} height={500}
+                            />
                             <div className="flex-1 my-4">
                                 <p className="text-xl font-semibold leading-snug">Binay Rijal</p>
                                 <p>IT Engineer</p>
@@ -99,7 +109,10 @@ export const TeamSection = () => {
                         </div>
 
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-1/263466540_137729135284412_8858117032975631302_n.jpg?stp=c0.9.200.200a_dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=KNFA7l3fsV0Q7kNvgGOOa-1&_nc_ht=scontent.fktm10-1.fna&oh=00_AYBzfTkfdL5-lU4xbtyTA8Woup9FuETqpTeQhRfZq2qGBw&oe=6659077F" />
+                            <Image alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                            width={500} 
+                            height={500}
+                            />
                             <div className="flex-1 my-4">
                                 <p className="text-xl font-semibold leading-snug">Smreeta Shrestha </p>
                                 <p>IT Engineer</p>
@@ -145,32 +158,33 @@ export const TeamSection = () => {
                             </div>
                             <div className="lg:w-1/2 px-6 mt-4 lg:mt-0">
                                 <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
-                                <a className="text-indigo-500 leading-relaxed">arpannacharya@gmail.com</a>
+                                <a className="text-green-500 leading-relaxed">arpannacharya@gmail.com</a>
                                 <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">PHONE</h2>
                                 <p className="leading-relaxed">+977-9866742214</p>
                             </div>
                         </div>
                     </div>
 
-                    <div classNameName="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
-                        <h2 classNameName="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
-                        <p classNameName="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
+                    <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
+                        <h2 className="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
+                        <p className="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
                         <form onSubmit={handleSubmit}>
                             <div className="relative mb-4">
                                 <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
-                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
                             </div>
                             <div className="relative mb-4">
                                 <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
-                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
                             </div>
                             <div className="relative mb-4">
                                 <label htmlFor="message" className="leading-7 text-sm text-gray-600">Message</label>
-                                <textarea id="message" name="message" value={formData.message} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" required></textarea>
+                                <textarea id="message" name="message" value={formData.message} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" required></textarea>
                             </div>
-                            <button type="submit" className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Send Now</button>
+                            <button type="submit" className="text-white bg-green-500 border-0 py-2 px-2 rounded-md focus:outline-none hover:bg-green-600  text-sm">Send Now</button>
                         </form>
                     </div>
+                   
 
                 </div>
             </section>

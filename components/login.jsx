@@ -4,28 +4,38 @@ import Image from 'next/image';
 import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useToast } from './ui/use-toast';
 
 export default function CustomLogin() {
+    const { toast } = useToast();
     const emailRef = useRef(null);
     const passRef = useRef(null);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
+
     const handleLogin = async (event) => {
         event.preventDefault();
-        console.log('Starting login process with email:', emailRef.current.value);
+        setLoading(true);
+
         signIn("credentials", {
             email: emailRef.current.value,
             password: passRef.current.value,
             redirect: false
         }).then(res => {
-            console.log('Login response:', res);
+            setLoading(false);
             if (res.error == null) {
-                console.log('Login successful, redirecting to home page');
                 router.push('/');
             } else {
-                console.error('Login failed:', res.error);
-                alert(`${res.error}`);
+                toast({
+                    title: 'Error',
+                    description: res.error,
+                    variant: 'destructive',
+                });
+                emailRef.current.value = '';
+                passRef.current.value = '';
             }
         }).catch(error => {
+            setLoading(false);
             console.error('Login error:', error);
         });
     }
@@ -33,6 +43,7 @@ export default function CustomLogin() {
         borderRadius: '50%',
         border: '1px solid #fff',
     }
+
     return (
         <div>
             <section className="bg-gray-50 dark:bg-gray-900">
@@ -77,9 +88,10 @@ export default function CustomLogin() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full text-white bg-red-800 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                    className={`w-full text-white ${loading ? 'bg-gray-500' : 'bg-red-800 hover:bg-primary-700'} focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
+                                    disabled={loading}
                                 >
-                                    Sign in
+                                    {loading ? 'Loading...' : 'Sign in'}
                                 </button>
 
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">

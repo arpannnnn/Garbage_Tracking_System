@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 export default function CustomNavbar() {
+    
     const pathname = usePathname()
     const { data: session } = useSession()
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)

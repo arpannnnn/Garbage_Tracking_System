@@ -5,9 +5,11 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { app } from '../firebase/firebase';
 import Image from 'next/image';
+import { useToast } from './ui/use-toast';
 const roles = ['User', 'Staff'];
 
 export default function CustomRegister() {
+
     const emailRef = useRef("");
     const passRef = useRef("");
     const confirmPassRef = useRef("");
@@ -15,13 +17,15 @@ export default function CustomRegister() {
     const citizenshipRef = useRef("");
     const [selectedRole, setSelectedRole] = useState('');
     const router = useRouter();
-    const [isGoogleLoading, setisGoogleLoading] = useState(false);
+
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
 
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
 
     const handleMobileNumberChange = (event) => {
         const value = event.target.value;
@@ -41,52 +45,80 @@ export default function CustomRegister() {
     };
 
     const handleRegister = async (event) => {
+        setLoading(true);
         event.preventDefault();
-        try {
-            const email = emailRef.current;
-            const password = passRef.current;
-            const confirmPassword = confirmPassRef.current;
-            const fullName = fullNameRef.current;
-            const citizenship = citizenshipRef.current;
 
-            // Validate email and password
-            if (!email) return alert('Email is empty');
-            if (!password || password.length < 6) return alert('Password must not be less than 6 characters');
-            if (password !== confirmPassword) return alert('Passwords must match');
 
-            // Register user using Firebase authentication
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+        const email = emailRef.current;
+        const password = passRef.current;
+        const confirmPassword = confirmPassRef.current;
+        const fullName = fullNameRef.current;
+        const citizenship = citizenshipRef.current;
 
-            const payload = {
-                email: user.email,
-                fullName,
-                citizenship,
-                mobileNumber,
-                latitude: parseFloat(latitude),
-                longitude: parseFloat(longitude),
-                role: selectedRole,
-                uid: user.uid,
-            };
+        // Validate email and password
+        if (!email) {
+            toast({
+                title: 'Email is empty',
+                description: ' Enter a valid email',
+                variant: 'destructive',
+            }); setLoading(false);
 
-            // Store user data in Firestore
-            await setDoc(doc(db, 'users', user.uid), payload);
+        } else if (!password || password.length < 6) {
+            toast({
+                title: 'Password must not be less than 6 characters',
+                description: 'Enter a valid password',
+                variant: 'destructive',
+            }); setLoading(false);
 
-            // Redirect user to login page
-            router.push('/login');
-        } catch (error) {
-            console.error('Error registering user:', error);
-            alert('Error registering user. Please try again.');
+        } else if (password !== confirmPassword) {
+            toast({
+                title: 'Passwords must match',
+                description: ' Enter the same password in both fields',
+                variant: 'destructive',
+            }); setLoading(false);
+
+        }
+        else {
+
+            try {
+
+                // Register user using Firebase authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const payload = {
+                    email: user.email,
+                    fullName,
+                    citizenship,
+                    mobileNumber,
+                    latitude: parseFloat(latitude),
+                    longitude: parseFloat(longitude),
+                    role: selectedRole,
+                    uid: user.uid,
+                };
+
+                // Store user data in Firestore
+                await setDoc(doc(db, 'users', user.uid), payload);
+
+                // Redirect user to login page
+                router.push('/login');
+            } catch (error) {
+                toast({
+                    title: 'Error registering user. Please try again.',
+                    variant: 'destructive',
+                });
+            } finally {
+                setLoading(false);
+            }
         }
     }
-
     const imageStyle = {
         borderRadius: '5%',
         border: '1px solid #fff',
         width: '700px',
         height: '700px',
     };
-    
+
 
     return (
         <section>
@@ -244,27 +276,13 @@ export default function CustomRegister() {
                                 <div>
                                     <button
                                         type="submit"
-                                        className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                                        className={`w-full text-white ${loading ? 'bg-gray-500' : 'bg-black hover:bg-primary-700'} focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
+                                        disabled={loading}
                                     >
-                                        Get started{' '}
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="20"
-                                            height="20"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            className="ml-4"
-                                        >
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            <polyline points="12 5 19 12 12 19"></polyline>
-                                        </svg>
+                                        {loading ? 'Loading...' : 'Sign up'}
                                     </button>
                                 </div>
-                                
+
                             </div>
                         </form>
 

@@ -91,10 +91,10 @@ export default function Home() {
                             <p className="text-sm font-medium text-white"> ♻️Nepal </p>
                         </div>
                         <h1 className="mt-8 text-3xl font-bold tracking-tight text-black md:text-4xl lg:text-6xl">
-                            Welcome to the Garbage Tracking System Web App!
+                            Welcome to the <span className='text-green-400'>Garbage Tracking System ! </span>
                         </h1>
                         <p className="mt-8 text-lg text-gray-700">
-                            Revolutionize waste management with our innovative web app. Track, manage, and optimize waste collection for municipalities, waste companies, and homeowners. Streamline operations, cut costs, and create a cleaner environment.
+                            Revolutionize waste management with our innovative web app. Track, manage, and optimize waste collection for municipalities, waste companies, and homeowners.
                         </p>
                         <form action="" className="mt-8 flex items-start space-x-2">
 

@@ -1,7 +1,21 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import  Map  from '../../../../components/map'
+import Loader from '../../../../components/Loader';
 
-function page() {
+function Page() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); 
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div>
 <Map />
@@ -10,4 +24,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

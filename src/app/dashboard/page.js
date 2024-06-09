@@ -7,8 +7,11 @@ import { useSession } from 'next-auth/react';
 import { Card, CardContent } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import Loader from '../../../components/Loader';
 
 function Page() {
+  
+
   const { data: session, status } = useSession();
   const db = getFirestore(app);
   const [userData, setUserData] = useState(null);
@@ -42,6 +45,18 @@ function Page() {
   useEffect(() => {
     getUser();
   }, [getUser]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a data fetch
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 3 seconds delay
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <ScrollArea className="h-full">

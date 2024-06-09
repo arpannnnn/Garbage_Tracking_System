@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getFirestore, query, where, getDocs, collection } from 'firebase/firestore';
 import { app } from '../../../../firebase/firebase'
 import { useSession } from 'next-auth/react';
+import Loader from '../../../../components/Loader';
 
 function ProfileSection() {
   const { data: session, status } = useSession();
@@ -32,6 +33,18 @@ function ProfileSection() {
   useEffect(() => {
     getUser();
   }, [getUser]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a data fetch
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); // 3 seconds delay
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">

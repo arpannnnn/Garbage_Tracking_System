@@ -7,8 +7,10 @@ import CustomNavbar from "../../components/navbar";
 
 import AuthProvider from "../../components/auth/AuthProvider";
 import Footer from "../../components/footer";
+import { Toaster } from "../../components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" >
@@ -19,7 +21,7 @@ export default function RootLayout({ children }) {
           <CustomNavbar />
 
           {children}
-          
+          <Toaster />
         </AuthProvider>
           
         
