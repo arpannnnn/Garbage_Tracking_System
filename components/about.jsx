@@ -10,7 +10,7 @@ export const AboutPage = () => {
                     <h2 className="text-3xl font-bold tracking-tight text-center sm:text-5xl text-black">Efficient Garbage Tracking System</h2>
                     <p className="max-w-3xl mx-auto mt-4 text-xl text-center text-black">Optimize waste management with real-time tracking and data insights.</p>
                 </div>
-                
+
                 <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
                     <div className="relative lg:mr-8" style={{ marginTop: '-8rem' }}>
                         <h3 className="text-2xl font-bold tracking-tight sm:text-3xl text-black">Real-time Tracking</h3>
@@ -20,11 +20,11 @@ export const AboutPage = () => {
                         <div className="absolute inset-0 w-full h-full bg-blue-400 rounded-lg transform translate-x-2 lg:translate-x-4 translate-y-2 lg:translate-y-4"></div>
                         <Image src="https://img.freepik.com/free-vector/isometric-garbage-banners_1284-9197.jpg?t=st=1716560614~exp=1716564214~hmac=b31af6faf855c8f41d49462567eba1549b45099267a93b9066a3405d62163cbd&w=740" alt="Garbage Tracking"
                             width={500} height={500}
-                         className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
+                            className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
                     </div>
                 </div>
             </div>
-        
+
             <div className='bg-gray-800 pt-2 py-2'>
                 <div className="container max-w-xl p-6 py-12 mx-auto lg:px-8 lg:max-w-7xl">
                     <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
@@ -34,9 +34,9 @@ export const AboutPage = () => {
                         </div>
                         <div className="relative mt-10 lg:mt-0 lg:col-start-1 lg:row-start-1 transition-transform transform hover:scale-105 duration-300">
                             <div className="absolute inset-0 w-full h-full bg-green-300 rounded-lg transform translate-x-2 lg:translate-x-4 translate-y-2 lg:translate-y-4"></div>
-                            <Image src="https://img.freepik.com/free-vector/vector-garbage-truck-isolated-white_8130-663.jpg?t=st=1716560196~exp=1716563796~hmac=42e37744888d7af9ef1ee00ee0ed0336b40c69ad9e69156e4909b48118921000&w=996" alt="Garbage Truck" 
-                            width={500} height={500}
-                            className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
+                            <Image src="https://img.freepik.com/free-vector/vector-garbage-truck-isolated-white_8130-663.jpg?t=st=1716560196~exp=1716563796~hmac=42e37744888d7af9ef1ee00ee0ed0336b40c69ad9e69156e4909b48118921000&w=996" alt="Garbage Truck"
+                                width={500} height={500}
+                                className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
                         </div>
                     </div>
                 </div>
@@ -52,8 +52,8 @@ export const AboutPage = () => {
                         <div className="relative mt-10 lg:mt-0 transition-transform transform hover:scale-105 duration-300">
                             <div className="absolute inset-0 w-full h-full bg-gray-700 rounded-lg transform translate-x-2 lg:translate-x-4 translate-y-2 lg:translate-y-4"></div>
                             <Image src="https://img.freepik.com/free-vector/garbage-truck-concept_1284-12005.jpg?t=st=1716564896~exp=1716568496~hmac=a82ef6f48f3594413c18ded96bfa685a441847848be3f464ba7203d9192b43a9&w=740" alt="Advanced Analytics"
-                            width={500} height={500}
-                            className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
+                                width={500} height={500}
+                                className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
                         </div>
                     </div>
                 </div>
@@ -69,8 +69,8 @@ export const AboutPage = () => {
                         <div className="relative mt-10 lg:mt-0 lg:col-start-1 lg:row-start-1 transition-transform transform hover:scale-105 duration-300">
                             <div className="absolute inset-0 w-full h-full bg-gray-700 rounded-lg transform translate-x-2 lg:translate-x-6 translate-y-2 lg:translate-y-4"></div>
                             <Image src="https://as2.ftcdn.net/v2/jpg/01/01/68/27/1000_F_101682732_OejrMC8RzUdpxMVmSQLhgsnTW2HQloO0.jpg" alt="Smart Notifications"
-                            width={500} height={500}
-                            className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
+                                width={500} height={500}
+                                className="relative mx-auto bg-gray-500 rounded-lg shadow-lg" />
                         </div>
                     </div>
                 </div>
