@@ -12,7 +12,7 @@ export const AboutPage = () => {
                 </div>
 
                 <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
-                    <div className="relative lg:mr-8" style={{ marginTop: '-8rem' }}>
+                    <div className="relative lg:mr-8 lg:mt-0 mt-8">
                         <h3 className="text-2xl font-bold tracking-tight sm:text-3xl text-black">Real-time Tracking</h3>
                         <p className="mt-3 text-lg text-black">Monitor garbage collection trucks in real-time and ensure efficient route management.</p>
                     </div>

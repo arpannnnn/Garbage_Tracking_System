@@ -21,6 +21,7 @@ export default function RootLayout({ children }) {
           <CustomNavbar />
 
           {children}
+          
           <Toaster />
         </AuthProvider>
           
