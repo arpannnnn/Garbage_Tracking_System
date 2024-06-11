@@ -24,7 +24,7 @@ Garbage Tracking System `GTS` is a web application built using Next.js. It lever
 Make sure you have the following installed on your machine:
 
 - Node.js (version 14 or later)
-- npm (version 6 or later)
+- yarn (version 6 or later)
 
 ### Installation
 
@@ -36,6 +36,10 @@ Make sure you have the following installed on your machine:
 2. Install the dependencies:
    ```sh
    yarn install
+   
+3. To start the development server:
+   ```sh
+   yarn dev
 
   
 
