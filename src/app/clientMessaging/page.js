@@ -96,7 +96,7 @@ const ClientMessaging = () => {
     };
     return (
         <div className='mt-2 mx-60 p-6 bg-white rounded-lg mb-2 shadow-lg'>
-            <h2 className='font-bold'>Notification sent as per the driver's location near the client, less than 100 meters away.</h2>
+            <h2 className='font-bold'>Notification sent as per the drivers location near the client, less than 100 meters away.</h2>
             {driverLocation && (
                 <p>Driver Location: Latitude {driverLocation.latitude}, Longitude {driverLocation.longitude}</p>
             )}
