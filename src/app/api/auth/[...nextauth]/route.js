@@ -33,6 +33,7 @@ export const authOptions = {
                 const formData = {
                     email: credentials.email,
                     password: credentials.password,
+                    password2:credentials,
                     fullName: credentials.fullName,
                     citizenship: credentials.citizenship,
                     mobileNumber: credentials.mobileNumber,
@@ -49,7 +50,7 @@ export const authOptions = {
                     body: JSON.stringify(formData)
                 };
 
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
+                const res = await fetch('http://127.0.0.1:8000/api/register_user/', payload);
                 const resJson = await res.json();
                 const user = resJson.data;
 

@@ -9,26 +9,29 @@ export default function CustomLogin() {
     const emailRef = useRef(null);
     const passRef = useRef(null);
     const router = useRouter();
-    const handleLogin = async (event) => {
-        event.preventDefault();
-        console.log('Starting login process with email:', emailRef.current.value);
-        signIn("credentials", {
-            email: emailRef.current.value,
-            password: passRef.current.value,
-            redirect: false
-        }).then(res => {
-            console.log('Login response:', res);
-            if (res.error == null) {
-                console.log('Login successful, redirecting to home page');
-                router.push('/');
-            } else {
-                console.error('Login failed:', res.error);
-                alert(`${res.error}`);
-            }
-        }).catch(error => {
-            console.error('Login error:', error);
-        });
-    }
+    // const handleLogin = async (event) => {
+    //     event.preventDefault();
+    //     console.log('Starting login process with email:', emailRef.current.value);
+    //     signIn("credentials", {
+    //         email: emailRef.current.value,
+    //         password: passRef.current.value,
+    //         redirect: false
+    //     }).then(res => {
+    //         console.log('Login response:', res);
+    //         if (res.error == null) {
+    //             console.log('Login successful, redirecting to home page');
+    //             router.push('/');
+    //         } else {
+    //             console.error('Login failed:', res.error);
+    //             alert(`${res.error}`);
+    //         }
+    //     }).catch(error => {
+    //         console.error('Login error:', error);
+    //     });
+    // }
+    
+ 
+
     const imageStyle = {
         borderRadius: '50%',
         border: '1px solid #fff',

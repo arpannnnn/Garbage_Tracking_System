@@ -45,14 +45,14 @@ export default function CustomRegister() {
         try {
             const email = emailRef.current;
             const password = passRef.current;
-            const confirmPassword = confirmPassRef.current;
+            const password2 = confirmPassRef.current;
             const fullName = fullNameRef.current;
             const citizenship = citizenshipRef.current;
 
             // Validate email and password
             if (!email) return alert('Email is empty');
             if (!password || password.length < 6) return alert('Password must not be less than 6 characters');
-            if (password !== confirmPassword) return alert('Passwords must match');
+            if (password !== password2) return alert('Passwords must match');
 
             // Register user using Firebase authentication
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -146,7 +146,7 @@ export default function CustomRegister() {
                                 </div>
                                 <div>
                                     <div className="flex items-center justify-between">
-                                        <label htmlFor="confirmPassword" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="password2" className="text-base font-medium text-gray-900">
                                             Confirm Password
                                         </label>
                                     </div>
