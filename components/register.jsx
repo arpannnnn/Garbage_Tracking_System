@@ -15,7 +15,7 @@ export default function CustomRegister() {
     const citizenshipRef = useRef("");
     const [selectedRole, setSelectedRole] = useState('');
     const router = useRouter();
-    const [isGoogleLoading, setisGoogleLoading] = useState(false);
+    // const [isGoogleLoading, setisGoogleLoading] = useState(false);
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
@@ -54,28 +54,52 @@ export default function CustomRegister() {
             if (!password || password.length < 6) return alert('Password must not be less than 6 characters');
             if (password !== password2) return alert('Passwords must match');
 
-            // Register user using Firebase authentication
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+            // // Register user using Firebase authentication
+            // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            // const user = userCredential.user;
 
             const payload = {
-                email: user.email,
-                fullName,
-                citizenship,
-                mobileNumber,
+                email: email,
+                full_name: fullName,
+                citizenship: citizenship,
+                mobile_number: mobileNumber,
                 latitude: parseFloat(latitude),
                 longitude: parseFloat(longitude),
                 role: selectedRole,
-                uid: user.uid,
+                password: password,
+                password2: password2
             };
 
-            // Store user data in Firestore
-            await setDoc(doc(db, 'users', user.uid), payload);
+            // // Store user data in Firestore
+            // await setDoc(doc(db, 'users', user.uid), payload);
 
-            // Redirect user to login page
-            router.push('/login');
+            // // Redirect user to login page
+            // router.push('/login');
+
+            //django api for register
+            const response = await fetch('http://127.0.0.1:8000/api/register_user/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            console.log(payload)
+            
+            if (response.ok) {
+                // Redirect user to login page
+                console.log("we are inside response.ok")
+                router.push('/login');
+
+            } else {
+                console.log("we are at else")
+                const errorData = await response.json();
+                console.error('Error registering user:', errorData);
+                alert('Error registering user.');
+            }
+
         } catch (error) {
-            console.error('Error registering user:', error);
+            console.error('Error registering user.please try again', error);
             alert('Error registering user. Please try again.');
         }
     }
