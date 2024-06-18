@@ -82,9 +82,9 @@ export default function CustomRegister() {
 
             try {
 
-                // Register user using Firebase authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // // Register user using Firebase authentication
+                // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                // const user = userCredential.user;
 
                 const payload = {
                     email: email,
@@ -103,6 +103,26 @@ export default function CustomRegister() {
 
                 // // Redirect user to login page
                 // router.push('/login');
+                const response = await fetch('http://127.0.0.1:8000/api/register_user/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                console.log(payload)
+                
+                if (response.ok) {
+                    // Redirect user to login page
+                    console.log("we are inside response.ok")
+                    router.push('/login');
+    
+                } else {
+                    console.log("we are at else")
+                    const errorData = await response.json();
+                    console.error('Error registering user:', errorData);
+                    alert('Error registering user.');
+                }
                 
             } catch (error) {
                 toast({
