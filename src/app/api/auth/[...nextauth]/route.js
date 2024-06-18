@@ -48,7 +48,7 @@ export const authOptions = {
                     body: JSON.stringify(formData)
                 };
 
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
+                const res = await fetch('http://localhost:3000/api/auth/login', payload); //port change to 3000
                 const resJson = await res.json();
                 const user = resJson.data;
 
@@ -66,7 +66,7 @@ export const authOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
-        maxAge: 60 * 60 * 24 * 365, // 1 year
+        maxAge: 60 * 60 * 1, // 1 hour
     },
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
