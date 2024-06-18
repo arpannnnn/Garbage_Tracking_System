@@ -226,7 +226,7 @@ function ProfileSection() {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2" htmlFor="mobileNumber">
-              Mobile Number
+              Mobile Number   
             </label>
             <input
               type="text"
@@ -283,18 +283,17 @@ function ProfileSection() {
             <label className="block text-gray-700 font-bold mb-2" htmlFor="role">
               Role
             </label>
-            <select
+            <input
               id="role"
               name="role"
               value={editableUserData.role}
               onChange={handleRoleChange}
+              readOnly
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:ring focus:border-blue-300"
               required
             >
-              <option value="">Select Role</option>
-              <option value="staff">Staff</option>
-              <option value="user">User</option>
-            </select>
+
+            </input>
           </div>
           <button
             onClick={handleUpdateUserData}
