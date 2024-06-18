@@ -288,7 +288,7 @@ export function CalendarDateRangePicker({ className, isDriver }: CalendarDateRan
             )}
             <div className="w-full mt-4">
                 <h3 className="text-lg font-semibold flex justify-center items-center text-black">Scheduled Pickups</h3>
-                <ul className="text-center mt-2 text-red-600">
+                <ul className="text-center mt-2 text-red-600 text">
                     {Array.isArray(schedules) && schedules.map((event) => (
                         <li key={event.id} className="list-disc list-inside mb-2">
                             <div>
