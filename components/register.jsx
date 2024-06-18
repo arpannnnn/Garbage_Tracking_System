@@ -87,21 +87,23 @@ export default function CustomRegister() {
                 const user = userCredential.user;
 
                 const payload = {
-                    email: user.email,
-                    fullName,
-                    citizenship,
-                    mobileNumber,
+                    email: email,
+                    full_name: fullName,
+                    citizenship: citizenship,
+                    mobile_number: mobileNumber,
                     latitude: parseFloat(latitude),
                     longitude: parseFloat(longitude),
                     role: selectedRole,
-                    uid: user.uid,
+                    password: password,
+                    password2: confirmPassword
                 };
 
-                // Store user data in Firestore
-                await setDoc(doc(db, 'users', user.uid), payload);
+                // // Store user data in Firestore
+                // await setDoc(doc(db, 'users', user.uid), payload);
 
-                // Redirect user to login page
-                router.push('/login');
+                // // Redirect user to login page
+                // router.push('/login');
+                
             } catch (error) {
                 toast({
                     title: 'Error registering user. Please try again.',
