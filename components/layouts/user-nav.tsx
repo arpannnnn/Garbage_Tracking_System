@@ -12,10 +12,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '../../components/ui/dropdown-menu';
-import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
-import { app, customAuth, db } from '../../firebase/firebase';
+
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { app } from '../../firebase/firebase';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export function UserNav() {
     const { data: session, status } = useSession();
@@ -46,17 +47,13 @@ export function UserNav() {
         getUser();
     }, [getUser]);
 
-
-
     return (
         <div className="flex items-center space-x-4">
             {userData && (
                 <DropdownMenu>
-
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                             <Avatar className="h-8 w-8">
-
                                 <AvatarImage
                                     src='https://avatars.dicebear.com/api/avataaars/123.svg'
                                     alt="User avatar"
@@ -84,18 +81,19 @@ export function UserNav() {
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
-                                Profile
+                                <Link href="/dashboard">
+                                    Dashboard
+                                </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                Billing
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                Settings
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>New Team</DropdownMenuItem>
+                            {userData.role === 'staff' && (
+                                <DropdownMenuItem>
+                                    <Link href="/dashboard/notify">
+                                        Notify
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-
                     </DropdownMenuContent>
                 </DropdownMenu>
             )}

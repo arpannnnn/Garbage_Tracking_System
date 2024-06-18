@@ -30,7 +30,8 @@ import {
     UserX2Icon,
     Calendar,
     MapIcon,
-    X
+    X,
+    Bell,
   } from 'lucide-react';
   
   export type Icon = LucideIcon;
@@ -64,6 +65,7 @@ import {
     laptop: Laptop,
     calendar:Calendar,
     map:MapIcon,
+    bell:Bell,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"
