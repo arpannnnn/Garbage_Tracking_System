@@ -16,28 +16,62 @@ export default function CustomLogin() {
     const handleLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
-
-        signIn("credentials", {
-            email: emailRef.current.value,
-            password: passRef.current.value,
-            redirect: false
-        }).then(res => {
-            setLoading(false);
-            if (res.error == null) {
-                router.push('/');
-            } else {
+         
+        // signIn("credentials", {
+        //     email: emailRef.current.value,
+        //     password: passRef.current.value,
+        //     redirect: false
+        // }).then(res => {
+        //     setLoading(false);
+        //     if (res.error == null) {
+        //         router.push('/');
+        //     } else {
+        //         toast({
+        //             title: 'Error',
+        //             description: res.error,
+        //             variant: 'destructive',
+        //         });
+        //         emailRef.current.value = '';
+        //         passRef.current.value = '';
+        //     }
+        // }).catch(error => {
+        //     setLoading(false);
+        //     console.error('Login error:', error);
+        // });
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/login_user/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            });
+      
+            if (response.ok) {
+              const data = await response.json();
+              const Token = data.token;
+              
+      
+              // Store tokens securely (localStorage, secure cookies, etc.)
+              localStorage.setItem('User-Token',JSON.stringify(Token));
+              
+      
+              // Redirect to home page or another route
+              router.push('/');
+            } 
+            else {
                 toast({
-                    title: 'Error',
-                    description: res.error,
-                    variant: 'destructive',
-                });
-                emailRef.current.value = '';
-                passRef.current.value = '';
+                             title: 'Error',
+                             variant: 'destructive',
+                            });
             }
-        }).catch(error => {
+          } catch (error) {
             setLoading(false);
             console.error('Login error:', error);
-        });
+          }
     }
     const imageStyle = {
         borderRadius: '50%',
