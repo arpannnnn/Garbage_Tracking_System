@@ -85,7 +85,7 @@ export default function CustomRegister() {
                 // // Register user using Firebase authentication
                 // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 // const user = userCredential.user;
-
+                console.log("hello")
                 const payload = {
                     email: email,
                     full_name: fullName,
