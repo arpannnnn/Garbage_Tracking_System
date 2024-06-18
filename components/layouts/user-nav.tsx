@@ -12,11 +12,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '../../components/ui/dropdown-menu';
-
+import { signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { app, customAuth, db } from '../../firebase/firebase';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 
 export function UserNav() {
     const { data: session, status } = useSession();
@@ -71,26 +70,31 @@ export function UserNav() {
                     <DropdownMenuContent className="w-56" align="end" forceMount>
                         <DropdownMenuLabel className="font-normal">
                             <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-semibold leading-none">
+                                <p className="text-sm font-medium leading-none">
                                     {userData.fullName}
                                 </p>
                                 <p className="text-xs leading-none text-muted-foreground">
                                     {userData.email}
                                 </p>
-                                <p className="text-xs font-bold uppercase text-green-800 leading-none text-muted-foreground">
+                                <p className="text-xs font-bold uppercase text-green-400 leading-none text-muted-foreground">
                                     {userData.role}
                                 </p>
-                                {session?.user && (
-                                    <li>
-                                        <Link href="/api/auth/signout" className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Logout</Link>
-                                    </li>
-                                )}
                             </div>
                         </DropdownMenuLabel>
-
-
-
-
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem>
+                                Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Billing
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                Settings
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>New Team</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
 
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -47,12 +47,13 @@ export default function CustomRegister() {
     const handleRegister = async (event) => {
         setLoading(true);
         event.preventDefault();
-        try {
-            const email = emailRef.current;
-            const password = passRef.current;
-            const password2 = confirmPassRef.current;
-            const fullName = fullNameRef.current;
-            const citizenship = citizenshipRef.current;
+
+
+        const email = emailRef.current;
+        const password = passRef.current;
+        const confirmPassword = confirmPassRef.current;
+        const fullName = fullNameRef.current;
+        const citizenship = citizenshipRef.current;
 
         // Validate email and password
         if (!email) {
@@ -81,53 +82,34 @@ export default function CustomRegister() {
 
             try {
 
-            // // Register user using Firebase authentication
-            // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            // const user = userCredential.user;
+                // Register user using Firebase authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-            const payload = {
-                email: email,
-                full_name: fullName,
-                citizenship: citizenship,
-                mobile_number: mobileNumber,
-                latitude: parseFloat(latitude),
-                longitude: parseFloat(longitude),
-                role: selectedRole,
-                password: password,
-                password2: password2
-            };
+                const payload = {
+                    email: user.email,
+                    fullName,
+                    citizenship,
+                    mobileNumber,
+                    latitude: parseFloat(latitude),
+                    longitude: parseFloat(longitude),
+                    role: selectedRole,
+                    uid: user.uid,
+                };
 
-            // // Store user data in Firestore
-            // await setDoc(doc(db, 'users', user.uid), payload);
+                // Store user data in Firestore
+                await setDoc(doc(db, 'users', user.uid), payload);
 
-            // // Redirect user to login page
-            // router.push('/login');
-
-            //django api for register
-            const response = await fetch('http://127.0.0.1:8000/api/register_user/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-            console.log(payload)
-            
-            if (response.ok) {
                 // Redirect user to login page
-                console.log("we are inside response.ok")
                 router.push('/login');
-
-            } else {
-                console.log("we are at else")
-                const errorData = await response.json();
-                console.error('Error registering user:', errorData);
-                alert('Error registering user.');
+            } catch (error) {
+                toast({
+                    title: 'Error registering user. Please try again.',
+                    variant: 'destructive',
+                });
+            } finally {
+                setLoading(false);
             }
-
-        } catch (error) {
-            console.error('Error registering user.please try again', error);
-            alert('Error registering user. Please try again.');
         }
     }
     const imageStyle = {
@@ -196,7 +178,7 @@ export default function CustomRegister() {
                                 </div>
                                 <div>
                                     <div className="flex items-center justify-between">
-                                        <label htmlFor="password2" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="confirmPassword" className="text-base font-medium text-gray-900">
                                             Confirm Password
                                         </label>
                                     </div>
