@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { database } from '../firebase/firebase';
-import { ref, onValue } from 'firebase/database';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { app } from '../firebase/firebase';
 import { useSession } from 'next-auth/react';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../firebase/firebase';
 
 // Fix broken icon images on Leaflet maps
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,6 +31,7 @@ const driverMarkerIcon = L.divIcon({
 
 const MapComponent = () => {
   const { data: session, status } = useSession();
+  const db = getFirestore(app);
   const [position, setPosition] = useState(null);
   const [driverLocation, setDriverLocation] = useState(null);
   const [driverETA, setDriverETA] = useState(null);
@@ -48,27 +51,28 @@ const MapComponent = () => {
     fetchUserData();
   }, []);
 
-  // Track the user's position
+  // Fetch user's position from Firestore
   useEffect(() => {
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setPosition([latitude, longitude]);
-        },
-        (error) => {
-          console.error('Error getting geolocation', error);
-        },
-        { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
-      );
+    const fetchUserLocation = async () => {
+      if (status === 'authenticated' && session?.user?.uid) {
+        try {
+          const userDoc = await getDoc(doc(collection(db, 'users'), session.user.uid));
+          if (userDoc.exists()) {
+            const { latitude, longitude } = userDoc.data();
+            setPosition([latitude, longitude]);
+          } else {
+            console.log('No such document!');
+          }
+        } catch (error) {
+          console.error('Error getting user location:', error);
+        }
+      }
+    };
 
-      return () => {
-        navigator.geolocation.clearWatch(watchId); // Cleanup on unmount
-      };
-    }
-  }, []);
+    fetchUserLocation();
+  }, [db, session, status]);
 
-  // Track the driver's position if the user is a staff member
+   // Track the driver's position if the user is a staff member
   useEffect(() => {
     if (userData?.role === 'Staff' && navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
@@ -113,6 +117,7 @@ const MapComponent = () => {
 
     fetchBinStatus();
   }, []);
+
 
   // Calculate driver ETA
   useEffect(() => {
@@ -207,7 +212,7 @@ const MapComponent = () => {
           )}
         </MapContainer>
       ) : (
-        <p>Loading...</p>
+        <p className='flex justify-center font-semibold'>Loading...</p>
       )}
     </div>
   );

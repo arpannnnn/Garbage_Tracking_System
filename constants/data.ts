@@ -1,4 +1,5 @@
 import { NavItem } from '../types';
+
 export const navItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -30,6 +31,7 @@ export const navItems: NavItem[] = [
         icon: 'map',
         label: 'map'
     },
+
     {
         title: 'Notify',
         href: '/dashboard/notify',

@@ -70,11 +70,11 @@ export const authOptions = {
     },
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            console.log("signIn", { user, account, profile, email, credentials });
+            // console.log("signIn", { user, account, profile, email, credentials });
             return true;
         },
         async redirect({ url, baseUrl }) {
-            console.log("redirect", { url, baseUrl });
+            // console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
         async session({ session, token }) {
@@ -85,7 +85,7 @@ export const authOptions = {
                 session.accessToken = token.accessToken; // Ensure access token is set
                 session.role = token.user.role; // Ensure role is set if available
             }
-            console.log("Session data:", session);
+            // console.log("Session data:", session);
             return session;
         },
         async jwt({ token, user, account }) {
@@ -96,7 +96,7 @@ export const authOptions = {
                     token.role = user.role;
                 }
             }
-            console.log("JWT token data:", token);
+            // console.log("JWT token data:", token);
             return token;
         }
     }
