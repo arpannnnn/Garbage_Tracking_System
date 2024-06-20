@@ -89,21 +89,21 @@ const NotificationPage = () => {
   };
 
   // Notify the user when the driver is within 200 meters
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (driverPosition && userPosition) {
-        const [driverLat, driverLng] = driverPosition;
-        const [userLat, userLng] = userPosition;
-        const distance = L.latLng(driverLat, driverLng).distanceTo(L.latLng(userLat, userLng));
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (driverPosition && userPosition) {
+  //       const [driverLat, driverLng] = driverPosition;
+  //       const [userLat, userLng] = userPosition;
+  //       const distance = L.latLng(driverLat, driverLng).distanceTo(L.latLng(userLat, userLng));
 
-        if (distance <= 200) {
-          sendNotification('The driver is within 200 meters of your location.');
-        }
-      }
-    }, 480000); // Check every 8 minutes
+  //       if (distance <= 200) {
+  //         sendNotification('The driver is within 200 meters of your location.');
+  //       }
+  //     }
+  //   }, 480000 ); // Check every 8 minutes   
 
-    return () => clearInterval(interval);
-  }, [driverPosition, userPosition]);
+  //   return () => clearInterval(interval);
+  // }, [driverPosition, userPosition]);
 
   // Clear all timers on component unmount
   useEffect(() => {

@@ -111,13 +111,13 @@ const MapComponent = () => {
     const fetchBinStatus = () => {
       onValue(binStatusRef, (snapshot) => {
         const status = snapshot.val();
-        setBinStatus(status);
+        const percentage = (status / 194) * 100;
+        setBinStatus(percentage);
       });
     };
 
     fetchBinStatus();
   }, []);
-
 
   // Calculate driver ETA
   useEffect(() => {
@@ -142,14 +142,13 @@ const MapComponent = () => {
     if (percentage >= 75) {
       return 'red';
     } else if (percentage >= 50) {
-      return 'orange';
-    } else if (percentage >= 25) {
       return 'yellow';
+     
     } else {
       return 'green';
     }
   };
-  const binMarkerColor = getBinMarkerColor(binStatus);
+  const binMarkerColor = binStatus !== null ? getBinMarkerColor(binStatus) : 'transparent';
 
   const binIconSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -204,7 +203,7 @@ const MapComponent = () => {
                 Bin location
                 {binStatus && (
                   <div>
-                    Status: {binStatus}%
+                    Status: {binStatus.toFixed(2)}%
                   </div>
                 )}
               </Popup>

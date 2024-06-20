@@ -14,7 +14,6 @@ const SmartDustbin = () => {
         const fetchDustbinData = () => {
             onValue(dustbinRef, (snapshot) => {
                 const data = snapshot.val();
-                console.log('Fetched data:', data); // Log data to verify it's being fetched
                 if (data !== null) {
                     setDustbinLevel(data);
                     const percentage = (data / 194) * 100; // Convert to percentage with max value 194
@@ -23,8 +22,6 @@ const SmartDustbin = () => {
                 }
             });
         };
-
-        // Fetch initial data and set up a listener for changes
         fetchDustbinData();
 
         // Optionally, you can clear the listener if needed in future
