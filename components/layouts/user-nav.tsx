@@ -36,10 +36,10 @@ export function UserNav() {
                     });
                 }
             } catch (error) {
-                console.error("Error getting user data:", error);
+                
             }
         } else {
-            console.log("User is not authenticated or UID is missing.");
+            
         }
     }, [db, session, status]);
 

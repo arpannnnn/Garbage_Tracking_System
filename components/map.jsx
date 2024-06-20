@@ -72,7 +72,7 @@ const MapComponent = () => {
     fetchUserLocation();
   }, [db, session, status]);
 
-   // Track the driver's position if the user is a staff member
+  // Track the driver's position if the user is a staff member
   useEffect(() => {
     if (userData?.role === 'Staff' && navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
@@ -143,7 +143,7 @@ const MapComponent = () => {
       return 'red';
     } else if (percentage >= 50) {
       return 'yellow';
-     
+
     } else {
       return 'green';
     }
