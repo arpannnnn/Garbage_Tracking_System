@@ -39,18 +39,18 @@ export const authOptions = {
                     longitude: credentials.longitude,
                     role: credentials.role,
                 };
-                const payload = {
-                    method: 'POST',
+                const payload = { 
+                    method: 'POST',  
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Accept': 'application/json', 
+                        'Content-Type': 'application/json' 
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(formData)  
                 };
 
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
-                const resJson = await res.json();
-                const user = resJson.data;
+                const res = await fetch('http://localhost:3000/api/auth/login', payload);  
+                const resJson = await res.json(); 
+                const user = resJson.data; 
 
                 if (user?.email === credentials?.email) {
                     return user;
