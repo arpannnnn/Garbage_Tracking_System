@@ -331,7 +331,7 @@ export default function Home() {
                                     </ul>
                                     <p className="mb-6 text-lg font-semibold leading-normal text-gray-600">
                                         <span>Starting from</span>
-                                        <span className="ml-2 text-gray-900">$19/mo</span>
+                                        <span className="ml-2 text-gray-900">$19/mo </span>
                                     </p>
                                     <div className="md:inline-block">
                                         <button
@@ -447,7 +447,7 @@ export default function Home() {
                                             type="button"
                                             className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                                         >
-                                            Try free for 1 month
+                                            Try free for 2 month
                                         </button>
                                     </div>
                                 </div>
