@@ -32,6 +32,12 @@ import {
     MapIcon,
     X,
     Bell,
+    Star,
+    FrownIcon,
+    MehIcon,
+    SmileIcon,
+    Laugh,
+    HeartIcon
   } from 'lucide-react';
   
   export type Icon = LucideIcon;
@@ -66,6 +72,12 @@ import {
     calendar:Calendar,
     map:MapIcon,
     bell:Bell,
+    star:Star,
+    FrownIcon: FrownIcon,
+     MehIcon: MehIcon,
+      SmileIcon: SmileIcon,
+      Laugh: Laugh,
+       HeartIcon: HeartIcon,
     gitHub: ({ ...props }: LucideProps) => (
       <svg
         aria-hidden="true"

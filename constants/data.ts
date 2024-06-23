@@ -37,6 +37,12 @@ export const navItems: NavItem[] = [
         href: '/dashboard/notify',
         icon: 'bell',
         label: 'Notify'
+    },
+    {
+        title: 'Feedback',
+        href: '/dashboard/feedback',
+        icon: 'star',
+        label: 'Feddback'
     }
 ];
 
