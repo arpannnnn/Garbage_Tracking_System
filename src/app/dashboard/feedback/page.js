@@ -25,7 +25,7 @@ const PageFeedbackForm = () => {
         if (success) {
             timer = setTimeout(() => {
                 setSuccess(false);
-            }, 3000); 
+            },4000); 
         }
         return () => clearTimeout(timer);
     }, [success]);

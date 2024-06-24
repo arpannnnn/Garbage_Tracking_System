@@ -9,12 +9,12 @@ export default function Home() {
     useEffect(() => {
         const handleScroll = () => {
             const scrollHeight = window.pageYOffset;
-            setShowScrollBtn(scrollHeight > 200); // Show button when scrolled more than 200px
+            setShowScrollBtn(scrollHeight > 200); 
         };
 
         window.addEventListener('scroll', handleScroll);
 
-        // Clean up the event listener on component unmount
+        
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -48,7 +48,7 @@ export default function Home() {
         }
     };
     const validateEmail = (email) => {
-        // Very basic email validation using regex
+       
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };

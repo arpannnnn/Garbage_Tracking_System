@@ -202,8 +202,8 @@ const SmartDustbin = () => {
             timestamp: nepalTime
         });
 
-        
-       
+
+
     }, [dustbinLevel, dustbinPercentage]);
 
     useEffect(() => {
@@ -225,11 +225,11 @@ const SmartDustbin = () => {
 
         fetchDustbinData();
 
-        // Set up daily notification at 3:15 PM
+
         const setDailyNotification = () => {
             const now = new Date();
             const notificationTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 28, 0);
-            
+
             if (now > notificationTime) {
                 notificationTime.setDate(notificationTime.getDate() + 1);
             }
