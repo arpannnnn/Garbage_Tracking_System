@@ -4,8 +4,8 @@ import type { Metadata } from 'next';
 import SidebarAdmin from './sidebar';
 
 export const metadata: Metadata = {
-  title: ' Dashboard Of GTS Nepal',
-  description: 'Dashboard layout for GTS Nepal',
+  title: 'Admin Dashboard Of GTS Nepal',
+  description: ' Admin Dashboard Of GTS Nepal',
 };
 
 export default function DashboardLayout({

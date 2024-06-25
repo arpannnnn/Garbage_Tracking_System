@@ -8,10 +8,10 @@ export const navItemsAdmin: NavItem[] = [
         label: 'Admin'
     },
     {
-        title: 'Settings',
-        href: '/admin/settings',
-        icon: 'settings',
-        label: 'Admin'
+        title: 'Schedule',
+        href: '/admin/schedule',
+        icon: 'calendar',
+        label: 'Schedule'
     },
     {
         title: 'Dustbin',
