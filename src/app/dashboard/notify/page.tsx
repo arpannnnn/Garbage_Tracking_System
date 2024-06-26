@@ -291,15 +291,15 @@ const NotificationPage = () => {
   }, []);
 
   // Show "No notifications yet" if user data is not fetched or if notifications are not loaded
-  if (!userData) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <p className="text-lg font-bold ">No notifications yet</p>
-        </div>
-      </div>
-    );
-  }
+  // if (!userData) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <div className="text-center">
+  //         <p className="text-lg font-bold ">No notifications yet</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -324,8 +324,8 @@ const NotificationPage = () => {
             {hasNotifiedStart && (
               <p className="text-green-500 mt-2">Round has started. Notification sent to all users.</p>
             )}
-
-          {/* </>
+{/* 
+          </>
         )} */}
         {/* Display notifications */}
         <div className="mt-4">

@@ -228,7 +228,7 @@ const SmartDustbin = () => {
 
         const setDailyNotification = () => {
             const now = new Date();
-            const notificationTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 28, 0);
+            const notificationTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 15, 0);
 
             if (now > notificationTime) {
                 notificationTime.setDate(notificationTime.getDate() + 1);
