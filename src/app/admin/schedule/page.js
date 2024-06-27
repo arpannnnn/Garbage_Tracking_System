@@ -72,6 +72,21 @@ const [loading, setLoading] = useState(true);
 
     const handleEditSchedule = async (id) => {
         try {
+            const selectedDate = new Date(editedDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+    
+            if (selectedDate < today) {
+                toast({
+                    title: 'Error',
+                    description: 'Cannot update schedule to a past date.',
+                    variant: 'destructive',
+                });
+                setEditing(null);
+                setEditedDate('');
+                return;
+            }
+    
             await updateDoc(doc(db, 'schedules', id), { date: editedDate });
             setEditing(null);
             setEditedDate('');
@@ -88,6 +103,7 @@ const [loading, setLoading] = useState(true);
             });
         }
     };
+    
 
     const handleDeleteSchedule = async (id) => {
         try {
