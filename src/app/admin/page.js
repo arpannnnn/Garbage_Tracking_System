@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Loader from '../../../components/Loader';
 import { ScrollArea } from '../../../components/ui/scroll-area';
+import { Overview } from '../../../components/overview';
 
 function Page() {
   const { data: session, status } = useSession();
@@ -65,6 +66,9 @@ function Page() {
         {userData.role === 'admin' && (
           <h2 className="text-3xl font-bold tracking-tight">
             Hi, Welcome back {userData && userData.fullName ? userData.fullName : ''} 🫡
+
+            <Overview/>
+
           </h2>
         )}
         </div>
