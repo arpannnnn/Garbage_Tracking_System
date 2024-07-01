@@ -9,7 +9,7 @@ export default function FeaturePage() {
     // Simulate a data fetch
     setTimeout(() => {
       setLoading(false);
-    }, 1000); // 3 seconds delay
+    }, 2000); // 3 seconds delay
   }, []);
 
   if (loading) {

@@ -7,10 +7,10 @@ function Page() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate a data fetch
+    
     setTimeout(() => {
       setLoading(false);
-    }, 1000); // 3 seconds delay
+    }, 1000); 
   }, []);
 
   if (loading) {

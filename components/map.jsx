@@ -1,17 +1,20 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { app } from '../firebase/firebase';
+import { useSession } from 'next-auth/react';
+import { ref, onValue } from 'firebase/database';
 import { database } from '../firebase/firebase';
-import { ref, onValue } from "firebase/database";
 
 // Fix broken icon images on Leaflet maps
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
 // Custom SVG for driver marker icon
@@ -23,26 +26,62 @@ const driverIconSvg = `
 const driverMarkerIcon = L.divIcon({
   html: driverIconSvg,
   iconSize: [32, 32],
-  className: "driver-marker-icon",
+  className: 'driver-marker-icon',
 });
 
 const MapComponent = () => {
+  const { data: session, status } = useSession();
+  const db = getFirestore(app);
   const [position, setPosition] = useState(null);
   const [driverLocation, setDriverLocation] = useState(null);
-  // const [showNotification, setShowNotification] = useState(false);
   const [driverETA, setDriverETA] = useState(null);
   const [binLocation, setBinLocation] = useState(null);
   const [binStatus, setBinStatus] = useState(null);
+  const [userData, setUserData] = useState(null);
 
+  // Fetch user data (simulating the user data fetching logic)
   useEffect(() => {
-    if (navigator.geolocation) {
+    // Simulated user data fetching
+    const fetchUserData = async () => {
+      // Replace this with actual fetching logic
+      const user = { role: 'Staff' }; // Example user data
+      setUserData(user);
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Fetch user's position from Firestore
+  useEffect(() => {
+    const fetchUserLocation = async () => {
+      if (status === 'authenticated' && session?.user?.uid) {
+        try {
+          const userDoc = await getDoc(doc(collection(db, 'users'), session.user.uid));
+          if (userDoc.exists()) {
+            const { latitude, longitude } = userDoc.data();
+            setPosition([latitude, longitude]);
+          } else {
+            console.log('No such document!');
+          }
+        } catch (error) {
+          console.error('Error getting user location:', error);
+        }
+      }
+    };
+
+    fetchUserLocation();
+  }, [db, session, status]);
+
+  // Track the driver's position if the user is a staff member
+  useEffect(() => {
+    if (userData?.role === 'Staff' && navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setPosition([latitude, longitude]);
+          setDriverLocation([latitude, longitude]);
         },
         (error) => {
-          console.error("Error getting geolocation", error);
+          console.error('Error getting driver geolocation', error);
         },
         { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
       );
@@ -51,20 +90,7 @@ const MapComponent = () => {
         navigator.geolocation.clearWatch(watchId); // Cleanup on unmount
       };
     }
-  }, []);
-
-  // Simulate fetching driver location within 200 meters (for demo purposes)
-  useEffect(() => {
-    if (position) {
-      const [userLatitude, userLongitude] = position;
-
-      // Simulate fetching driver location within a radius of 200 meters
-      const driverLatitude = userLatitude + (Math.random() * 0.002 - 0.001);
-      const driverLongitude = userLongitude + (Math.random() * 0.002 - 0.001);
-
-      setDriverLocation([driverLatitude, driverLongitude]);
-    }
-  }, [position]);
+  }, [userData]);
 
   // Simulate fetching bin location within 100 meters
   useEffect(() => {
@@ -80,25 +106,18 @@ const MapComponent = () => {
   }, [position]);
 
   // Fetch bin status from Firebase
-
-
   useEffect(() => {
-    const binStatusRef = ref(database, "/sensor/distance");
+    const binStatusRef = ref(database, '/sensor/distance');
     const fetchBinStatus = () => {
       onValue(binStatusRef, (snapshot) => {
         const status = snapshot.val();
-          setBinStatus(status);
-        
+        const percentage = (status / 194) * 100;
+        setBinStatus(percentage);
       });
     };
-    
+
     fetchBinStatus();
-
-    // Optionally, we can clear the listener if needed in future
-    // return () => off(binStatusRef);
-
   }, []);
-
 
   // Calculate driver ETA
   useEffect(() => {
@@ -118,64 +137,18 @@ const MapComponent = () => {
     }
   }, [position, driverLocation]);
 
-  // Send notification API call
-  // const sendNotification = async () => {
-  //   try {
-  //     const response = await fetch('https://api-endpoint.com/notify', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         message: 'Driver is within 100 meters',
-  //         position,
-  //         driverLocation,
-  //       }),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-  //     console.log('Notification sent!');
-  //   } catch (error) {
-  //     console.error('Failed to send notification:', error);
-  //   }
-  // };
-
-  // Check if driver is within 100 meters of user
-  // useEffect(() => {
-  //   if (position && driverLocation) {
-  //     const [userLatitude, userLongitude] = position;
-  //     const [driverLatitude, driverLongitude] = driverLocation;
-
-  //     const distance = L.latLng(userLatitude, userLongitude).distanceTo(
-  //       L.latLng(driverLatitude, driverLongitude)
-  //     );
-
-  //     if (distance <= 100) {
-  //       setShowNotification(true);
-  //       sendNotification(); // Call the function to send the notification
-  //     } else {
-  //       setShowNotification(false);
-  //     }
-  //   }
-  // }, [position, driverLocation]);
-
   // Get bin marker color based on status
   const getBinMarkerColor = (percentage) => {
     if (percentage >= 75) {
-      return "red";
+      return 'red';
     } else if (percentage >= 50) {
-      return "orange";
-    } else if (percentage >= 25) {
-      return "yellow";
+      return 'yellow';
+
     } else {
-      return "green";
+      return 'green';
     }
   };
-    const binMarkerColor = getBinMarkerColor(binStatus);
-
-
-    
+  const binMarkerColor = binStatus !== null ? getBinMarkerColor(binStatus) : 'transparent';
 
   const binIconSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -189,16 +162,16 @@ const MapComponent = () => {
   const binMarkerIcon = L.divIcon({
     html: binIconSvg,
     iconSize: [32, 32],
-    className: "bin-marker-icon",
+    className: 'bin-marker-icon',
   });
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: '100vh', width: '100%' }}>
       {position ? (
         <MapContainer
           center={position}
           zoom={13}
-          style={{ height: "100%", width: "100%" }}
+          style={{ height: '100%', width: '100%' }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -210,7 +183,7 @@ const MapComponent = () => {
           <Circle
             center={position}
             radius={300}
-            pathOptions={{ fillColor: "blue", color: "blue" }}
+            pathOptions={{ fillColor: 'blue', color: 'blue' }}
           />
           {driverLocation && (
             <Marker position={driverLocation} icon={driverMarkerIcon}>
@@ -227,10 +200,10 @@ const MapComponent = () => {
           {binLocation && (
             <Marker position={binLocation} icon={binMarkerIcon}>
               <Popup>
-                Bin 1 location
+                Bin location
                 {binStatus && (
                   <div>
-                    Status: {binStatus}
+                    Status: {binStatus.toFixed(2)}%
                   </div>
                 )}
               </Popup>
@@ -238,9 +211,8 @@ const MapComponent = () => {
           )}
         </MapContainer>
       ) : (
-        <p>Loading...</p>
+        <p className='flex justify-center font-semibold'>Loading...</p>
       )}
-      {/* {showNotification && <p>Driver is approaching! Please be ready.</p>} */}
     </div>
   );
 };
