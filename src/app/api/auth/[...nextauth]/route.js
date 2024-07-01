@@ -39,18 +39,18 @@ export const authOptions = {
                     longitude: credentials.longitude,
                     role: credentials.role,
                 };
-                const payload = {
-                    method: 'POST',
+                const payload = { 
+                    method: 'POST',  
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Accept': 'application/json', 
+                        'Content-Type': 'application/json' 
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(formData)  
                 };
 
-                const res = await fetch('http://localhost:3000/api/auth/login', payload);
-                const resJson = await res.json();
-                const user = resJson.data;
+                const res = await fetch('http://localhost:3000/api/auth/login', payload);  
+                const resJson = await res.json(); 
+                const user = resJson.data; 
 
                 if (user?.email === credentials?.email) {
                     return user;
@@ -70,11 +70,11 @@ export const authOptions = {
     },
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            console.log("signIn", { user, account, profile, email, credentials });
+            // console.log("signIn", { user, account, profile, email, credentials });
             return true;
         },
         async redirect({ url, baseUrl }) {
-            console.log("redirect", { url, baseUrl });
+            // console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
         async session({ session, token }) {
@@ -85,7 +85,7 @@ export const authOptions = {
                 session.accessToken = token.accessToken; // Ensure access token is set
                 session.role = token.user.role; // Ensure role is set if available
             }
-            console.log("Session data:", session);
+            // console.log("Session data:", session);
             return session;
         },
         async jwt({ token, user, account }) {
@@ -96,7 +96,7 @@ export const authOptions = {
                     token.role = user.role;
                 }
             }
-            console.log("JWT token data:", token);
+            // console.log("JWT token data:", token);
             return token;
         }
     }

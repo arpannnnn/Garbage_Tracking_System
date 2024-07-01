@@ -130,15 +130,11 @@ import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function CustomNavbar() {
-    const pathname = usePathname();
-    const router = useRouter();
-    const [isNavbarOpen, setIsNavbarOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const token = localStorage.getItem('User-Token');
-        setIsLoggedIn(!!token);
-    }, []);
+    const pathname = usePathname()
+    const { data: session } = useSession()
+    const [isNavbarOpen, setIsNavbarOpen] = useState(false)
+    const [isSessionLoading, setIsSessionLoading] = useState(false)
 
     const toggleNavbar = () => {
         setIsNavbarOpen(!isNavbarOpen);
@@ -159,6 +155,7 @@ export default function CustomNavbar() {
         <div>
             <nav className="bg-white border-gray-200 dark:bg-gray-800">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                    
                     <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                         <Image
                             className=""
@@ -195,12 +192,10 @@ export default function CustomNavbar() {
                     </button>
                     <div className={`${isNavbarOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} id="navbar-default">
                         <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-4 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        
                             <li>
-                                <Link
-                                    href="/"
-                                    className={`${pathname === '/' ? 'text-green-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}
-                                    aria-current="page"
-                                >
+                                
+                                <Link href="/" className={`${pathname === '/' ? 'text-green-700' : ''}block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`} aria-current="page">
                                     Home
                                 </Link>
                             </li>
