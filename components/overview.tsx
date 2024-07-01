@@ -5,7 +5,6 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recha
 import { database } from '../firebase/firebase';
 import { ref, onValue, off } from "firebase/database";
 
-
 const transformDataForChart = (notifications) => {
     return notifications.map(notification => {
         const date = new Date(notification.timestamp);
@@ -24,9 +23,8 @@ const transformDataForChart = (notifications) => {
     });
 };
 
-
 const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
+    if (active && payload && payload.length && label) {
         return (
             <div className="bg-white p-2 shadow-lg rounded">
                 <p className="label">{`Date & Time: ${label.replace('\n', ' ')}`}</p>
@@ -36,7 +34,6 @@ const CustomTooltip = ({ active, payload, label }) => {
     }
     return null;
 };
-
 
 const CustomTick = ({ x, y, payload }) => {
     const lines = payload.value.split('\n');
@@ -52,7 +49,6 @@ const CustomTick = ({ x, y, payload }) => {
         </g>
     );
 };
-
 
 export function Overview() {
     const [chartData, setChartData] = useState([]);

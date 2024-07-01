@@ -296,6 +296,7 @@ export default function CustomRegister() {
                         height={700}
                         style={imageStyle}
                         alt=""
+                        priority={true}
                     />
                 </div>
             </div>
