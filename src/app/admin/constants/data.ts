@@ -14,6 +14,13 @@ export const navItemsAdmin: NavItem[] = [
         label: 'Schedule'
     },
     {
+        title: 'Map',
+        href: '/admin/map',
+        icon: 'map',
+        label: 'Map'
+    },
+
+    {
         title: 'Dustbin',
         href: '/admin/dustbin',
         icon: 'trash',

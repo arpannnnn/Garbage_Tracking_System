@@ -290,22 +290,23 @@ const NotificationPage = () => {
     };
   }, []);
 
-  // Show "No notifications yet" if user data is not fetched or if notifications are not loaded
-  // if (!userData) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen">
-  //       <div className="text-center">
-  //         <p className="text-lg font-bold ">No notifications yet</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (userData && userData.role !== 'staff') {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <p className="text-lg font-bold text-red-600">
+            Access Denied: Your role does not permit access to this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="text-center">
-        {/* {userData.role === 'staff' && (
-          <> */}
+        {userData && userData.role === 'staff' && (
+          <>
             <h1 className="text-2xl font-bold mb-4">Driver Notification System</h1>
             <p className="text-lg">Users will be notified when the driver starts the garbage collection round and when the driver is within 200 meters of the user.</p>
 
@@ -324,9 +325,8 @@ const NotificationPage = () => {
             {hasNotifiedStart && (
               <p className="text-green-500 mt-2">Round has started. Notification sent to all users.</p>
             )}
-{/* 
           </>
-        )} */}
+        )}
         {/* Display notifications */}
         <div className="mt-4">
           {notifications.map((notification, index) => (
