@@ -45,7 +45,7 @@ export default function CustomNavbar() {
         <div>
             <nav className="bg-white border-gray-200 dark:bg-gray-800">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    
+
                     <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                         <Image className=''
                             src="/GTS.jpg"
@@ -56,6 +56,7 @@ export default function CustomNavbar() {
                         />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">GTS</span>
                     </Link>
+
                     <button
                         data-collapse-toggle="navbar-default"
                         type="button"
@@ -71,9 +72,9 @@ export default function CustomNavbar() {
                     </button>
                     <div className={`${isNavbarOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} id="navbar-default">
                         <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-4 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                        
+
                             <li>
-                                
+
                                 <Link href="/" className={`${pathname === '/' ? 'text-green-700' : ''}block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`} aria-current="page">
                                     Home
                                 </Link>
@@ -104,17 +105,22 @@ export default function CustomNavbar() {
 
 
                             {session?.user && (
-                                <li>
+                                <><li>
                                     <Link href="/api/auth/signout" className={`${pathname === '/logout' ? 'text-green-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>Logout</Link>
-                                </li>
+                                </li><ul className="flex  flex-col font-medium p-4 md:p-0 mt-4 border  border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                                        <li>
+                                            <Link
+                                                href="/dashboard" className={`${pathname === '/dashboard' ? 'text-green-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></svg></Link>
+                                        </li>
+                                    </ul></>
                             )}
-
-
                             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                                 <svg className="block rounded hover:bg-orange-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 text-gree
                                 -500 " xmlns="http://www.w3.org/2000/svg" width="1em" height="1.5em" viewBox="0 0 10 12"><path fill="currentColor" d="m5.966 4.49l-.827.742a5 5 0 0 0 .455 1.073a4.7 4.7 0 0 0 .722.922l1.071-.33c.6-.185 1.255.005 1.654.48l.61.726a1.47 1.47 0 0 1-.137 2.042c-.995.908-2.527 1.215-3.674.314a10.4 10.4 0 0 1-2.516-2.87A10 10 0 0 1 2.03 4.013c-.22-1.422.821-2.56 2.119-2.948c.774-.232 1.6.166 1.884.908l.335.875c.22.576.062 1.225-.402 1.641" /></svg>
                                 <Link href="tel:+9779856987452" className='block rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 text-green-500'>+9779856987452</Link>
                             </ul>
+
                         </ul>
                     </div>
 

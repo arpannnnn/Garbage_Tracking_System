@@ -6,7 +6,7 @@ import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { app } from '../firebase/firebase';
 import Image from 'next/image';
 import { useToast } from './ui/use-toast';
-const roles = ['User', 'Staff'];
+const roles = ['user', 'staff'];
 
 export default function CustomRegister() {
 
