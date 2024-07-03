@@ -17,29 +17,42 @@ export default function CustomLogin() {
     const handleLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
-
-        signIn("credentials", {
+        const payload = {
             email: emailRef.current.value,
             password: passRef.current.value,
-            redirect: false
-        }).then(res => {
+        };
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/login_user/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+    
             setLoading(false);
-            if (res.error == null) {
+    
+            if (response.ok) {
+                const data = await response.json();
+                // Save the token in localStorage or cookies
+                localStorage.setItem('User_token', JSON.stringify(data.token));
                 router.push('/');
             } else {
+                const errorData = await response.json();
                 toast({
                     title: 'Error',
-                    description: res.error,
+                    description: errorData.errors,
                     variant: 'destructive',
                 });
                 emailRef.current.value = '';
                 passRef.current.value = '';
             }
-        }).catch(error => {
+        } catch (error) {
             setLoading(false);
             console.error('Login error:', error);
-        });
+        }
     };
+        
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

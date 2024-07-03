@@ -14,9 +14,203 @@ import { app } from "../../../../firebase/firebase";
 import { useSession } from "next-auth/react";
 import Loader from "../../../../components/Loader";
 
+// function ProfileSection() {
+//   const { data: session, status } = useSession();
+//   const db = getFirestore(app);
+//   const citizenshipRef = useRef("");
+//   const { toast } = useToast();
+//   const [userData, setUserData] = useState({
+//     fullName: "",
+//     email: "",
+//     citizenship: "",
+//     mobileNumber: "",
+//     latitude: "",
+//     longitude: "",
+//     role: "",
+//   });
+//   const [editableUserData, setEditableUserData] = useState({
+//     fullName: "",
+//     email: "",
+//     citizenship: "",
+//     mobileNumber: "",
+//     latitude: "",
+//     longitude: "",
+//     role: "",
+//   });
+//   const [loading, setLoading] = useState(true);
+//   const [updateLoading, setUpdateLoading] = useState(false);
+//   const [error, setError] = useState(null);
+
+//   const getUser = useCallback(async () => {
+//     setLoading(true);
+//     setError(null);
+
+//     if (status === "authenticated" && session?.user?.uid) {
+//       try {
+//         const q = query(
+//           collection(db, "users"),
+//           where("uid", "==", session.user.uid)
+//         );
+//         const querySnapshot = await getDocs(q);
+//         if (querySnapshot.empty) {
+//           setError("No matching documents found.");
+//         } else {
+//           querySnapshot.forEach((doc) => {
+//             const data = doc.data();
+//             setUserData(data);
+//             setEditableUserData(data);
+//           });
+//         }
+//       } catch (error) {
+//         setError("Error getting user data: " + error.message);
+//       }
+//     }
+
+//     setLoading(false);
+//   }, [db, session, status]);
+
+//   useEffect(() => {
+//     getUser();
+//   }, [getUser]);
+
+
+//   const handleFullNameChange = (event) => {
+//     const value = event.target.value;
+//     if (/^[a-zA-Z\s]*$/.test(value)) {
+//       setEditableUserData((prevState) => ({
+//         ...prevState,
+//         fullName: value,
+//       }));
+//     }
+//   };
+
+
+//   const handleMobileNumberChange = (event) => {
+//     const value = event.target.value;
+//     if (/^\d*$/.test(value) && value.length <= 10) {
+//       setEditableUserData((prevState) => ({
+//         ...prevState,
+//         mobileNumber: value,
+//       }));
+//     }
+//   };
+
+//   const handleCitizenshipChange = (event) => {
+//     let value = event.target.value.replace(/\D/g, "");
+//     if (value.length > 16) {
+//       value = value.slice(0, 16); // Only 16 digits allowed
+//     }
+//     const formattedValue = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+//     citizenshipRef.current = formattedValue;
+//     setEditableUserData((prevState) => ({
+//       ...prevState,
+//       citizenship: formattedValue,
+//     }));
+//     event.target.value = formattedValue;
+//   };
+
+//   const handleRoleChange = (event) => {
+//     const value = event.target.value;
+//     setEditableUserData((prevState) => ({
+//       ...prevState,
+//       role: value,
+//     }));
+//   };
+
+
+
+//   const handleUpdateUserData = async () => {
+//     if (
+//       !editableUserData.fullName.trim() ||
+
+//       !editableUserData.citizenship.trim() ||
+//       !editableUserData.mobileNumber.trim() ||
+//       !editableUserData.role.trim()
+//     ) {
+//       toast({
+//         title: 'All fields must be filled out correctly.',
+//         description: 'Please fill out all fields correctly before updating user data.',
+//         variant: 'destructive',
+//       });
+
+//       return;
+//     }
+//     setUpdateLoading(true);
+//     try {
+//       const userRef = doc(db, "users", session.user.uid);
+
+//       // Update the user data
+//       await updateDoc(userRef, editableUserData);
+//       setUserData(editableUserData);
+//       toast({
+//         title: 'User data updated successfully.',
+//         description: 'User data has been updated successfully.',
+//       });
+//     } catch (error) {
+//       console.error("Error updating user data:", error);
+//     }
+
+//     setUpdateLoading(false);
+//   };
+//   const fetchLocation = () => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           const { latitude, longitude } = position.coords;
+//           setEditableUserData((prevState) => ({
+//             ...prevState,
+//             latitude: latitude.toString(),
+//             longitude: longitude.toString(),
+//           }));
+//         },
+//         (error) => {
+//           console.error("Error fetching location:", error);
+//         }
+//       );
+//     } else {
+//       alert("Geolocation is not supported by this browser.");
+//     }
+//   };
+
+//   if (loading) {
+//     return <Loader />;
+//   }
+
+//   if (error) {
+//     return (
+//       <div className="flex justify-center items-center h-screen">
+//         <div className="bg-red-100 rounded-lg shadow-lg p-8 max-w-md">
+//           <p className="text-red-600">{error}</p>
+//         </div>
+//       </div>
+//     );
+//   }
+const mapBackendResponseToFrontend = (data) => {
+  return {
+    fullName: data.full_name,
+    email: data.email,
+    citizenship: data.citizenship,
+    mobileNumber: data.mobile_number,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    role: data.role,
+  };
+};
+
+const mapFrontendToBackendRequest = (data) => {
+  return {
+    full_name: data.fullName,
+    email: data.email,
+    citizenship: data.citizenship,
+    mobile_number: data.mobileNumber,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    role: data.role,
+  };
+};
+
 function ProfileSection() {
-  const { data: session, status } = useSession();
-  const db = getFirestore(app);
+  const { status } = useSession(); // Remove session since you use local storage for the token
   const citizenshipRef = useRef("");
   const { toast } = useToast();
   const [userData, setUserData] = useState({
@@ -45,34 +239,36 @@ function ProfileSection() {
     setLoading(true);
     setError(null);
 
-    if (status === "authenticated" && session?.user?.uid) {
+    const token = JSON.parse(localStorage.getItem('User_Token')); // Retrieve token from local storage
+
+    if (token) {
       try {
-        const q = query(
-          collection(db, "users"),
-          where("uid", "==", session.user.uid)
-        );
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-          setError("No matching documents found.");
-        } else {
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            setUserData(data);
-            setEditableUserData(data);
-          });
+        const response = await fetch('http://127.0.0.1:8000/api/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token.access}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
+
+        const data = await response.json();
+        const mappedData = mapBackendResponseToFrontend(data); // Map backend response
+        setUserData(mappedData);
+        setEditableUserData(mappedData); // Map to frontend form fields
       } catch (error) {
         setError("Error getting user data: " + error.message);
       }
     }
 
     setLoading(false);
-  }, [db, session, status]);
+  }, [status]);
 
   useEffect(() => {
     getUser();
   }, [getUser]);
-
 
   const handleFullNameChange = (event) => {
     const value = event.target.value;
@@ -83,7 +279,6 @@ function ProfileSection() {
       }));
     }
   };
-
 
   const handleMobileNumberChange = (event) => {
     const value = event.target.value;
@@ -117,12 +312,9 @@ function ProfileSection() {
     }));
   };
 
-
-
   const handleUpdateUserData = async () => {
     if (
       !editableUserData.fullName.trim() ||
-
       !editableUserData.citizenship.trim() ||
       !editableUserData.mobileNumber.trim() ||
       !editableUserData.role.trim()
@@ -136,22 +328,39 @@ function ProfileSection() {
       return;
     }
     setUpdateLoading(true);
-    try {
-      const userRef = doc(db, "users", session.user.uid);
+    const token = localStorage.getItem('token'); // Retrieve token from local storage
 
-      // Update the user data
-      await updateDoc(userRef, editableUserData);
-      setUserData(editableUserData);
+    try {
+      const backendData = mapFrontendToBackendRequest(editableUserData); // Map frontend data to backend format
+      const response = await fetch('http://127.0.0.1:8000/api/profile/', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(backendData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const updatedData = await response.json();
+      const mappedData = mapBackendResponseToFrontend(updatedData); // Map backend response to frontend format
+      setUserData(mappedData);
+      setEditableUserData(mappedData);
       toast({
         title: 'User data updated successfully.',
         description: 'User data has been updated successfully.',
       });
     } catch (error) {
       console.error("Error updating user data:", error);
+      setError("Error updating user data: " + error.message);
     }
 
     setUpdateLoading(false);
   };
+
   const fetchLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

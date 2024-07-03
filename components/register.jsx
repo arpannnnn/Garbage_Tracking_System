@@ -83,25 +83,39 @@ export default function CustomRegister() {
             try {
 
                 // Register user using Firebase authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                // const user = userCredential.user;
 
                 const payload = {
-                    email: user.email,
-                    fullName,
+                    email,
+                    full_name:fullName,
                     citizenship,
-                    mobileNumber,
+                    mobile_number:mobileNumber,
                     latitude: parseFloat(latitude),
                     longitude: parseFloat(longitude),
                     role: selectedRole,
-                    uid: user.uid,
+                    password:password,
+                    password2:confirmPassword
+                   
                 };
 
-                // Store user data in Firestore
-                await setDoc(doc(db, 'users', user.uid), payload);
-
-                // Redirect user to login page
-                router.push('/login');
+                const response = await fetch('http://127.0.0.1:8000/api/register_user/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                
+                if (response.ok) {
+                    // Redirect user to login page if the API call was successful
+                    router.push('/login');
+                } else {
+                    // Handle errors if the API call was not successful
+                    const errorData = await response.json();
+                    console.error('Error registering user:', errorData);
+                    // Optionally, show an error message to the user
+                }
             } catch (error) {
                 toast({
                     title: 'Error registering user. Please try again.',
