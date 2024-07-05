@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from '../firebase/firebase';
 import { useSession } from 'next-auth/react';
 import { ref, onValue, set } from 'firebase/database';
@@ -38,39 +38,38 @@ const MapComponent = () => {
   const [binLocation, setBinLocation] = useState(null);
   const [binStatus, setBinStatus] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [usersLocations, setUsersLocations] = useState([]);
 
   // Fetch user data (simulating the user data fetching logic)
   useEffect(() => {
-    // Simulated user data fetching
     const fetchUserData = async () => {
-      // Replace this with actual fetching logic
-      const user = { role: 'Staff' }; // Example user data
+      const user = { role: 'Staff' };
       setUserData(user);
     };
 
     fetchUserData();
   }, []);
 
-  // Fetch user's position from Firestore
+  // Fetch all users' locations from Firestore
   useEffect(() => {
-    const fetchUserLocation = async () => {
-      if (status === 'authenticated' && session?.user?.uid) {
+    const fetchUsersLocations = async () => {
+      if (status === 'authenticated') {
         try {
-          const userDoc = await getDoc(doc(collection(db, 'users'), session.user.uid));
-          if (userDoc.exists()) {
-            const { latitude, longitude } = userDoc.data();
-            setPosition([latitude, longitude]);
-          } else {
-            console.log('No such document!');
-          }
+          const usersCollection = await getDocs(collection(db, 'users'));
+          const locations = usersCollection.docs.map((doc) => {
+            const { fullName, latitude, longitude } = doc.data();
+            return { id: doc.id, fullName, latitude, longitude };
+          });
+          console.log('Fetched users locations:', locations);
+          setUsersLocations(locations);
         } catch (error) {
-          console.error('Error getting user location:', error);
+          console.error('Error getting users locations:', error);
         }
       }
     };
 
-    fetchUserLocation();
-  }, [db, session, status]);
+    fetchUsersLocations();
+  }, [db, status]);
 
   // Track the driver's position if the user is a staff member
   useEffect(() => {
@@ -79,9 +78,9 @@ const MapComponent = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           const location = [latitude, longitude];
+          console.log('Driver position:', location);
           setDriverLocation(location);
 
-          // Update driver's location in Firebase Realtime Database
           const driverLocationRef = ref(database, 'drivers/location');
           set(driverLocationRef, {
             latitude,
@@ -95,7 +94,7 @@ const MapComponent = () => {
       );
 
       return () => {
-        navigator.geolocation.clearWatch(watchId); // Cleanup on unmount
+        navigator.geolocation.clearWatch(watchId);
       };
     }
   }, [userData]);
@@ -107,10 +106,11 @@ const MapComponent = () => {
       onValue(driverLocationRef, (snapshot) => {
         const location = snapshot.val();
         if (location && location.latitude && location.longitude) {
+          console.log('Fetched driver location from database:', location);
           setDriverLocation([location.latitude, location.longitude]);
         }
       });
-    }, 5000); // Fetch after 5 seconds
+    }, 5000);
 
     return () => clearTimeout(delayFetch);
   }, []);
@@ -120,10 +120,10 @@ const MapComponent = () => {
     if (position) {
       const [userLatitude, userLongitude] = position;
 
-      // Simulate bin location within a radius of 100 meters
       const binLatitude = userLatitude + (1 * 0.0001 - 0.0005);
       const binLongitude = userLongitude + (1 * 0.0001 - 0.0005);
 
+      console.log('Simulated bin location:', [binLatitude, binLongitude]);
       setBinLocation([binLatitude, binLongitude]);
     }
   }, [position]);
@@ -134,6 +134,7 @@ const MapComponent = () => {
     const fetchBinStatus = () => {
       onValue(binStatusRef, (snapshot) => {
         const status = snapshot.val();
+        console.log('Fetched bin status:', status);
         const percentage = (status / 194) * 100;
         setBinStatus(percentage);
       });
@@ -152,10 +153,10 @@ const MapComponent = () => {
         L.latLng(driverLatitude, driverLongitude)
       );
 
-      // Assuming the driver's speed is 30 km/h (8.33 m/s)
       const driverSpeed = 8.33;
       const eta = distance / driverSpeed;
 
+      console.log('Calculated driver ETA:', eta);
       setDriverETA(eta);
     }
   }, [position, driverLocation]);
@@ -187,10 +188,28 @@ const MapComponent = () => {
     className: 'bin-marker-icon',
   });
 
-  const isDriverLocationArray = Array.isArray(driverLocation) && driverLocation.length === 2;
+  // Get user's geolocation and set the position state
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log('User position:', [latitude, longitude]);
+          setPosition([latitude, longitude]);
+        },
+        (error) => {
+          console.error('Error getting geolocation', error);
+        }
+      );
+    }
+  }, []);
+
+  // Check if driverLocation is an array
+  const isDriverLocationArray =
+    Array.isArray(driverLocation) && driverLocation.length === 2;
 
   return (
-    <div style={{ height: '100vh', width: '100%' }}>
+    <div style={{ height: '500px', width: '100%' }}>
       {position ? (
         <MapContainer
           center={position}
@@ -209,7 +228,7 @@ const MapComponent = () => {
           {isDriverLocationArray && (
             <Marker position={driverLocation} icon={driverMarkerIcon}>
               <Popup>
-                Driver's location
+                Drivers location
                 {driverETA && <p>ETA: {Math.round(driverETA)} seconds</p>}
               </Popup>
               <Circle center={driverLocation} radius={20} />
@@ -224,12 +243,16 @@ const MapComponent = () => {
               </Popup>
             </Marker>
           )}
+          {usersLocations.map(({ id, fullName, latitude, longitude }) => (
+            <Marker key={id} position={[latitude, longitude]}>
+              <Popup>{fullName}'s location</Popup>
+            </Marker>
+          ))}
         </MapContainer>
       ) : (
         <p>Loading...</p>
       )}
     </div>
-          
   );
 };
 
