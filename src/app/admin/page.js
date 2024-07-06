@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from 'react';
-import { getFirestore, query, where, getDocs, collection, onSnapshot } from 'firebase/firestore';
+import { getFirestore, query, where, getDocs, collection} from 'firebase/firestore';
 import { app } from '../../../firebase/firebase';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -54,22 +54,13 @@ function Page() {
     }, 2000);
   }, []);
 
-  // Fetch PaymentInfo from Firestore
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'PaymentInfo'), (snapshot) => {
-      const fetchedpayInfo = snapshot.docs.map((doc) => doc.data());
-      setPayInfo(fetchedpayInfo);
-    });
-
-    return () => unsubscribe();
-  }, [db]);
+  
 
   if (loading) {
     return <Loader />;
   }
 
-  // Check if there is a successful payment
-  const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
+
 
   return (
     <ScrollArea className="h-full">
@@ -81,23 +72,7 @@ function Page() {
               {userData.role === 'admin' && (
                 <>
                   <span className='text-green-600'> {userData.fullName} </span> !
-                  {hasSuccessfulPayment && (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="#2372af" // Change fill color to blue
-                      stroke="#fafafa"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="inline-block w-6 h-6 ml-2"
-                    >
-                      <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                      <path d="m9 12 2 2 4-4" />
-                    </svg>
-                  )}
+                  
                 </>
               )}
             </h2>
