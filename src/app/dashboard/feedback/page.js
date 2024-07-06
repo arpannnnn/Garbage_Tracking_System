@@ -1,9 +1,10 @@
 "use client"
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { db } from '../../../../firebase/firebase';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { FrownIcon, MehIcon, SmileIcon, HeartIcon,Laugh } from 'lucide-react';
+import { FrownIcon, MehIcon, SmileIcon, HeartIcon, Laugh } from 'lucide-react';
+import {useRouter }from 'next/navigation';
 
 const PageFeedbackForm = () => {
     const { data: session, status } = useSession();
@@ -12,6 +13,7 @@ const PageFeedbackForm = () => {
     const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const route = useRouter()
 
     const feedbackCategories = [
         'User Interface',
@@ -25,7 +27,7 @@ const PageFeedbackForm = () => {
         if (success) {
             timer = setTimeout(() => {
                 setSuccess(false);
-            },4000); 
+            }, 4000);
         }
         return () => clearTimeout(timer);
     }, [success]);
@@ -33,7 +35,7 @@ const PageFeedbackForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (status !== 'authenticated') {
-            alert('You must be logged in to submit feedback');
+            route.push('/login');
             return;
         }
 
@@ -73,9 +75,8 @@ const PageFeedbackForm = () => {
                             <div key={value} className="flex flex-col items-center">
                                 <button
                                     type="button"
-                                    className={`p-2 rounded-full transition-all duration-200 ${
-                                        rating === value ? `${color} bg-gray-100 scale-110` : 'text-gray-400 hover:scale-105'
-                                    }`}
+                                    className={`p-2 rounded-full transition-all duration-200 ${rating === value ? `${color} bg-gray-100 scale-110` : 'text-gray-400 hover:scale-105'
+                                        }`}
                                     onClick={() => setRating(value)}
                                 >
                                     <Icon size={36} />

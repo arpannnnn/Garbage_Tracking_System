@@ -2,6 +2,7 @@
 'use client'
 import Image from 'next/image';
 import React, { useState } from 'react'
+import PageFeedbackForm from '../src/app/dashboard/feedback/page';
 export const TeamSection = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -109,9 +110,9 @@ export const TeamSection = () => {
                         </div>
 
                         <div className="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 lg:w-80 xl:w-64 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <Image alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                            width={500} 
-                            height={500}
+                            <Image alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full bg-gray-500 dark:bg-gray-500" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                width={500}
+                                height={500}
                             />
                             <div className="flex-1 my-4">
                                 <p className="text-xl font-semibold leading-snug">Smreeta Shrestha </p>
@@ -150,7 +151,7 @@ export const TeamSection = () => {
             <section className="text-black bg-cyan-100 body-font relative ">
                 <div className="container px-5 py-20 mx-auto flex sm:flex-nowrap flex-wrap ">
                     <div className="lg:w-2/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative ">
-                        <iframe width="100%" height="100%" className="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Nepal&ie=UTF8&t=&z=7&iwloc=B&output=embed"></iframe>
+                        <iframe width="100%" height="100%" className="absolute inset-0" frameBorder="0" title="map" marginHeight="0" marginWidth="0" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Nepal&ie=UTF8&t=&z=7&iwloc=B&output=embed"></iframe>
                         <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
                             <div className="lg:w-1/2 px-6">
                                 <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
@@ -165,26 +166,10 @@ export const TeamSection = () => {
                         </div>
                     </div>
 
-                    <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col   md:ml-auto w-full md:py-8 mt-8 px-6   md:mt-0">
-                        <h2 className="text-gray-900 text-bold mb-1   text-4xl font-bold leading-none">Feedback</h2>
-                        <p className="leading-relaxed mb-5 text-gray-600">Drop us a line with any questions, inquiries or business proposals</p>
-                        <form onSubmit={handleSubmit}>
-                            <div className="relative mb-4">
-                                <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
-                                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
-                            </div>
-                            <div className="relative mb-4">
-                                <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
-                                <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
-                            </div>
-                            <div className="relative mb-4">
-                                <label htmlFor="message" className="leading-7 text-sm text-gray-600">Message</label>
-                                <textarea id="message" name="message" value={formData.message} onChange={handleChange} className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" required></textarea>
-                            </div>
-                            <button type="submit" className="text-white bg-green-500 border-0 py-2 px-2 rounded-md focus:outline-none hover:bg-green-600  text-sm">Send Now</button>
-                        </form>
+                    <div className="lg:w-1/3 md:w-1/2 bg-cyan-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
+                        <PageFeedbackForm />
                     </div>
-                   
+
 
                 </div>
             </section>
