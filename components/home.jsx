@@ -1,24 +1,89 @@
-"use client"
+'use client'
+import React, { useEffect, useState, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { app } from '../firebase/firebase';
 
 export default function Home() {
+    const { data: session, status } = useSession();
     const [showScrollBtn, setShowScrollBtn] = useState(false);
+    const [email, setEmail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    const route = useRouter();
+    const [userData, setUserData] = useState(null);
+    const db = getFirestore(app);
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollHeight = window.pageYOffset;
-            setShowScrollBtn(scrollHeight > 200); 
+            setShowScrollBtn(window.pageYOffset > 200);
         };
 
         window.addEventListener('scroll', handleScroll);
-
-        
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+    const handleEmailChange = (e) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        setIsValidEmail(validateEmail(newEmail));
+    };
+
+    const handleSubscribeClick = () => {
+        if (isValidEmail) {
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent('Subscribe Request')}&body=${encodeURIComponent('Please subscribe me to your newsletter.')}`;
+            window.location.href = mailtoLink;
+        } else {
+            alert('Please enter a valid email address.');
+        }
+    };
+
+    const handlePayment = useCallback((amount, type) => {
+        if (!session?.user?.uid) {
+            route.push('/login')
+            return;
+        }
+
+        const taxAmount = amount * 0.13;
+        const serviceCharge = 0;
+        const deliveryCharge = 0;
+        const totalAmount = amount + taxAmount + serviceCharge + deliveryCharge;
+
+        const oid = `ee2l3ca1-696b-4cc5-a6be-2c40d929d5-${Date.now()}`;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://uat.esewa.com.np/epay/main';
+
+        const appendInput = (name, value) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        };
+
+        appendInput('tAmt', totalAmount.toFixed(2));
+        appendInput('amt', amount.toFixed(2));
+        appendInput('txAmt', taxAmount.toFixed(2));
+        appendInput('psc', serviceCharge.toFixed(2));
+        appendInput('pdc', deliveryCharge.toFixed(2));
+        appendInput('scd', 'EPAYTEST');
+        appendInput('pid', oid);
+        appendInput('su', `http://localhost:3000/success?oid=${oid}&planType=${type}&amount=${amount}&userId=${session.user.uid}`);
+        appendInput('fu', 'http://localhost:3000/failure');
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+
+    }, [session]);
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -27,41 +92,39 @@ export default function Home() {
         borderRadius: '5%',
         border: '1px solid #fff',
     }
-    const [email, setEmail] = useState('');
-    const [isValidEmail, setIsValidEmail] = useState(false);
 
-    const handleEmailChange = (e) => {
-        const newEmail = e.target.value;
-        setEmail(newEmail);
-        setIsValidEmail(validateEmail(newEmail));
-    };
-    const handleSubscribeClick = () => {
-        if (isValidEmail) {
-            const emailAddress = email;
-            const subject = 'Subscribe Request';
-            const body = 'Please subscribe me to your newsletter.';
+    const getUser = useCallback(async () => {
+        if (status === 'authenticated' && session?.user?.uid) {
+            try {
+                const q = query(collection(db, "users"), where("uid", "==", session.user.uid));
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    console.log("No matching documents.");
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        setUserData(doc.data());
+                    });
+                }
+            } catch (error) {
 
-            const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
+            }
         } else {
-            alert('Please enter a valid email address.');
+
         }
-    };
-    const validateEmail = (email) => {
-       
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    };
+    }, [db, session, status]);
+
+    useEffect(() => {
+        getUser();
+    }, [getUser]);
+
 
 
 
     return (
-
         <div className="w-full">
             <button
                 id="scrollToTopBtn"
-                className={`fixed bottom-4 right-4 z-50 ${showScrollBtn ? 'block' : 'hidden'
-                    } h-12 w-12 rounded-full bg-gradient-to-r from-green-400 to-blue-500`}
+                className={`fixed bottom-4 right-4 z-50 ${showScrollBtn ? 'block' : 'hidden'} h-12 w-12 rounded-full bg-gradient-to-r from-green-400 to-blue-500`}
                 onClick={scrollToTop}
             >
                 <svg
@@ -75,11 +138,11 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M5 10l7-7m0 0l7 7m-7-7v18"
-                    />
+                        d="M5 10l7-7m0 0l7 7m-7-7v18" />
                 </svg>
             </button>
             <header className="relative w-full border-b bg-white pb-1">
+
             </header>
             <div className="relative w-full bg-white">
                 <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
@@ -123,14 +186,12 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-
-
             <div className="mx-auto my-32 max-w-7xl px-2 lg:px-8">
                 <div className="grid grid-cols-1 gap-y-8 text-center sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
                     <div>
                         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
                             <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" stroke-linecap="round" strokelinejoin="round" />
+                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokelinejoin="round" />
                                 <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#000000" strokeWidth="2" strokelinecap="round" strokelinejoin="round" />
                             </svg>
                         </div>
@@ -273,24 +334,20 @@ export default function Home() {
                             </button>
                         </div>
                     </div>
-
                     <div className="flex flex-col items-center justify-center md:flex-row lg:col-span-7">
-                        <div className="w-full p-5 md:w-1/2">
-                            <div className="rounded-md border bg-white  ">
-                                <div className=" border-b  ">
-                                    <div className="px-9 py-7 ">
-                                        <h3 className="mb-3 text-xl font-bold leading-snug   text-gray-900">
-                                            Basic Plan
-                                        </h3>
+
+                        <><div className="w-full p-5 md:w-1/2">
+                            <div className="rounded-md border bg-white">
+                                <div className="border-b">
+                                    <div className="px-9 py-7">
+                                        <h3 className="mb-3 text-xl font-bold leading-snug text-gray-900">Basic Plan</h3>
                                         <p className="font-medium leading-relaxed text-gray-500">
-                                            Start managing your waste efficiently with our basic plan.
+                                            Perfect for individuals or small households to manage waste efficiently.
                                         </p>
                                     </div>
                                 </div>
                                 <div className="px-9 pb-9 pt-8">
-                                    <p className="mb-6 font-medium leading-relaxed text-gray-600">
-                                        Features included:
-                                    </p>
+                                    <p className="mb-6 font-medium leading-relaxed text-gray-600">Features included:</p>
                                     <ul className="mb-11">
                                         <li className="mb-4 flex items-center">
                                             <svg
@@ -326,143 +383,131 @@ export default function Home() {
                                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                             </svg>
-                                            <p className="font-semibold leading-normal">Access to Community Updates</p>
+                                            <p className="font-semibold leading-normal">Weekly Pickup Reminders</p>
+                                        </li>
+                                        <li className="flex items-center">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                className="mr-2"
+                                            >
+                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                            </svg>
+                                            <p className="font-semibold leading-normal">Access to Recycling Tips</p>
                                         </li>
                                     </ul>
-                                    <p className="mb-6 text-lg font-semibold leading-normal text-gray-600">
-                                        <span>Starting from</span>
-                                        <span className="ml-2 text-gray-900">$19/mo </span>
-                                    </p>
-                                    <div className="md:inline-block">
-                                        <button
-                                            type="button"
-                                            className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                                        >
-                                            Get Now
-                                        </button>
+
+                                    <div>
+                                        {(!userData || userData.role === 'user') && (
+                                            <button
+                                                className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80"
+                                                onClick={() => handlePayment(25, 'Basic Plan')}
+                                            >
+                                                Purchase Plan for NPR 25
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="w-full p-5 md:w-1/2">
-                            <div className="rounded-md border bg-white">
-                                <div className="border-b">
-                                    <div className="px-9 py-7">
-                                        <h3 className="mb-3 text-xl font-bold leading-snug text-gray-900">
-                                            Premium Plan
-                                        </h3>
-                                        <p className="font-medium leading-relaxed text-gray-500">
-                                            Unlock advanced features with our premium plan.
-                                        </p>
+                        </div><div className="w-full p-5 md:w-1/2">
+                                <div className="rounded-md border bg-white">
+                                    <div className="border-b">
+                                        <div className="px-9 py-7">
+                                            <h3 className="mb-3 text-xl font-bold leading-snug text-gray-900">Premium Plan</h3>
+                                            <p className="font-medium leading-relaxed text-gray-500">
+                                                Ideal for families and larger households looking for enhanced waste management solutions.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="px-9 pb-9 pt-8">
+                                        <p className="mb-6 font-medium leading-relaxed text-gray-600">Features included:</p>
+                                        <ul className="mb-11">
+                                            <li className="mb-4 flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Advanced Waste Tracking</p>
+                                            </li>
+                                            <li className="mb-4 flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Daily Pickup Reminders</p>
+                                            </li>
+                                            <li className="flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Exclusive Recycling Workshops</p>
+                                            </li>
+                                        </ul>
+                                        <div>
+
+                                            {(!userData || userData.role === 'user') && (
+                                                <button
+                                                    className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
+                                                    onClick={() => handlePayment(50, 'Premium Plan')}
+                                                >
+                                                    Purchase Plan for NPR 50
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="px-9 pb-9 pt-8">
-                                    <p className="mb-6 font-medium leading-relaxed text-gray-600">
-                                        Features included:
-                                    </p>
-                                    <ul className="mb-11">
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">Advanced Waste Tracking</p>
-                                        </li>
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">Advanced Analytics Dashboard</p>
-                                        </li>
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">
-                                                Automatic Pickup Scheduling
-                                            </p>
-                                        </li>
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">
-                                                Personalized Waste Reduction Tips
-                                            </p>
-                                        </li>
-                                    </ul>
-                                    <p className="mb-6 text-lg font-semibold leading-normal text-gray-600">
-                                        <span>Starting from</span>
-                                        <span className="ml-2 text-gray-900">$49/mo</span>
-                                    </p>
-                                    <div className="md:inline-block">
-                                        <button
-                                            type="button"
-                                            className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                                        >
-                                            Try free for 2 month
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            </div></>
+
                     </div>
                 </div>
+
             </div>
-
-
-
-
-
-
         </div>
+
+
+
 
     );
 }

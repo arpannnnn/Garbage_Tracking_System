@@ -1,6 +1,15 @@
 import { NavItem } from '../../../../types';
 
 export const navItemsAdmin: NavItem[] = [
+
+    {
+        title: 'Dashboard',
+        href: '/admin',
+        icon: 'Admin',
+        label: 'Admin'
+    },
+
+
     {
         title: 'Users',
         href: '/admin/users',
@@ -14,10 +23,23 @@ export const navItemsAdmin: NavItem[] = [
         label: 'Schedule'
     },
     {
+        title: 'Map',
+        href: '/admin/map',
+        icon: 'map',
+        label: 'Map'
+    },
+
+    {
         title: 'Dustbin',
         href: '/admin/dustbin',
         icon: 'trash',
         label: 'Dustbin'
+    },
+    {
+        title: 'Payment',
+        href: '/admin/paymentInfo',
+        icon: 'Payment',
+        label: 'Payment'
     },
     {
         title: 'Feedback',

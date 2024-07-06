@@ -2,11 +2,11 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { app } from '../firebase/firebase';
 import Image from 'next/image';
 import { useToast } from './ui/use-toast';
-const roles = ['User', 'Staff'];
+const roles = ['user', 'staff'];
 
 export default function CustomRegister() {
 
@@ -77,10 +77,46 @@ export default function CustomRegister() {
                 variant: 'destructive',
             }); setLoading(false);
 
+        } else if (mobileNumber.length !== 10) {
+            toast({
+                title: 'Invalid mobile number',
+                description: 'Please enter a 10-digit mobile number',
+                variant: 'destructive',
+            });
+            setLoading(false);
+        } else if (citizenship.length !== 19) {
+            toast({
+                title: 'Invalid citizenship number',
+                description: 'Please enter a 16-digit citizenship number',
+                variant: 'destructive',
+            });
+            setLoading(false);
         }
+
         else {
 
             try {
+                const { citizenshipExists, mobileExists } = await checkExistingUser(citizenship, mobileNumber);
+
+                if (citizenshipExists) {
+                    toast({
+                        title: 'Citizenship number already in use',
+                        description: 'Please use a different citizenship number',
+                        variant: 'destructive',
+                    });
+                    setLoading(false);
+                    return;
+                }
+
+                if (mobileExists) {
+                    toast({
+                        title: 'Mobile number already in use',
+                        description: 'Please use a different mobile number',
+                        variant: 'destructive',
+                    });
+                    setLoading(false);
+                    return;
+                }
 
                 // // Register user using Firebase authentication
                 // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -139,6 +175,19 @@ export default function CustomRegister() {
         border: '1px solid #fff',
         width: '700px',
         height: '700px',
+    };
+    const checkExistingUser = async (citizenship, mobileNumber) => {
+        const usersRef = collection(db, 'users');
+        const citizenshipQuery = query(usersRef, where("citizenship", "==", citizenship));
+        const mobileQuery = query(usersRef, where("mobileNumber", "==", mobileNumber));
+
+        const citizenshipDocs = await getDocs(citizenshipQuery);
+        const mobileDocs = await getDocs(mobileQuery);
+
+        return {
+            citizenshipExists: !citizenshipDocs.empty,
+            mobileExists: !mobileDocs.empty
+        };
     };
 
 
@@ -318,6 +367,7 @@ export default function CustomRegister() {
                         height={700}
                         style={imageStyle}
                         alt=""
+                        priority={true}
                     />
                 </div>
             </div>

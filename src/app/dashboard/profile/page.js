@@ -484,8 +484,8 @@ function ProfileSection() {
           const { latitude, longitude } = position.coords;
           setEditableUserData((prevState) => ({
             ...prevState,
-            latitude: latitude.toString(),
-            longitude: longitude.toString(),
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
           }));
         },
         (error) => {
@@ -565,7 +565,7 @@ function ProfileSection() {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2" htmlFor="mobileNumber">
-              Mobile Number
+              Mobile Number   
             </label>
             <input
               type="text"

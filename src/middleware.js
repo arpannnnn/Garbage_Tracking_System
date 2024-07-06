@@ -1,47 +1,22 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 export { default } from 'next-auth/middleware';
-import route from 'next/navigation';
-
-
-// export async function middleware(request) {
-//   const token = await getToken({ req: request });
-//   const url = request.nextUrl;
-
-
-//   if (
-//     token &&
-//     (url.pathname.startsWith('/login') ||
-//       url.pathname.startsWith('/register')
-
-//     )
-//   ) {
-//     return NextResponse.redirect(new URL('/', request.url));
-//   }
-
-//   if (!token && url.pathname.startsWith('/dashboard')) {
-//     return NextResponse.redirect(new URL('/login', request.url));
-//   }
-
-//   return NextResponse.next();
-// }
-
-import { NextResponse } from 'next/server';
-import { parse } from 'cookie';
 
 export async function middleware(request) {
   const token = await getToken({ req: request });
   const url = request.nextUrl;
-  const role = token?.role;
 
 
+  // Redirect authenticated users away from the forgot-password page
+  if (token && url.pathname.startsWith('/forgot-password')) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
+  // Handle other redirects or permissions based on token and URLs
   if (
-    token && 
+    token &&
     (url.pathname.startsWith('/login') ||
-      url.pathname.startsWith('/register')
-
-    )
-
+      url.pathname.startsWith('/register'))
   ) {
     return NextResponse.redirect(new URL('/', request.url));
   }
@@ -50,10 +25,6 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  
 
     return NextResponse.next();
 }
-
-export { default } from 'next-auth/middleware';
-
