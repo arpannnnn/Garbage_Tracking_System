@@ -2,9 +2,9 @@ import MapComponent from "../../../../components/map"
 
 const MapPage = () => {
   return (
-    <div >
+    <main >
         <MapComponent />
-    </div>
+    </main>
   )
 }
 

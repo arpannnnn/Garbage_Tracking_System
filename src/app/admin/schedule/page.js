@@ -15,8 +15,8 @@ const AdminSchedule = () => {
     const { toast } = useToast();
 const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, 'schedules'), (snapshot) => {
+    useEffect(() => {   
+        const unsubscribe = onSnapshot(collection(db, 'schedules'), (snapshot) => {     
             const fetchedSchedules = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),

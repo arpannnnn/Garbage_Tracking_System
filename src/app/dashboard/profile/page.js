@@ -368,8 +368,8 @@ function ProfileSection() {
           const { latitude, longitude } = position.coords;
           setEditableUserData((prevState) => ({
             ...prevState,
-            latitude: latitude.toString(),
-            longitude: longitude.toString(),
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
           }));
         },
         (error) => {
