@@ -85,11 +85,11 @@
 //                 </CardContent>
 
 //               </Card>
-              
+
 //             </div>
-            
-              
-            
+
+
+
 //           </TabsContent>
 
 //         </Tabs>
@@ -102,11 +102,11 @@
 
 "use client";
 import { useState, useEffect, useCallback } from 'react';
-import { getFirestore, query, where, getDocs, collection } from 'firebase/firestore';
+import { getFirestore, query, where, getDocs, collection, onSnapshot } from 'firebase/firestore';
 import { app } from '../../../firebase/firebase';
 import { Overview } from '../../../components/overview';
 import { useSession } from 'next-auth/react';
-import { Card, CardContent} from '../../../components/ui/card';
+import { Card, CardContent } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
 import Loader from '../../../components/Loader';
@@ -116,6 +116,7 @@ function Page() {
   const db = getFirestore(app);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [payInfo, setPayInfo] = useState([]);
 
   const getUser = useCallback(async () => {
     console.log("getUser called");
@@ -151,20 +152,36 @@ function Page() {
     }, 1000);
   }, [getUser]);
 
+   // Fetch PaymentInfo for the logged-in user from Firestore
+  useEffect(() => {
+    if (session?.user?.uid) {
+      const unsubscribe = onSnapshot(
+        query(collection(db, 'PaymentInfo'), where('userId', '==', session.user.uid)),
+        (snapshot) => {
+          const fetchedpayInfo = snapshot.docs.map((doc) => doc.data());
+          setPayInfo(fetchedpayInfo);
+        }
+      );
+
+      return () => unsubscribe();
+    }
+  }, [db, session]);
+
+
   if (loading) {
     return <Loader />;
   }
-
+  const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 bg-white md:p-8">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
-            Hi, Welcome back  
+            Hi, Welcome back
             {userData && userData.fullName ? (
               <>
                 <span className='text-green-600'> {userData.fullName} </span> !
-                {!userData.verified && (
+                {hasSuccessfulPayment && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="28"
@@ -177,14 +194,14 @@ function Page() {
                     strokeLinejoin="round"
                     className="inline-block w-6 h-6 ml-2"
                   >
-                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/>
-                    <path d="m9 12 2 2 4-4"/>
+                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                    <path d="m9 12 2 2 4-4" />
                   </svg>
                 )}
               </>
             ) : ''}
 
-            
+
           </h2>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">
