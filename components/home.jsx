@@ -2,12 +2,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { app } from '../firebase/firebase';
 
 export default function Home() {
     const { data: session, status } = useSession();
     const [showScrollBtn, setShowScrollBtn] = useState(false);
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
+    const route = useRouter();
+    const [userData, setUserData] = useState(null);
+    const db = getFirestore(app);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -40,7 +46,7 @@ export default function Home() {
 
     const handlePayment = useCallback((amount, type) => {
         if (!session?.user?.uid) {
-            alert('Please log in to make a purchase.');
+            route.push('/login')
             return;
         }
 
@@ -86,6 +92,34 @@ export default function Home() {
         borderRadius: '5%',
         border: '1px solid #fff',
     }
+
+    const getUser = useCallback(async () => {
+        if (status === 'authenticated' && session?.user?.uid) {
+            try {
+                const q = query(collection(db, "users"), where("uid", "==", session.user.uid));
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    console.log("No matching documents.");
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        setUserData(doc.data());
+                    });
+                }
+            } catch (error) {
+
+            }
+        } else {
+
+        }
+    }, [db, session, status]);
+
+    useEffect(() => {
+        getUser();
+    }, [getUser]);
+
+
+
+
     return (
         <div className="w-full">
             <button
@@ -152,14 +186,12 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-
-
             <div className="mx-auto my-32 max-w-7xl px-2 lg:px-8">
                 <div className="grid grid-cols-1 gap-y-8 text-center sm:grid-cols-2 sm:gap-12 lg:grid-cols-4">
                     <div>
                         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
                             <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" stroke-linecap="round" strokelinejoin="round" />
+                                <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokelinejoin="round" />
                                 <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#000000" strokeWidth="2" strokelinecap="round" strokelinejoin="round" />
                             </svg>
                         </div>
@@ -303,7 +335,8 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-center md:flex-row lg:col-span-7">
-                        <div className="w-full p-5 md:w-1/2">
+
+                        <><div className="w-full p-5 md:w-1/2">
                             <div className="rounded-md border bg-white">
                                 <div className="border-b">
                                     <div className="px-9 py-7">
@@ -371,104 +404,110 @@ export default function Home() {
                                             <p className="font-semibold leading-normal">Access to Recycling Tips</p>
                                         </li>
                                     </ul>
-                                    <button
-                                        className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
-                                        onClick={() => handlePayment(25, 'Basic Plan')}
-                                    >
-                                        Purchase Plan for $25
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="w-full p-5 md:w-1/2">
-                            <div className="rounded-md border bg-white">
-                                <div className="border-b">
-                                    <div className="px-9 py-7">
-                                        <h3 className="mb-3 text-xl font-bold leading-snug text-gray-900">Premium Plan</h3>
-                                        <p className="font-medium leading-relaxed text-gray-500">
-                                            Ideal for families and larger households looking for enhanced waste management solutions.
-                                        </p>
+                                    <div>
+                                        {(!userData || userData.role === 'user') && (
+                                            <button
+                                                className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80"
+                                                onClick={() => handlePayment(25, 'Basic Plan')}
+                                            >
+                                                Purchase Plan for NPR 25
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="px-9 pb-9 pt-8">
-                                    <p className="mb-6 font-medium leading-relaxed text-gray-600">Features included:</p>
-                                    <ul className="mb-11">
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">Advanced Waste Tracking</p>
-                                        </li>
-                                        <li className="mb-4 flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">Daily Pickup Reminders</p>
-                                        </li>
-                                        <li className="flex items-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="mr-2"
-                                            >
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </svg>
-                                            <p className="font-semibold leading-normal">Exclusive Recycling Workshops</p>
-                                        </li>
-                                    </ul>
-                                    <button
-                                        className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
-                                        onClick={() => handlePayment(50, 'Premium Plan')}
-                                    >
-                                        Purchase Plan for $50
-                                    </button>
-                                </div>
                             </div>
-                        </div>
+                        </div><div className="w-full p-5 md:w-1/2">
+                                <div className="rounded-md border bg-white">
+                                    <div className="border-b">
+                                        <div className="px-9 py-7">
+                                            <h3 className="mb-3 text-xl font-bold leading-snug text-gray-900">Premium Plan</h3>
+                                            <p className="font-medium leading-relaxed text-gray-500">
+                                                Ideal for families and larger households looking for enhanced waste management solutions.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="px-9 pb-9 pt-8">
+                                        <p className="mb-6 font-medium leading-relaxed text-gray-600">Features included:</p>
+                                        <ul className="mb-11">
+                                            <li className="mb-4 flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Advanced Waste Tracking</p>
+                                            </li>
+                                            <li className="mb-4 flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Daily Pickup Reminders</p>
+                                            </li>
+                                            <li className="flex items-center">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="mr-2"
+                                                >
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                <p className="font-semibold leading-normal">Exclusive Recycling Workshops</p>
+                                            </li>
+                                        </ul>
+                                        <div>
+
+                                            {(!userData || userData.role === 'user') && (
+                                                <button
+                                                    className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
+                                                    onClick={() => handlePayment(50, 'Premium Plan')}
+                                                >
+                                                    Purchase Plan for NPR 50
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></>
+
                     </div>
-
-                    
-
                 </div>
 
             </div>
-</div>
+        </div>
 
-              
-                
-           
-                );
+
+
+
+    );
 }

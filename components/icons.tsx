@@ -38,7 +38,10 @@ import {
   SmileIcon,
   Laugh,
   HeartIcon,
-  Users
+  Users,
+  Shield,
+  DollarSign,
+
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -80,6 +83,8 @@ export const Icons = {
   Laugh: Laugh,
   HeartIcon: HeartIcon,
   Users: Users,
+  Admin: Shield,
+  Payment: DollarSign,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
