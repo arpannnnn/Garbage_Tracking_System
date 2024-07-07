@@ -18,12 +18,6 @@ oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 async function sendMail(email: string, message: string) {
     const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
-
-
-
-
-    
-
     const rawMessage = [
         'From: "Garbage " <rockarpan31@gmail.com>',
         `To: ${email}`,

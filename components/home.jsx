@@ -408,10 +408,10 @@ export default function Home() {
                                     <div>
                                         {(!userData || userData.role === 'user') && (
                                             <button
-                                                className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80"
+                                                className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80"
                                                 onClick={() => handlePayment(25, 'Basic Plan')}
                                             >
-                                                Purchase Plan for NPR 25
+                                                Purchase Plan for NPR 25  
                                             </button>
                                         )}
                                     </div>
@@ -489,7 +489,7 @@ export default function Home() {
 
                                             {(!userData || userData.role === 'user') && (
                                                 <button
-                                                    className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-4 px-9 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
+                                                    className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
                                                     onClick={() => handlePayment(50, 'Premium Plan')}
                                                 >
                                                     Purchase Plan for NPR 50
