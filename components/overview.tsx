@@ -158,7 +158,7 @@ const CustomTick = ({ x, y, payload }) => {
 
 export function Overview() {
     const [chartData, setChartData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 2;
 
     useEffect(() => {

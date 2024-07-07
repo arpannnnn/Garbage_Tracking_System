@@ -392,7 +392,7 @@ export default function CustomRegister() {
     const handleCitizenshipChange = (event) => {
         let value = event.target.value.replace(/\D/g, '');
         if (value.length > 16) {
-            value = value.slice(0, 16); // Only 16 digits allowed
+            value = value.slice(0, 16);
         }
         const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
         citizenshipRef.current = formattedValue;
@@ -409,7 +409,7 @@ export default function CustomRegister() {
         const fullName = fullNameRef.current;
         const citizenship = citizenshipRef.current;
 
-        // Validate inputs
+
         if (!email) {
             toast({
                 title: 'Email is empty',
@@ -478,10 +478,6 @@ export default function CustomRegister() {
                 setLoading(false);
                 return;
             }
-
-            // Send OTP to the mobile number
-            await sendOTP(mobileNumber);
-
             // Store registration data in local storage
             const registrationData = {
                 email,
@@ -521,7 +517,7 @@ export default function CustomRegister() {
         };
     };
 
-   
+
 
     const imageStyle = {
         borderRadius: '5%',

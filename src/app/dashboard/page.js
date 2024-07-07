@@ -119,12 +119,9 @@ function Page() {
   const [payInfo, setPayInfo] = useState([]);
 
   const getUser = useCallback(async () => {
-    console.log("getUser called");
-    console.log("Session data:", session);
-    console.log("Session status:", status);
 
     if (status === 'authenticated' && session?.user?.uid) {
-      console.log("Fetching user data for UID:", session.user.uid);
+
       try {
         const q = query(collection(db, "users"), where("uid", "==", session.user.uid));
         const querySnapshot = await getDocs(q);
@@ -152,7 +149,7 @@ function Page() {
     }, 1000);
   }, [getUser]);
 
-   // Fetch PaymentInfo for the logged-in user from Firestore
+  // Fetch PaymentInfo for the logged-in user from Firestore
   useEffect(() => {
     if (session?.user?.uid) {
       const unsubscribe = onSnapshot(
@@ -187,7 +184,7 @@ function Page() {
                     width="28"
                     height="28"
                     viewBox="0 0 24 24"
-                    fill="#2372af" // Change fill color to blue
+                    fill="#2372af" 
                     stroke="#fafafa"
                     strokeWidth="1.5"
                     strokeLinecap="round"

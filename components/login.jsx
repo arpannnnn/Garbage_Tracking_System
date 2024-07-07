@@ -61,6 +61,7 @@ export default function CustomLogin() {
                             height={50}
                             alt="Picture of the author"
                             style={imageStyle}
+                            priority={true}
                         />
                         GTS
                     </a>

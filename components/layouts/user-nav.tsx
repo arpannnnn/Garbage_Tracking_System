@@ -46,6 +46,7 @@ export function UserNav() {
     useEffect(() => {
         getUser();
     }, [getUser]);
+    
 
     return (
         <div className="flex items-center space-x-4">
@@ -55,7 +56,7 @@ export function UserNav() {
                         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                             <Avatar className="h-8 w-8">
                                 <AvatarImage
-                                    src='https://avatars.dicebear.com/api/avataaars/123.svg'
+                                    src='https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?t=st=1720350273~exp=1720353873~hmac=41dcf9e9b31d9e7a101f3babc322f1d2cb77bd3df19637d85f64c0e4e7c02dff&w=740'
                                     alt="User avatar"
                                 />
                                 <AvatarFallback>
