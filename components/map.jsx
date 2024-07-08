@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { app } from '../firebase/firebase';
 import { useSession } from 'next-auth/react';
 import { ref, onValue, set } from 'firebase/database';
 import { database } from '../firebase/firebase';
+import axios from 'axios';
 
 // Fix broken icon images on Leaflet maps
 delete L.Icon.Default.prototype._getIconUrl;
@@ -19,7 +20,7 @@ L.Icon.Default.mergeOptions({
 
 // Custom SVG for driver marker icon
 const driverIconSvg = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" strokeWidth="1.5" color="currentColor"><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/><path d="M11 9v3m-4-2v2m10-8h-2m0 0H9.485c-1.226 0-1.84 0-2.39.228c-.552.229-.985.662-1.852 1.53L3.464 7.535c-.722.722-1.083 1.083-1.274 1.543c-.19.46-.19.97-.19 1.992V13c0 2.357 0 3.535.732 4.268c.487.487 1.171.65 2.268.704M15 4v4c0 1.886 0 2.828.586 3.414S17.114 12 19 12h3v1c0 2.357 0 3.535-.732 4.268c-.487.487-1.171.65-2.268.704M9 18h6"/><path d="M15 7h1.7c1.358 0 2.037 0 2.59.354c.553.353.875.994 1.519 2.276L22 12"/></g></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLnejoin="round" strokeWidth="1.5" color="currentColor"><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/><path d="M11 9v3m-4-2v2m10-8h-2m0 0H9.485c-1.226 0-1.84 0-2.39.228c-.552.229-.985.662-1.852 1.53L3.464 7.535c-.722.722-1.083 1.083-1.274 1.543c-.19.46-.19.97-.19 1.992V13c0 2.357 0 3.535.732 4.268c.487.487 1.171.65 2.268.704M15 4v4c0 1.886 0 2.828.586 3.414S17.114 12 19 12h3v1c0 2.357 0 3.535-.732 4.268c-.487.487-1.171.65-2.268.704M9 18h6"/><path d="M15 7h1.7c1.358 0 2.037 0 2.59.354c.553.353.875.994 1.519 2.276L22 12"/></g></svg>
 `;
 
 // Create a custom icon for the driver marker
@@ -39,6 +40,7 @@ const MapComponent = () => {
   const [binStatus, setBinStatus] = useState(null);
   const [userData, setUserData] = useState(null);
   const [usersLocations, setUsersLocations] = useState([]);
+  const [notificationSent, setNotificationSent] = useState(false);
 
   // Fetch user data (simulating the user data fetching logic)
   useEffect(() => {
@@ -161,6 +163,40 @@ const MapComponent = () => {
     }
   }, [position, driverLocation]);
 
+  // Function to send notification
+  const sendNotification = async (userId, userLatitude, userLongitude) => {
+    try {
+      const response = await axios.post('/api/sendNotification', {
+
+        userId,
+        userLatitude,
+        userLongitude
+      });
+      console.log('Notification sent:', response.data);
+      setNotificationSent(true);
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
+  // Check distance to users every 10 seconds
+  useEffect(() => {
+    if (position && driverLocation && usersLocations.length > 0) {
+      const intervalId = setInterval(() => {
+        console.log('Checking distance to users');
+        usersLocations.forEach(({ id, latitude, longitude }) => {
+          const distance = L.latLng(latitude, longitude).distanceTo(L.latLng(driverLocation[0], driverLocation[1]));
+          console.log(`Distance to user ${id}: ${distance} meters`);
+
+          if (distance <= 400) {
+            sendNotification(id, latitude, longitude);
+          }
+        });
+      }, 10000); // Check every 10 seconds     
+      return () => clearInterval(intervalId);
+    }
+  }, [position, driverLocation, usersLocations]);
+
   // Get bin marker color based on status
   const getBinMarkerColor = (percentage) => {
     if (percentage >= 75) {
@@ -171,10 +207,17 @@ const MapComponent = () => {
       return 'green';
     }
   };
+
+  // Simulate user's position
+  useEffect(() => {
+    const [simulatedLatitude, simulatedLongitude] = [27.6974, 85.3318];
+    console.log('Simulated user position:', [simulatedLatitude, simulatedLongitude]);
+    setPosition([simulatedLatitude, simulatedLongitude]);
+  }, []);
   const binMarkerColor = binStatus !== null ? getBinMarkerColor(binStatus) : 'transparent';
 
   const binIconSvg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" strokeLinecap="round" stroke-linejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="${binMarkerColor}" stroke="white" stroke-width="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z" />
       <line x1="10" y1="11" x2="10" y2="17" />
       <line x1="14" y1="11" x2="14" y2="17" />
@@ -188,29 +231,10 @@ const MapComponent = () => {
     className: 'bin-marker-icon',
   });
 
-  // Get user's geolocation and set the position state
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          console.log('User position:', [latitude, longitude]);
-          setPosition([latitude, longitude]);
-        },
-        (error) => {
-          console.error('Error getting geolocation', error);
-        }
-      );
-    }
-  }, []);
-
-  const isDriverLocationArray =
-    Array.isArray(driverLocation) && driverLocation.length === 2;
-
   return (
-    <div   style={{ height: '800px', width: '100%', position: 'relative', zIndex: 0}}>
+    <div style={{ height: '800px', width: '100%', position: 'relative', zIndex: 0 }}>
       {position ? (
-        <MapContainer 
+        <MapContainer
           center={position}
           zoom={13}
           style={{ height: '100%', width: '100%' }}
@@ -224,7 +248,7 @@ const MapComponent = () => {
               <Popup>Your location</Popup>
             </Marker>
           )}
-          {isDriverLocationArray && (
+          {driverLocation && (
             <Marker position={driverLocation} icon={driverMarkerIcon}>
               <Popup>
                 Drivers location

@@ -139,7 +139,7 @@ export default function CustomNavbar() {
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="h-6 w-12 mr-2"
-                                    aria-labelledby="binIconTitle" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-labelledby="binIconTitle" strokeLinecap="round" strokeLinejoin="round"
                                     fill={binStatus < 50 ? "green" : binStatus < 80 ? "yellow" : "red"}
                                     viewBox="0 0 24 24"
                                     color="#000000"

@@ -1,8 +1,9 @@
 "use client";
+
 import React, { useRef, useState } from 'react';
 import { useToast } from '../../../components/ui/use-toast';
-import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
-import firebaseApp from '../../../firebase/firebase'; 
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { customAuth } from '../../../firebase/firebase';
 import { useRouter } from 'next/navigation';
 
 export default function ForgotPassword() {
@@ -15,9 +16,7 @@ export default function ForgotPassword() {
         event.preventDefault();
         setLoading(true);
 
-        const auth = getAuth(firebaseApp);
-
-        sendPasswordResetEmail(auth, emailRef.current.value)
+        sendPasswordResetEmail(customAuth, emailRef.current.value)
             .then(() => {
                 setLoading(false);
                 toast({
