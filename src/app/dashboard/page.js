@@ -106,10 +106,11 @@ import { getFirestore, query, where, getDocs, collection, onSnapshot } from 'fir
 import { app } from '../../../firebase/firebase';
 import { Overview } from '../../../components/overview';
 import { useSession } from 'next-auth/react';
-import { Card, CardContent } from '../../../components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/card';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
 import Loader from '../../../components/Loader';
+import Link from 'next/link';
 
 function Page() {
   const { data: session, status } = useSession();
@@ -146,7 +147,7 @@ function Page() {
     // Simulate a data fetch
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
   }, [getUser]);
 
   // Fetch PaymentInfo for the logged-in user from Firestore
@@ -169,11 +170,12 @@ function Page() {
     return <Loader />;
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
+  const isStaff = userData && userData.role === 'staff';
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 bg-white md:p-8">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">
+          <h2 className="text-3xl font-bold tracking-tight text-center">
             Hi, Welcome back
             {userData && userData.fullName ? (
               <>
@@ -201,6 +203,7 @@ function Page() {
 
           </h2>
         </div>
+        {(hasSuccessfulPayment  || isStaff) ? (
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -218,7 +221,31 @@ function Page() {
             </div>
           </TabsContent>
         </Tabs>
+      ): (
+        <div className="flex justify-center items-center py-12 bg-gray-100 ">
+  <Card className="max-w-sm w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+    <CardHeader className="bg-green-500 p-6">
+      <CardTitle className="text-white text-2xl font-bold text-center">
+        Subscription Required
+      </CardTitle>
+    </CardHeader>
+    <div className="p-8">
+      <CardDescription className="text-gray-600 mb-6 text-center">
+        You need a subscription to access this premium content. Unlock exclusive features today!
+      </CardDescription>
+      <div>
+        <Link href="/Plan" >
+      <button className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80">
+        Subscribe Now
+      </button>
+      </Link>
       </div>
+    </div>
+  </Card>
+</div>
+          )}
+      </div>
+
     </ScrollArea>
   );
 }
