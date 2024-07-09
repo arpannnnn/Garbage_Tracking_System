@@ -231,6 +231,8 @@ const MapComponent = () => {
     className: 'bin-marker-icon',
   });
 
+  
+
   return (
     <div style={{ height: '800px', width: '100%', position: 'relative', zIndex: 0 }}>
       {position ? (

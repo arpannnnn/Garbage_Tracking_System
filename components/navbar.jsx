@@ -13,7 +13,7 @@ import { database } from '../firebase/firebase'
 export default function CustomNavbar() {
     const pathname = usePathname()
     const [userData, setUserData] = useState(null)
-        const { data: session, status } = useSession()
+    const { data: session, status } = useSession()
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)
     const [isSessionLoading, setIsSessionLoading] = useState(false)
     const [binStatus, setBinStatus] = useState(null)
@@ -56,7 +56,7 @@ export default function CustomNavbar() {
 
         fetchBinStatus();
     }, []);
-    
+
     const getUser = useCallback(async () => {
         if (status === 'authenticated' && session?.user?.uid) {
             try {
@@ -161,19 +161,19 @@ export default function CustomNavbar() {
                             )}
                             {session?.user && userData?.role === 'admin' && (
 
-                            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                                <li>
-                                    <Link
-                                        href="/admin" className={`${pathname === '/admin' ? 'text-green-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>
-                                        <svg  width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <g>
-                                                <path fill="none" d="M0 0h24v24H0z" />
-                                                <path d="M12 14v8H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm9 4h1v5h-8v-5h1v-1a3 3 0 0 1 6 0v1zm-2 0v-1a1 1 0 0 0-2 0v1h2z" />
-                                            </g>
-                                        </svg>
-                                    </Link>
-                                </li>
-                            </ul>
+                                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                                    <li>
+                                        <Link
+                                            href="/admin" className={`${pathname === '/admin' ? 'text-green-700' : ''} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-green-700 md:p-0 dark:text-white md:dark:hover:text-green-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>
+                                            <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <g>
+                                                    <path fill="none" d="M0 0h24v24H0z" />
+                                                    <path d="M12 14v8H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm9 4h1v5h-8v-5h1v-1a3 3 0 0 1 6 0v1zm-2 0v-1a1 1 0 0 0-2 0v1h2z" />
+                                                </g>
+                                            </svg>
+                                        </Link>
+                                    </li>
+                                </ul>
                             )}
 
 

@@ -110,6 +110,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
 import Loader from '../../../components/Loader';
+import Link from 'next/link';
 
 function Page() {
   const { data: session, status } = useSession();
@@ -169,6 +170,7 @@ function Page() {
     return <Loader />;
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
+  const isStaff = userData && userData.role === 'staff';
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 bg-white md:p-8">
@@ -201,7 +203,7 @@ function Page() {
 
           </h2>
         </div>
-        {hasSuccessfulPayment ? (
+        {(hasSuccessfulPayment  || isStaff) ? (
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -231,9 +233,13 @@ function Page() {
       <CardDescription className="text-gray-600 mb-6 text-center">
         You need a subscription to access this premium content. Unlock exclusive features today!
       </CardDescription>
+      <div>
+        <Link href="/Plan" >
       <button className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80">
         Subscribe Now
       </button>
+      </Link>
+      </div>
     </div>
   </Card>
 </div>
