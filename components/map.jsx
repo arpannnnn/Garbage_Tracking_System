@@ -166,7 +166,7 @@ const MapComponent = () => {
   // Function to send notification
   const sendNotification = async (userId, userLatitude, userLongitude) => {
     try {
-      const response = await axios.post('/api/sendNotification', {
+      const response = await axios.post('/api/send-Notification', { //for sending notification( aile chai -  afai lekheko for not sending notification)
 
         userId,
         userLatitude,
@@ -192,7 +192,7 @@ const MapComponent = () => {
             sendNotification(id, latitude, longitude);
           }
         });
-      }, 10000); // Check every 10 seconds     
+      }, 480000);   // 8 minutes   
       return () => clearInterval(intervalId);
     }
   }, [position, driverLocation, usersLocations]);

@@ -1,11 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, where, getDocs } from 'firebase/firestore';
+import axios from 'axios';
 import { app } from '../../../../firebase/firebase';
 import { Button } from '../../../../components/ui/button';
 import { format } from 'date-fns';
 import { useToast } from '../../../../components/ui/use-toast';
 import Loader from '../../../../components/Loader';
+
 const AdminSchedule = () => {
     const db = getFirestore(app);
     const [newScheduleDate, setNewScheduleDate] = useState('');
@@ -13,19 +15,51 @@ const AdminSchedule = () => {
     const [editing, setEditing] = useState(null);
     const [editedDate, setEditedDate] = useState('');
     const { toast } = useToast();
-const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {   
         const unsubscribe = onSnapshot(collection(db, 'schedules'), (snapshot) => {     
             const fetchedSchedules = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
-            }));
+            })).sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort schedules by date ascending
             setSchedules(fetchedSchedules);
         });
 
         return () => unsubscribe();
     }, [db]);
+
+    const sendNotificationToStaff = async (message) => {
+        try {
+            // Query Firestore for users with the 'staff' role
+            const staffQuery = query(collection(db, 'users'), where('role', '==', 'staff'));
+            const staffSnapshot = await getDocs(staffQuery);
+            
+            const staffEmails = staffSnapshot.docs.map(doc => doc.data().email);
+
+            // Send notification to each staff member
+            for (const email of staffEmails) {
+                await axios.post('/api/sendemailStaff', { 
+                    email, 
+                    subject: 'New Pickup Schedule', 
+                    message
+                });
+            }
+
+            toast({
+                title: 'Success',
+                description: 'Notification sent to staff members.',
+                variant: 'success',
+            });
+        } catch (error) {
+            console.error('Error sending notification:', error);
+            toast({
+                title: 'Error',
+                description: 'Failed to send notification to staff.',
+                variant: 'destructive',
+            });
+        }
+    };
 
     const handleAddSchedule = async () => {
         if (newScheduleDate) {
@@ -34,7 +68,6 @@ const [loading, setLoading] = useState(true);
             today.setHours(0, 0, 0, 0);
 
             if (selectedDate < today) {
-
                 toast({
                     title: 'Error',
                     description: 'Cannot schedule a pickup for a past date.',
@@ -49,8 +82,10 @@ const [loading, setLoading] = useState(true);
                 toast({
                     title: 'Success',
                     description: 'Schedule added successfully!',
-                    variant: ' success',
+                    variant: 'success',
                 });
+                // Send notification to staff after successfully adding a new schedule
+                await sendNotificationToStaff(`A new pickup has been scheduled for ${newScheduleDate}`);
             } catch (error) {
                 toast({
                     title: 'Error',
@@ -60,15 +95,12 @@ const [loading, setLoading] = useState(true);
             }
         }
     };
+
     useEffect(() => {
-        
         setTimeout(() => {
             setLoading(false);
         }, 1000); 
     }, []);
-    if (loading) {
-        return <Loader />
-    }
 
     const handleEditSchedule = async (id) => {
         try {
@@ -95,6 +127,8 @@ const [loading, setLoading] = useState(true);
                 description: 'Schedule updated successfully!',
                 variant: 'success',
             });
+            // Send notification to staff after successfully updating the schedule
+            await sendNotificationToStaff(`The pickup schedule for ${format(new Date(editedDate), 'LLL dd, y')} has been updated`);
         } catch (error) {
             toast({
                 title: 'Error',
@@ -104,7 +138,6 @@ const [loading, setLoading] = useState(true);
         }
     };
     
-
     const handleDeleteSchedule = async (id) => {
         try {
             await deleteDoc(doc(db, 'schedules', id));
