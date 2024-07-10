@@ -171,6 +171,7 @@ function Page() {
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
   const isStaff = userData && userData.role === 'staff';
+  const isadmin = userData && userData.role === 'admin';
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 pt-6 bg-white md:p-8">
@@ -203,7 +204,7 @@ function Page() {
 
           </h2>
         </div>
-        {(hasSuccessfulPayment  || isStaff) ? (
+        {(hasSuccessfulPayment  || isStaff || isadmin ) ? (
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>

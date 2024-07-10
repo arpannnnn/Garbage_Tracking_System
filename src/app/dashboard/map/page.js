@@ -71,12 +71,13 @@ function Page() {
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
   const isStaff = userData && userData.role === 'staff';
+  const isadmin= userData && userData.role === 'admin';
   return (
 
 
 
     <div>
-      {(hasSuccessfulPayment  || isStaff) ? (
+      {(hasSuccessfulPayment  || isStaff || isadmin) ? (
           <Map />
 
 
