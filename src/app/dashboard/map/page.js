@@ -42,7 +42,7 @@ function Page() {
     // Simulate a data fetch
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }, [getUser]);
 
  
@@ -63,7 +63,7 @@ function Page() {
 
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
   }, []);
 
   if (loading) {
@@ -71,12 +71,13 @@ function Page() {
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
   const isStaff = userData && userData.role === 'staff';
+  const isadmin= userData && userData.role === 'admin';
   return (
 
 
 
     <div>
-      {(hasSuccessfulPayment  || isStaff) ? (
+      {(hasSuccessfulPayment  || isStaff || isadmin) ? (
           <Map />
 
 
