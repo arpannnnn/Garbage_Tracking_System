@@ -42,7 +42,7 @@ function Page() {
     // Simulate a data fetch
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }, [getUser]);
 
  
@@ -63,7 +63,7 @@ function Page() {
 
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 2000);
   }, []);
 
   if (loading) {

@@ -41,6 +41,8 @@ import {
   Users,
   Shield,
   DollarSign,
+  Slack,
+  
 
 } from 'lucide-react';
 
@@ -50,6 +52,7 @@ export const Icons = {
   dashboard: LayoutDashboardIcon,
   logo: Command,
   login: LogIn,
+  Slack: Slack,
   close: X,
   profile: User2Icon,
   spinner: Loader2,

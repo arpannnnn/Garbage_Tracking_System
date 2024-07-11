@@ -46,6 +46,12 @@ export const navItemsAdmin: NavItem[] = [
         href: '/admin/feedback',
         icon: 'star',
         label: 'Feddback'
+    },
+    {
+        title: 'Community Board',
+        href: '/admin/Gunaso',
+        icon: 'Slack',
+        label: 'Community Board'
     }
 
 

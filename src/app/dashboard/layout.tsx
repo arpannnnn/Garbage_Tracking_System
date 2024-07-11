@@ -3,7 +3,7 @@ import Sidebar from '../../../components/layouts/sidebar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: ' Dashboard Of GTS Nepal',
+  title: 'Dashboard Of GTS Nepal',
   description: 'Dashboard layout for GTS Nepal',
 };
 
@@ -15,9 +15,9 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      <div className="flex h-screen  overflow-hidden">
+      <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="w-full h-full bg-white" >{children}</main>
+        <main className="flex-1 overflow-y-auto bg-white">{children}</main>
       </div>
     </>
   );

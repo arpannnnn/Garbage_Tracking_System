@@ -43,6 +43,12 @@ export const navItems: NavItem[] = [
         href: '/dashboard/feedback',
         icon: 'star',
         label: 'Feddback'
+    },
+    {
+        title: 'Community Board',
+        href: '/dashboard/Gunaso',
+        icon: 'Slack',
+        label: 'Community Board'
     }
 ];
 
