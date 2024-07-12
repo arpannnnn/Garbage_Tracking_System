@@ -1,11 +1,11 @@
 "use client"
-import React, { useEffect, useState ,useCallback} from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSession } from 'next-auth/react';
 import { getFirestore, query, where, getDocs, collection, onSnapshot } from 'firebase/firestore';
 import { app } from '../../../../firebase/firebase';
 import Map from '../../../../components/map'
 import Loader from '../../../../components/Loader';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../../components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '../../../../components/ui/card';
 import Link from 'next/link';
 
 
@@ -45,7 +45,6 @@ function Page() {
     }, 1000);
   }, [getUser]);
 
- 
   useEffect(() => {
     if (session?.user?.uid) {
       const unsubscribe = onSnapshot(
@@ -71,43 +70,43 @@ function Page() {
   }
   const hasSuccessfulPayment = payInfo.some(payment => payment.status === 'success');
   const isStaff = userData && userData.role === 'staff';
-  const isadmin= userData && userData.role === 'admin';
+  const isadmin = userData && userData.role === 'admin';
   return (
 
 
 
     <div>
-      {(hasSuccessfulPayment  || isStaff || isadmin) ? (
-          <Map />
+      {(hasSuccessfulPayment || isStaff || isadmin) ? (
+        <Map />
 
 
-        ) : (
-          <div className="flex justify-center items-center py-12 bg-gray-100 ">
-            <Card className="max-w-sm w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
-              <CardHeader className="bg-green-500 p-6">
-                <CardTitle className="text-white text-2xl font-bold text-center">
-                  Subscription Required
-                </CardTitle>
-              </CardHeader>
-              <div className="p-8">
-                <CardDescription className="text-gray-600 mb-6 text-center">
-                  You need a subscription to access this premium content. Unlock exclusive features today!
-                </CardDescription>
-                <div>
-                  <Link href="/Plan" >
-                    <button className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80">
-                      Subscribe Now
-                    </button>
-                  </Link>
-                </div>
+      ) : (
+        <div className="flex justify-center items-center py-12 bg-gray-100 ">
+          <Card className="max-w-sm w-full mx-auto bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
+            <CardHeader className="bg-green-500 p-6">
+              <CardTitle className="text-white text-2xl font-bold text-center">
+                Subscription Required
+              </CardTitle>
+            </CardHeader>
+            <div className="p-8">
+              <CardDescription className="text-gray-600 mb-6 text-center">
+                You need a subscription to access this premium content. Unlock exclusive features today!
+              </CardDescription>
+              <div>
+                <Link href="/Plan" >
+                  <button className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white font-sm  transition-all duration-200 hover:opacity-80">
+                    Subscribe Now
+                  </button>
+                </Link>
               </div>
-            </Card>
-          </div>
-        )}
+            </div>
+          </Card>
+        </div>
+      )}
     </div >
   )
 }
-      
-  
+
+
 
 export default Page
