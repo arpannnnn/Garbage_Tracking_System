@@ -5,6 +5,7 @@ import { db } from '../../../../firebase/firebase';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { FrownIcon, MehIcon, SmileIcon, HeartIcon, Laugh } from 'lucide-react';
 import {useRouter }from 'next/navigation';
+import Loader from '../../../../components/Loader';
 
 const PageFeedbackForm = () => {
     const { data: session, status } = useSession();
@@ -12,6 +13,7 @@ const PageFeedbackForm = () => {
     const [category, setCategory] = useState('');
     const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
+    const [Loading, setLoad] = useState(true);
     const [success, setSuccess] = useState(false);
     const route = useRouter()
 
@@ -63,6 +65,17 @@ const PageFeedbackForm = () => {
         { icon: Laugh, value: 'positive', color: 'text-green-500', label: 'Good' },
         { icon: HeartIcon, value: 'very_positive', color: 'text-pink-500', label: 'Excellent' }
     ];
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoad(false);
+        }, 2000);
+    }, []);
+
+    if (Loading) {
+        return <Loader />;
+    }
+
 
     return (
         <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-8 border mt-6 border-gray-200">
