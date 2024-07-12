@@ -14,6 +14,8 @@ function PostListAdmin() {
     const [posts, setPosts] = useState([]);
     const [userNames, setUserNames] = useState({});
     const [Loading, setLoading] = useState(true);
+    const [payInfo, setPayInfo] = useState([]);
+    const [userRoles, setUserRoles] = useState({});
 
     const [deleteConfirmation, setDeleteConfirmation] = useState({ show: false, postId: null });
     const [userData, setUserData] = useState(null);
@@ -22,9 +24,13 @@ function PostListAdmin() {
         try {
             const userDoc = await getDoc(doc(db, 'users', uid));
             if (userDoc.exists()) {
-                return userDoc.data().fullName;
+                const userData = userDoc.data();
+                return {
+                    fullName: userData.fullName || 'Unknown User',
+                    role: userData.role || 'user'
+                };
             } else {
-                return 'Unknown User';
+                return { fullName: 'Unknown User', role: 'user' };
             }
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -59,15 +65,18 @@ function PostListAdmin() {
                 const unsubscribe = onSnapshot(q, async (snapshot) => {
                     const postsData = await Promise.all(snapshot.docs.map(async (doc) => {
                         const postData = { id: doc.id, ...doc.data() };
-                        const userName = await fetchUserName(postData.uid);
-                        return { ...postData, userName };
+                        const { fullName, role } = await fetchUserName(postData.uid);
+                        return { ...postData, userName: fullName, userRole: role };
                     }));
                     setPosts(postsData);
                     const names = {};
+                    const roles = {};
                     postsData.forEach(post => {
                         names[post.uid] = post.userName;
+                        roles[post.uid] = post.userRole;
                     });
                     setUserNames(names);
+                    setUserRoles(roles);
                 });
                 return () => unsubscribe();
             } catch (error) {
@@ -103,6 +112,28 @@ function PostListAdmin() {
     const cancelDelete = () => {
         setDeleteConfirmation({ show: false, postId: null });
     };
+
+    useEffect(() => {
+        const fetchPaymentInfo = async () => {
+            const unsubscribe = onSnapshot(collection(db, 'PaymentInfo'), async (snapshot) => {
+                const paymentData = await Promise.all(snapshot.docs.map(async (paymentDoc) => {
+                    const payment = paymentDoc.data();
+                    const userDoc = await getDoc(doc(db, 'users', payment.userId));
+                    const userData = userDoc.exists() ? userDoc.data() : {};
+                    return {
+                        ...payment,
+                        fullName: userData.fullName || 'Unknown'
+                    };
+                }));
+                setPayInfo(paymentData);
+                setLoading(false);
+            });
+            return unsubscribe;
+        };
+
+        fetchPaymentInfo();
+    }, [db]);
+
     useEffect(() => {
 
         setTimeout(() => {
@@ -114,7 +145,7 @@ function PostListAdmin() {
         return <Loader />;
     }
 
-
+    
 
 
 
@@ -131,7 +162,50 @@ function PostListAdmin() {
                                 />
                             </Avatar>
                             <div className="ml-4">
-                                <h4 className="text-lg font-bold text-gray-900">{userNames[post.uid] || 'Unknown User'}</h4>
+                            <h4 className="text-lg font-bold text-gray-900">
+                                    {userNames[post.uid] || 'Unknown User'}
+                                    {userRoles[post.uid] === 'admin' && (
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="blue" width="80px" height="80px"
+                                            className="inline-block w-5 h-5 ml-2 text-blue-500"
+                                            viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
+                                    )}
+                                    {userRoles[post.uid] === 'staff' && (
+                                        <svg width="80px" height="80px" viewBox="0 -2 20.001 20.001"
+                                            className="inline-block w-5 h-5 ml-2 " xmlns="http://www.w3.org/2000/svg">
+                                            <g id="truck" transform="translate(-2 -4)">
+                                                <path id="secondary" fill="#2ca9bc" d="M20.24,10.81,19,10.5l-.79-2.77a1,1,0,0,0-1-.73H13V6a1,1,0,0,0-1-1H4A1,1,0,0,0,3,6V16a1,1,0,0,0,1,1H5a2,2,0,0,1,4,0h6a2,2,0,0,1,4,0h1a1,1,0,0,0,1-1V11.78A1,1,0,0,0,20.24,10.81Z" />
+                                                <path id="primary" d="M5,17H4a1,1,0,0,1-1-1V6A1,1,0,0,1,4,5h8a1,1,0,0,1,1,1V17H9" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                <path id="primary-2" data-name="primary" d="M15,17H13V7h4.25a1,1,0,0,1,1,.73L19,10.5l1.24.31a1,1,0,0,1,.76,1V16a1,1,0,0,1-1,1H19" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                                <path id="primary-3" data-name="primary" d="M7,15a2,2,0,1,0,2,2A2,2,0,0,0,7,15Zm10,0a2,2,0,1,0,2,2A2,2,0,0,0,17,15Z" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                                            </g>
+                                        </svg>
+                                    )}
+
+
+
+
+
+                                    {payInfo.map(payment => (
+                                        payment.userId === post.uid && payment.status === 'success' && (
+                                            <svg
+                                                key={payment.userId}
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="28"
+                                                height="28"
+                                                viewBox="0 0 24 24"
+                                                fill="#2372af"
+                                                stroke="#fafafa"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                className="inline-block w-6 h-6 ml-2"
+                                            >
+                                                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                                <path d="m9 12 2 2 4-4" />
+                                            </svg>
+                                        )
+                                    ))}
+                                </h4>
                                 <p className="text-xs text-gray-500">{new Date(post.createdAt?.toDate()).toLocaleString()}</p>
                             </div>
                         </div>
