@@ -192,7 +192,7 @@ const MapComponent = () => {
             sendNotification(id, latitude, longitude);
           }
         });
-      }, 10000);  // 10 seconds      
+      }, 480000);   // 8 minutes  
       return () => clearInterval(intervalId);
     }
   }, [position, driverLocation, usersLocations]);

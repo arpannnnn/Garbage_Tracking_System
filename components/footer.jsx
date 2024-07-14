@@ -124,7 +124,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <p className="mt-12 text-center text-sm text-gray-500">
+                <p className="mt-4 text-center text-sm text-gray-500">
                     &copy; {currentYear} GTS Nepal. All rights reserved.
                 </p>
             </div>
