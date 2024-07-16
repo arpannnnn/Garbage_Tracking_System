@@ -304,7 +304,7 @@ export default function PaymentPlan() {
                                                 className="w-full rounded-md bg-gradient-to-r from-green-400 to-blue-500 py-3 px-4 text-center text-base font-semibold text-white transition-all duration-200 hover:opacity-80"
                                                 onClick={() => handlePayment(50, 'Premium Plan')}
                                             >
-                                                Purchase Plan for NPR 50
+                                                Purchase Plan for NPR 450
                                             </button>
                                         )}
                                     </div>
