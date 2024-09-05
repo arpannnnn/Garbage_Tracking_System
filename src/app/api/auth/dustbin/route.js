@@ -1,6 +1,9 @@
-
-// This is a mock API route that simulates a dustbin level
-export default function handler(req, res) {
+export async function GET(req) {
     const randomLevel = Math.floor(Math.random() * 101); // Simulate a dustbin level between 0 and 100
-    res.status(200).json({ level: randomLevel });
+    return new Response(JSON.stringify({ level: randomLevel }), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 }
