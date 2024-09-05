@@ -25,11 +25,10 @@ export function UserNav() {
     const db = getFirestore(app);
     const [userData, setUserData] = useState(null);
 
-    //after session?.user?.uid? is available, get user data( as of now i remove it from useEffect)
     const getUser = useCallback(async () => {
-        if (status === 'authenticated' && session?.user) {
+        if (status === 'authenticated' && session?.user?.uid) {
             try {
-                const q = query(collection(db, "users"), where("uid", "==", session.user));
+                const q = query(collection(db, "users"), where("uid", "==", session.user.uid));
                 const querySnapshot = await getDocs(q);
                 if (querySnapshot.empty) {
                     console.log("No matching documents.");

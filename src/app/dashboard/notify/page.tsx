@@ -190,27 +190,26 @@ const NotificationPage = () => {
   const timersRef = useRef([]);
 
   // Fetch user's data including role from Firestore
-  //after session?.user?.uid? is available, get user data( as of now i remove it from useEffect)
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     if (status === 'authenticated' && session?.user) {
-  //       try {
-  //         const userDoc = await getDoc(doc(collection(db, 'users'), session.user.uid));
-  //         if (userDoc.exists()) {
-  //           setUserData(userDoc.data());
-  //           const { latitude, longitude } = userDoc.data();
-  //           setUserPosition([latitude, longitude]);
-  //         } else {
-  //           console.log('No such document!');
-  //         }
-  //       } catch (error) {
-  //         console.error('Error getting user data:', error);
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (status === 'authenticated' && session?.user?.uid) {
+        try {
+          const userDoc = await getDoc(doc(collection(db, 'users'), session.user.uid));
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+            const { latitude, longitude } = userDoc.data();
+            setUserPosition([latitude, longitude]);
+          } else {
+            console.log('No such document!');
+          }
+        } catch (error) {
+          console.error('Error getting user data:', error);
+        }
+      }
+    };
 
-  //   fetchUserData();
-  // }, [db, session, status]);
+    fetchUserData();
+  }, [db, session, status]);
 
   // Track the driver's position
   useEffect(() => {
@@ -233,10 +232,9 @@ const NotificationPage = () => {
   }, []);
 
   // Send notification function for email
-  //after session?.user?.uid? is available, get user data( as of now i remove it from useEffect)
   const sendNotification = async (message) => {
     try {
-      await axios.post('/api/sendEmail', { message, userId: session.user });
+      await axios.post('/api/sendEmail', { message, userId: session.user.uid });
       const timestamp = new Date().toLocaleTimeString();
       setNotifications(prevNotifications => [...prevNotifications, { message, timestamp }]);
       // Set timer to remove notification after 60 seconds
