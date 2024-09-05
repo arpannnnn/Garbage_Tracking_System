@@ -3,8 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
 
-// Define authOptions
-export const authOptions = {
+const authOptions = {
     adapter: FirestoreAdapter({
         credential: cert({
             projectId: process.env.FIREBASE_PROJECT_ID,
@@ -25,7 +24,7 @@ export const authOptions = {
                 longitude: { label: "Longitude", type: "text" },
                 role: { label: "Role", type: "text" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 if (!credentials || !credentials.email || !credentials.password) {
                     throw new Error('Email or password is invalid');
                 }
@@ -52,7 +51,7 @@ export const authOptions = {
 
                 const res = await fetch('http://localhost:3000/api/auth/login', payload);  
                 const resJson = await res.json(); 
-                const user = resJson.data; 
+                const user = resJson.data;
 
                 if (user?.email === credentials?.email) {
                     return user;
@@ -71,10 +70,10 @@ export const authOptions = {
         maxAge: 60 * 60 * 24 * 365, // 1 year
     },
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ user }) {
             return true;
         },
-        async redirect({ url, baseUrl }) {
+        async redirect({ baseUrl }) {
             return baseUrl;
         },
         async session({ session, token }) {
@@ -99,6 +98,7 @@ export const authOptions = {
     }
 };
 
-// Define route handler and export it as GET and POST
+// Export the handler for GET and POST requests
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
