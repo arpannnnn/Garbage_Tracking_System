@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import SmartDustbin from '../../../../components/smartDustbin';
+import SmartDustbin from '../../../../components/SmartDustbin';
 import Loader from '../../../../components/Loader';
 export default function Home() {
     const [loading, setLoading] = useState(true);
