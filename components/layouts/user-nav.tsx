@@ -18,15 +18,18 @@ import { app } from '../../firebase/firebase';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
+
 export function UserNav() {
     const { data: session, status } = useSession();
+
     const db = getFirestore(app);
     const [userData, setUserData] = useState(null);
 
+    //after session?.user?.uid? is available, get user data( as of now i remove it from useEffect)
     const getUser = useCallback(async () => {
-        if (status === 'authenticated' && session?.user?.uid) {
+        if (status === 'authenticated' && session?.user) {
             try {
-                const q = query(collection(db, "users"), where("uid", "==", session.user.uid));
+                const q = query(collection(db, "users"), where("uid", "==", session.user));
                 const querySnapshot = await getDocs(q);
                 if (querySnapshot.empty) {
                     console.log("No matching documents.");

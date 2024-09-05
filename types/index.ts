@@ -10,6 +10,8 @@ export interface NavItem {
   description?: string;
   role?: string;
   uid?: string;
+  children?: NavItem[];
+  
 }
 
 
