@@ -99,6 +99,6 @@ const authOptions = {
 };
 
 // Export the handler for GET and POST requests
-const handler = NextAuth(authOptions);
+// const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+// export { handler as GET, handler as POST };
