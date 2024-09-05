@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { cert } from "firebase-admin/app";
 
+// Define authOptions
 export const authOptions = {
     adapter: FirestoreAdapter({
         credential: cert({
@@ -39,6 +40,7 @@ export const authOptions = {
                     longitude: credentials.longitude,
                     role: credentials.role,
                 };
+
                 const payload = { 
                     method: 'POST',  
                     headers: {
@@ -70,22 +72,18 @@ export const authOptions = {
     },
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            // console.log("signIn", { user, account, profile, email, credentials });
             return true;
         },
         async redirect({ url, baseUrl }) {
-            // console.log("redirect", { url, baseUrl });
             return baseUrl;
         },
         async session({ session, token }) {
-            console.log("Session callback triggered");
             if (token?.user) {
                 session.user = token.user;
                 session.email = token.user.email;
-                session.accessToken = token.accessToken; // Ensure access token is set
-                session.role = token.user.role; // Ensure role is set if available
+                session.accessToken = token.accessToken;
+                session.role = token.user.role;
             }
-            // console.log("Session data:", session);
             return session;
         },
         async jwt({ token, user, account }) {
@@ -96,11 +94,11 @@ export const authOptions = {
                     token.role = user.role;
                 }
             }
-            // console.log("JWT token data:", token);
             return token;
         }
     }
 };
 
+// Define route handler and export it as GET and POST
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
